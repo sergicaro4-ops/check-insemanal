@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Check-In Semanal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #09090f;
+    --bg2: #111118;
+    --bg3: #16161f;
+    --border: rgba(255,255,255,0.07);
+    --border-bright: rgba(255,255,255,0.15);
+    --text: #f0f0f8;
+    --text-muted: #8888aa;
+    --text-dim: #55556a;
+    --c1: #6366f1;
+    --c2: #8b5cf6;
+    --c3: #f59e0b;
+    --c4: #10b981;
+    --c5: #3b82f6;
+    --c6: #ec4899;
+    --c7: #f97316;
+    --c8: #14b8a6;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --shadow: 0 8px 40px rgba(0,0,0,0.5);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── HEADER ─── */
+  .header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    background: rgba(9,9,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .header-logo-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent, var(--c1));
+    box-shadow: 0 0 12px var(--accent, var(--c1));
+    transition: background 0.4s, box-shadow 0.4s;
+  }
+
+  .week-badge {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border-bright);
+    color: var(--text-muted);
+    transition: all 0.3s;
+  }
+
+  /* ─── PROGRESS ─── */
+  .progress-bar-wrap {
+    position: fixed;
+    top: 64px; left: 0; right: 0;
+    z-index: 99;
+    height: 3px;
+    background: rgba(255,255,255,0.05);
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent, var(--c1)), var(--accent2, var(--c2)));
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1), background 0.5s;
+    box-shadow: 0 0 12px var(--accent, var(--c1));
+  }
+
+  .progress-pill {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 99;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border-bright);
+    color: var(--text-muted);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s;
+  }
+
+  /* ─── MAIN WRAPPER ─── */
+  .main {
+    padding-top: 90px;
+    padding-bottom: 60px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ─── SECTIONS ─── */
+  .section {
+    display: none;
+    width: 100%;
+    max-width: 680px;
+    padding: 0 16px;
+    animation: sectionIn 0.45s cubic-bezier(0.4,0,0.2,1) both;
+  }
+
+  .section.active { display: block; }
+
+  @keyframes sectionIn {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes sectionOut {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-20px); }
+  }
+
+  .section-header {
+    margin-bottom: 32px;
+    padding-top: 16px;
+  }
+
+  .section-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--section-color, var(--c1));
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-num::before {
+    content: '';
+    display: block;
+    width: 24px; height: 2px;
+    background: var(--section-color, var(--c1));
+    border-radius: 2px;
+  }
+
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-icon { font-size: 28px; }
+
+  .section-desc {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ─── CARD ─── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--section-color, var(--c1)) 50%, transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .card:focus-within { border-color: rgba(255,255,255,0.14); }
+  .card:focus-within::before { opacity: 0.6; }
+
+  /* ─── LABELS ─── */
+  .label {
+    display: block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .label-question {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  /* ─── TEXT INPUTS ─── */
+  .input-wrap {
+    position: relative;
+  }
+
+  .input, .textarea {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s;
+    -webkit-appearance: none;
+  }
+
+  .input:focus, .textarea:focus {
+    border-color: var(--section-color, var(--c1));
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--section-color, var(--c1)) 15%, transparent);
+  }
+
+  .textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.6;
+  }
+
+  input[type="date"].input::-webkit-calendar-picker-indicator {
+    filter: invert(0.5);
+    cursor: pointer;
+  }
+
+  /* Number input with unit */
+  .num-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .num-input {
+    flex: 1;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s;
+    -moz-appearance: textfield;
+    text-align: center;
+  }
+
+  .num-input::-webkit-outer-spin-button,
+  .num-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+  .num-input:focus {
+    border-color: var(--section-color, var(--c1));
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--section-color, var(--c1)) 15%, transparent);
+  }
+
+  .unit-badge {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--section-color, var(--c1)) 15%, transparent);
+    color: var(--section-color, var(--c1));
+    border: 1px solid color-mix(in srgb, var(--section-color, var(--c1)) 30%, transparent);
+    white-space: nowrap;
+  }
+
+  /* ─── PILL SELECTORS ─── */
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pill {
+    padding: 8px 16px;
+    border-radius: 40px;
+    border: 1px solid var(--border-bright);
+    background: var(--bg3);
+    color: var(--text-muted);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    letter-spacing: 0.02em;
+  }
+
+  .pill:hover {
+    border-color: var(--section-color, var(--c1));
+    color: var(--text);
+    background: color-mix(in srgb, var(--section-color, var(--c1)) 10%, var(--bg3));
+  }
+
+  .pill.selected {
+    background: var(--section-color, var(--c1));
+    border-color: var(--section-color, var(--c1));
+    color: #fff;
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--section-color, var(--c1)) 40%, transparent);
+  }
+
+  /* ─── YES/NO TOGGLE ─── */
+  .yn-wrap { display: flex; gap: 10px; }
+
+  .yn-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-bright);
+    background: var(--bg3);
+    color: var(--text-muted);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .yn-btn:hover { border-color: var(--section-color, var(--c1)); color: var(--text); }
+
+  .yn-btn.selected-yes {
+    background: color-mix(in srgb, #10b981 15%, transparent);
+    border-color: #10b981;
+    color: #10b981;
+  }
+
+  .yn-btn.selected-no {
+    background: color-mix(in srgb, #ef4444 15%, transparent);
+    border-color: #ef4444;
+    color: #ef4444;
+  }
+
+  /* ─── EMOJI RATING ─── */
+  .emoji-rating {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+  }
+
+  .emoji-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 8px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .emoji-btn:hover {
+    border-color: var(--section-color, var(--c1));
+    background: color-mix(in srgb, var(--section-color, var(--c1)) 8%, var(--bg3));
+    transform: translateY(-2px);
+  }
+
+  .emoji-btn.selected {
+    border-color: var(--section-color, var(--c1));
+    background: color-mix(in srgb, var(--section-color, var(--c1)) 18%, var(--bg3));
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--section-color, var(--c1)) 30%, transparent);
+    transform: translateY(-2px);
+  }
+
+  .emoji-btn .emoji { font-size: 22px; }
+
+  .emoji-btn .emoji-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--text-dim);
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .emoji-btn.selected .emoji-label { color: var(--section-color, var(--c1)); }
+
+  /* ─── STAR RATING ─── */
+  .stars {
+    display: flex;
+    gap: 6px;
+  }
+
+  .star {
+    font-size: 28px;
+    cursor: pointer;
+    transition: transform 0.15s, filter 0.15s;
+    filter: grayscale(1) brightness(0.4);
+    user-select: none;
+  }
+
+  .star:hover, .star.lit { filter: none; transform: scale(1.15); }
+
+  /* ─── ADHERENCE BARS ─── */
+  .adherence-wrap { display: flex; flex-direction: column; gap: 8px; }
+
+  .adh-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .adh-option:hover { border-color: var(--section-color, var(--c1)); }
+
+  .adh-option.selected {
+    border-color: var(--section-color, var(--c1));
+    background: color-mix(in srgb, var(--section-color, var(--c1)) 12%, var(--bg3));
+  }
+
+  .adh-bar {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--border-bright);
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .adh-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--section-color, var(--c1));
+    transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .adh-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    min-width: 80px;
+    text-align: right;
+  }
+
+  .adh-option.selected .adh-label { color: var(--section-color, var(--c1)); }
+
+  /* ─── SLEEP HOURS ─── */
+  .sleep-opts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .sleep-btn {
+    padding: 14px 8px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  .sleep-btn:hover { border-color: var(--section-color, var(--c1)); color: var(--text); }
+
+  .sleep-btn.selected {
+    background: var(--section-color, var(--c1));
+    border-color: var(--section-color, var(--c1));
+    color: #fff;
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--section-color, var(--c1)) 35%, transparent);
+  }
+
+  /* ─── STRESS SLIDER ─── */
+  .stress-wrap { padding: 8px 0; }
+
+  .stress-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .slider-input {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
+  }
+
+  .slider-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    border: 3px solid var(--section-color, var(--c5));
+    transition: transform 0.15s;
+  }
+
+  .slider-input::-webkit-slider-thumb:hover { transform: scale(1.15); }
+
+  .slider-val {
+    text-align: center;
+    margin-top: 10px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  /* ─── ENERGY EMOJIS ─── */
+  .energy-wrap { display: flex; gap: 6px; justify-content: space-between; }
+
+  .energy-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 6px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .energy-btn:hover { border-color: var(--section-color, var(--c5)); transform: translateY(-2px); }
+
+  .energy-btn.selected {
+    border-color: var(--section-color, var(--c5));
+    background: color-mix(in srgb, var(--section-color, var(--c5)) 15%, var(--bg3));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--section-color, var(--c5)) 25%, transparent);
+  }
+
+  .energy-btn .e-emoji { font-size: 24px; }
+  .energy-btn .e-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-dim);
+  }
+  .energy-btn.selected .e-num { color: var(--section-color, var(--c5)); }
+
+  /* ─── SCORE SELECTOR ─── */
+  .score-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .score-btn {
+    aspect-ratio: 1;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    color: var(--text-muted);
+  }
+
+  .score-btn:hover { transform: translateY(-2px); }
+
+  .score-message {
+    min-height: 40px;
+    text-align: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: all 0.3s;
+    padding: 8px;
+  }
+
+  /* ─── PHOTO DROP ─── */
+  .drop-zone {
+    border: 2px dashed var(--border-bright);
+    border-radius: var(--radius);
+    padding: 40px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .drop-zone:hover, .drop-zone.dragover {
+    border-color: var(--section-color, var(--c8));
+    background: color-mix(in srgb, var(--section-color, var(--c8)) 5%, transparent);
+  }
+
+  .drop-zone input[type=file] {
+    position: absolute; inset: 0;
+    opacity: 0; cursor: pointer;
+    width: 100%; height: 100%;
+  }
+
+  .drop-icon { font-size: 40px; margin-bottom: 12px; }
+
+  .drop-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .drop-sub { font-size: 13px; color: var(--text-muted); }
+
+  .photo-previews {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .photo-thumb {
+    aspect-ratio: 1;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border);
+  }
+
+  .photo-thumb img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+
+  .photo-thumb-remove {
+    position: absolute;
+    top: 4px; right: 4px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    border: none;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  /* ─── CONDITIONAL FIELD ─── */
+  .conditional {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s;
+    margin-top: 0;
+  }
+
+  .conditional.visible {
+    max-height: 300px;
+    opacity: 1;
+    margin-top: 16px;
+  }
+
+  /* ─── NAVIGATION ─── */
+  .nav-wrap {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+    max-width: 680px;
+    width: 100%;
+    padding: 0 16px;
+  }
+
+  .nav-btn {
+    padding: 14px 28px;
+    border-radius: 40px;
+    border: 1px solid var(--border-bright);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-prev {
+    background: transparent;
+    color: var(--text-muted);
+  }
+
+  .nav-prev:hover { color: var(--text); border-color: var(--text-muted); }
+
+  .nav-next {
+    flex: 1;
+    justify-content: center;
+    background: var(--section-color, var(--c1));
+    border-color: var(--section-color, var(--c1));
+    color: #fff;
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--section-color, var(--c1)) 40%, transparent);
+  }
+
+  .nav-next:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 28px color-mix(in srgb, var(--section-color, var(--c1)) 50%, transparent);
+  }
+
+  .nav-submit {
+    flex: 1;
+    justify-content: center;
+    background: linear-gradient(135deg, #10b981, #3b82f6);
+    border: none;
+    color: #fff;
+    font-size: 15px;
+    box-shadow: 0 4px 24px rgba(16,185,129,0.4);
+  }
+
+  .nav-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(16,185,129,0.5);
+  }
+
+  /* ─── SUCCESS SCREEN ─── */
+  .success-screen {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: var(--bg);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 32px;
+  }
+
+  .success-screen.active { display: flex; }
+
+  .success-icon {
+    font-size: 72px;
+    margin-bottom: 24px;
+    animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0) rotate(-10deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0); opacity: 1; }
+  }
+
+  .success-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .success-sub {
+    font-size: 16px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 400px;
+  }
+
+  .success-name {
+    color: #10b981;
+    font-weight: 600;
+  }
+
+  /* ─── CONFETTI ─── */
+  #confetti-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 199;
+  }
+
+  /* ─── INTRO SCREEN ─── */
+  .intro-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 90px);
+    text-align: center;
+    padding: 32px 16px;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .intro-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    background: color-mix(in srgb, var(--c1) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--c1) 30%, transparent);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c1);
+    margin-bottom: 28px;
+  }
+
+  .intro-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #fff 30%, #888aaa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .intro-sub {
+    font-size: 16px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 40px;
+    max-width: 420px;
+  }
+
+  .intro-start {
+    padding: 16px 40px;
+    border-radius: 40px;
+    background: linear-gradient(135deg, var(--c1), var(--c2));
+    border: none;
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 8px 32px rgba(99,102,241,0.4);
+  }
+
+  .intro-start:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(99,102,241,0.55);
+  }
+
+  .intro-steps {
+    display: flex;
+    gap: 24px;
+    margin-top: 48px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .intro-step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .intro-step-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--text-dim);
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 20px 0;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 480px) {
+    .section-title { font-size: 22px; }
+    .intro-title { font-size: 30px; }
+    .score-grid { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .score-btn { font-size: 14px; }
+    .emoji-rating { gap: 4px; }
+    .emoji-btn { padding: 10px 4px; }
+    .emoji-btn .emoji { font-size: 18px; }
+    .emoji-btn .emoji-label { font-size: 9px; }
+    .sleep-opts { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  /* Loading spinner */
+  .spinner {
+    display: inline-block;
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-logo">
+    <div class="header-logo-dot" id="headerDot"></div>
+    Check-In Semanal
+  </div>
+  <div class="week-badge" id="weekBadge">Semana —</div>
+</header>
+
+<!-- PROGRESS -->
+<div class="progress-bar-wrap">
+  <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+</div>
+<div class="progress-pill" id="progressPill" style="display:none">1 / 8</div>
+
+<!-- MAIN -->
+<div class="main" id="mainWrap">
+
+  <!-- INTRO -->
+  <div class="intro-screen" id="introScreen">
+    <div class="intro-badge">✦ Seguimiento Semanal</div>
+    <h1 class="intro-title">Tu check-in<br/>de esta semana</h1>
+    <p class="intro-sub">Tómate 5 minutos para reflexionar sobre tu semana. Tu progreso importa — cada detalle ayuda a tu coach a guiarte mejor.</p>
+    <button class="intro-start" onclick="startForm()">Comenzar check-in →</button>
+    <div class="intro-steps">
+      <div class="intro-step"><div class="intro-step-dot"></div> 8 secciones</div>
+      <div class="intro-step"><div class="intro-step-dot"></div> ~5 minutos</div>
+      <div class="intro-step"><div class="intro-step-dot"></div> 100% confidencial</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- SECCIÓN 1 — DATOS PERSONALES -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="section" id="sec1" style="--section-color: var(--c1)">
+    <div class="section-header">
+      <div class="section-num">Sección 01</div>
+      <div class="section-title"><span class="section-icon">👤</span> Datos Personales</div>
+      <p class="section-desc">Identifícate y marca la semana correspondiente a este check-in.</p>
+    </div>
+
+    <div class="card">
+      <label class="label">Nombre Completo</label>
+      <div class="input-wrap">
+        <input class="input" type="text" id="nombreCompleto" placeholder="Tu nombre y apellidos…" oninput="updateWeekBadge()" />
+      </div>
+    </div>
+
+    <div class="card">
+      <label class="label">Semana / Fecha</label>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px">
+        <div>
+          <div class="label-question" style="font-size:12px;color:var(--text-dim);margin-bottom:8px">NÚMERO DE SEMANA</div>
+          <input class="input" type="text" id="semanaNum" placeholder="ej. Semana 5" oninput="updateWeekBadge()" />
+        </div>
+        <div>
+          <div class="label-question" style="font-size:12px;color:var(--text-dim);margin-bottom:8px">FECHA DE HOY</div>
+          <input class="input" type="date" id="semanaFecha" oninput="updateWeekBadge()" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- SECCIÓN 2 — COMPOSICIÓN CORPORAL -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="section" id="sec2" style="--section-color: var(--c2)">
+    <div class="section-header">
+      <div class="section-num">Sección 02</div>
+      <div class="section-title"><span class="section-icon">⚖️</span> Composición Corporal</div>
+      <p class="section-desc">Registra tus métricas de esta semana. Pésate siempre en las mismas condiciones.</p>
+    </div>
+
+    <div class="card">
+      <label class="label">Peso medio esta semana</label>
+      <div class="num-input-wrap">
+        <input class="num-input" type="number" id="pesoMedio" step="0.1" min="30" max="250" placeholder="—" />
+        <span class="unit-badge">kg</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <label class="label">Peso de hoy por la mañana</label>
+      <div class="num-input-wrap">
+        <input class="num-input" type="number" id="pesoHoy" step="0.1" min="30" max="250" placeholder="—" />
+        <span class="unit-badge">kg</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <label class="label">Cintura esta semana</label>
+      <div class="num-input-wrap">
+        <input class="num-input" type="number" id="cintura" step="0.5" min="40" max="200" placeholder="—" />
+        <span class="unit-badge">cm</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- SECCIÓN 3 — ENTRENAMIENTO -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="section" id="sec3" style="--section-color: var(--c3)">
+    <div class="section-header">
+      <div class="section-num">Sección 03</div>
+      <div class="section-title"><span class="section-icon">💪</span> Entrenamiento</div>
+      <p class="section-desc">Cuéntanos cómo han ido tus sesiones esta semana.</p>
+    </div>
+
+    <div class="card">
+      <span class="label-question">¿Cuántos entrenos has completado esta semana?</span>
+      <div class="pills" id="entrenosPills">
+        <div class="pill" onclick="selectPill('entrenosPills', this)">0</div>
+        <div class="pill" onclick="selectPill('entrenosPills', this)">1</div>
+        <div class="pill" onclick="selectPill('entrenosPills', this)">2</div>
+        <div class="pill" onclick="selectPill('entrenosPills', this)">3</div>
+        <div class="pill" onclick="selectPill('entrenosPills', this)">4</div>
+        <div class="pill" onclick="selectPill('entrenosPills', this)">5</div>
+        <div class="pill" onclick="selectPill('entrenosPills', this)">6</div>
+        <div class="pill" onclick="selectPill('entrenosPills', this)">7</div>
+        <div class="pill" onclick="selectPill('entrenosPills', this)">Todos ✓</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="label-question">¿Cómo te has sentido en los entrenos?</span>
+      <div class="emoji-rating" id="entrenoSensacion">
+        <div class="emoji-btn" onclick="selectEmoji('entrenoSensacion', this, 1)">
+          <div class="emoji">😴</div>
+          <div class="emoji-label">Flojo</div>
+        </div>
+        <div class="emoji-btn" onclick="selectEmoji('entrenoSensacion', this, 2)">
+          <div class="emoji">😐</div>
+          <div class="emoji-label">Normal</div>
+        </div>
+        <div class="emoji-btn" onclick="selectEmoji('entrenoSensacion', this, 3)">
+          <div class="emoji">💪</div>
+          <div class="emoji-label">Bien</div>
+        </div>
+        <div class="emoji-btn" onclick="selectEmoji('entrenoSensacion', this, 4)">
+          <div class="emoji">⚡</div>
+          <div class="emoji-label">Muy bien</div>
+        </div>
+        <div class="emoji-btn" onclick="selectEmoji('entrenoSensacion', this, 5)">
+          <div class="emoji">🔥</div>
+          <div class="emoji-label">Bestia</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="label-question">¿Has tenido alguna molestia o dolor?</span>
+      <div class="yn-wrap" id="molestiaYN">
+        <div class="yn-btn" onclick="selectYN('molestiaYN', 'si', 'molestiaDetail')">✓ Sí</div>
+        <div class="yn-btn" onclick="selectYN('molestiaYN', 'no', 'molestiaDetail')">✗ No</div>
+      </div>
+      <div class="conditional" id="molestiaDetail">
+        <textarea class="textarea" id="molestiaText" placeholder="Cuéntame dónde y cuándo has notado la molestia…" rows="3"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- SECCIÓN 4 — NUTRICIÓN -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="section" id="sec4" style="--section-color: var(--c4)">
+    <div class="section-header">
+      <div class="section-num">Sección 04</div>
+      <div class="section-title"><span class="section-icon">🥗</span> Nutrición</div>
+      <p class="section-desc">Sin juicios — la honestidad aquí es la herramienta más poderosa que tenemos.</p>
+    </div>
+
+    <div class="card">
+      <span class="label-question">¿Cómo valorarías tu adherencia al plan de nutrición?</span>
+      <div class="adherence-wrap" id="adherenciaWrap">
+        <div class="adh-option" onclick="selectAdherencia(this, 1)">
+          <div class="adh-bar"><div class="adh-bar-fill" style="width:20%"></div></div>
+          <div class="adh-label">Muy baja</div>
+        </div>
+        <div class="adh-option" onclick="selectAdherencia(this, 2)">
+          <div class="adh-bar"><div class="adh-bar-fill" style="width:40%"></div></div>
+          <div class="adh-label">Baja</div>
+        </div>
+        <div class="adh-option" onclick="selectAdherencia(this, 3)">
+          <div class="adh-bar"><div class="adh-bar-fill" style="width:60%"></div></div>
+          <div class="adh-label">Media</div>
+        </div>
+        <div class="adh-option" onclick="selectAdherencia(this, 4)">
+          <div class="adh-bar"><div class="adh-bar-fill" style="width:80%"></div></div>
+          <div class="adh-label">Alta</div>
+        </div>
+        <div class="adh-option" onclick="selectAdherencia(this, 5)">
+          <div class="adh-bar"><div class="adh-bar-fill" style="width:100%"></div></div>
+          <div class="adh-label">Perfecta</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="label-question">¿Has tenido alguna comida o día fuera del plan?</span>
+      <div class="yn-wrap" id="fueraPlanYN">
+        <div class="yn-btn" onclick="selectYN('fueraPlanYN', 'si', 'fueraPlanDetail')">✓ Sí</div>
+        <div class="yn-btn" onclick="selectYN('fueraPlanYN', 'no', 'fueraPlanDetail')">✗ No</div>
+      </div>
+      <div class="conditional" id="fueraPlanDetail">
+        <div class="pills" id="fueraPlanVeces" style="margin-bottom:12px">
+          <div class="pill" onclick="selectPill('fueraPlanVeces', this)">1 vez</div>
+          <div class="pill" onclick="selectPill('fueraPlanVeces', this)">2–3 veces</div>
+          <div class="pill" onclick="selectPill('fueraPlanVeces', this)">Más de 3</div>
+        </div>
+        <textarea class="textarea" id="fueraPlanText" placeholder="Sin presión — ¿qué pasó? Cuéntame para entender mejor tu semana…" rows="3"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="label-question">¿Cómo están tus digestiones esta semana?</span>
+      <div class="pills" id="digestionPills">
+        <div class="pill" onclick="selectPill('digestionPills', this)">😊 Muy bien</div>
+        <div class="pill" onclick="selectPill('digestionPills', this)">🙂 Bien</div>
+        <div class="pill" onclick="selectPill('digestionPills', this)">😐 Regular</div>
+        <div class="pill" onclick="selectPill('digestionPills', this)">😕 Mal</div>
+        <div class="pill" onclick="selectPill('digestionPills', this)">😖 Muy mal</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- SECCIÓN 5 — BIENESTAR -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="section" id="sec5" style="--section-color: var(--c5)">
+    <div class="section-header">
+      <div class="section-num">Sección 05</div>
+      <div class="section-title"><span class="section-icon">🧠</span> Bienestar y Recuperación</div>
+      <p class="section-desc">El descanso y el bienestar mental son tan importantes como el entrenamiento.</p>
+    </div>
+
+    <div class="card">
+      <span class="label-question">Nivel de energía general esta semana</span>
+      <div class="energy-wrap" id="energiaWrap">
+        <div class="energy-btn" onclick="selectEnergy(this, 1)">
+          <div class="e-emoji">🪫</div>
+          <div class="e-num">1</div>
+        </div>
+        <div class="energy-btn" onclick="selectEnergy(this, 2)">
+          <div class="e-emoji">😔</div>
+          <div class="e-num">2</div>
+        </div>
+        <div class="energy-btn" onclick="selectEnergy(this, 3)">
+          <div class="e-emoji">😊</div>
+          <div class="e-num">3</div>
+        </div>
+        <div class="energy-btn" onclick="selectEnergy(this, 4)">
+          <div class="e-emoji">😄</div>
+          <div class="e-num">4</div>
+        </div>
+        <div class="energy-btn" onclick="selectEnergy(this, 5)">
+          <div class="e-emoji">⚡</div>
+          <div class="e-num">5</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="label-question">Horas de sueño medias por noche</span>
+      <div class="sleep-opts" id="suenoHoras">
+        <div class="sleep-btn" onclick="selectSleep(this)">≤4h</div>
+        <div class="sleep-btn" onclick="selectSleep(this)">5h</div>
+        <div class="sleep-btn" onclick="selectSleep(this)">6h</div>
+        <div class="sleep-btn" onclick="selectSleep(this)">7h</div>
+        <div class="sleep-btn" onclick="selectSleep(this)">7–8h</div>
+        <div class="sleep-btn" onclick="selectSleep(this)">8h+</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="label-question">Calidad del sueño</span>
+      <div class="stars" id="suenoCalidad" style="justify-content:center">
+        <div class="star" onclick="selectStar('suenoCalidad', 1)">⭐</div>
+        <div class="star" onclick="selectStar('suenoCalidad', 2)">⭐</div>
+        <div class="star" onclick="selectStar('suenoCalidad', 3)">⭐</div>
+        <div class="star" onclick="selectStar('suenoCalidad', 4)">⭐</div>
+        <div class="star" onclick="selectStar('suenoCalidad', 5)">⭐</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="label-question">Nivel de estrés esta semana</span>
+      <div class="stress-wrap">
+        <div class="stress-labels">
+          <span>😌 Tranquilo</span>
+          <span>😰 Muy estresado</span>
+        </div>
+        <input class="slider-input" type="range" id="estresSlider" min="1" max="5" value="3" oninput="updateStressVal(this)" />
+        <div class="slider-val" id="estresVal">Nivel 3 — Moderado</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="label-question">¿Algo concreto que haya afectado tu semana? <span style="color:var(--text-dim);font-size:13px">(opcional)</span></span>
+      <textarea class="textarea" id="afectadoSemana" placeholder="Trabajo, familia, viajes, enfermedades… cualquier cosa que sea relevante." rows="3"></textarea>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- SECCIÓN 6 — REFLEXIÓN -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="section" id="sec6" style="--section-color: var(--c6)">
+    <div class="section-header">
+      <div class="section-num">Sección 06</div>
+      <div class="section-title"><span class="section-icon">📝</span> Reflexión Semanal</div>
+      <p class="section-desc">Esta sección es la más valiosa. Sé honesto contigo mismo.</p>
+    </div>
+
+    <div class="card">
+      <span class="label-question">¿Qué es lo que mejor has hecho esta semana?</span>
+      <textarea class="textarea" id="mejorHecho" placeholder="Celebra tus pequeñas victorias — cada paso cuenta. ¿Qué te enorgullece de esta semana?…" rows="4"></textarea>
+    </div>
+
+    <div class="card">
+      <span class="label-question">¿Qué cambiarías o mejorarías de cara a la próxima semana?</span>
+      <textarea class="textarea" id="mejoraria" placeholder="Un hábito, un comportamiento, una situación… ¿qué quieres hacer diferente?" rows="4"></textarea>
+    </div>
+
+    <div class="card">
+      <span class="label-question">¿Tienes alguna duda o pregunta para tu coach? <span style="color:var(--text-dim);font-size:13px">(opcional)</span></span>
+      <textarea class="textarea" id="dudas" placeholder="Pregunta lo que necesites — ninguna duda es pequeña…" rows="3"></textarea>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- SECCIÓN 7 — VALORACIÓN GLOBAL -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="section" id="sec7" style="--section-color: var(--c7)">
+    <div class="section-header">
+      <div class="section-num">Sección 07</div>
+      <div class="section-title"><span class="section-icon">🎯</span> Valoración Global</div>
+      <p class="section-desc">En perspectiva de todo el proceso, ¿cómo te sientes con tu progreso?</p>
+    </div>
+
+    <div class="card">
+      <span class="label-question">Del 1 al 10, ¿cómo te sientes con tu progreso en general?</span>
+      <div class="score-grid" id="scoreGrid">
+        <div class="score-btn" onclick="selectScore(1)">1</div>
+        <div class="score-btn" onclick="selectScore(2)">2</div>
+        <div class="score-btn" onclick="selectScore(3)">3</div>
+        <div class="score-btn" onclick="selectScore(4)">4</div>
+        <div class="score-btn" onclick="selectScore(5)">5</div>
+        <div class="score-btn" onclick="selectScore(6)">6</div>
+        <div class="score-btn" onclick="selectScore(7)">7</div>
+        <div class="score-btn" onclick="selectScore(8)">8</div>
+        <div class="score-btn" onclick="selectScore(9)">9</div>
+        <div class="score-btn" onclick="selectScore(10)">10</div>
+      </div>
+      <div class="score-message" id="scoreMsg">Selecciona una puntuación…</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- SECCIÓN 8 — FOTOS -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="section" id="sec8" style="--section-color: var(--c8)">
+    <div class="section-header">
+      <div class="section-num">Sección 08</div>
+      <div class="section-title"><span class="section-icon">📸</span> Fotos de Reporte</div>
+      <p class="section-desc">Las fotos son la herramienta más objetiva para medir tu evolución. Frente, lateral y espalda.</p>
+    </div>
+
+    <div class="card">
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="photoInput" multiple accept="image/*" onchange="handlePhotos(this.files)" />
+        <div class="drop-icon">📷</div>
+        <div class="drop-title">Arrastra tus fotos aquí</div>
+        <div class="drop-sub">o haz clic para seleccionarlas · JPG, PNG · Hasta 10 fotos</div>
+      </div>
+      <div class="photo-previews" id="photoPreviews"></div>
+    </div>
+
+    <div class="card" style="background:color-mix(in srgb, var(--c8) 6%, var(--bg2)); border-color:color-mix(in srgb, var(--c8) 20%, transparent)">
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="font-size:22px">💡</div>
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px">Consejo para las fotos</div>
+          <div style="font-size:13px;color:var(--text-muted);line-height:1.6">
+            Hazlas siempre en las mismas condiciones: misma hora, misma ropa, misma iluminación. Así la comparativa es real y motivadora.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav-wrap" id="navWrap" style="display:none">
+    <button class="nav-btn nav-prev" id="prevBtn" onclick="navPrev()" style="display:none">← Anterior</button>
+    <button class="nav-btn nav-next" id="nextBtn" onclick="navNext()">Siguiente →</button>
+    <button class="nav-btn nav-submit" id="submitBtn" onclick="submitForm()" style="display:none">Enviar Check-in ✓</button>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<canvas id="confetti-canvas"></canvas>
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">🎉</div>
+  <h2 class="success-title">¡Check-in enviado!</h2>
+  <p class="success-sub">Gracias <span class="success-name" id="successName"></span>, tu coach revisará tu check-in pronto.<br/><br/>💪 Sigue así — cada semana que te presentas es una victoria.</p>
+</div>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────────────────────
+const TOTAL = 8;
+let current = 0; // 0 = intro
+
+const sectionColors = ['','#6366f1','#8b5cf6','#f59e0b','#10b981','#3b82f6','#ec4899','#f97316','#14b8a6'];
+const stressLabels = ['','😌 Relajado','😐 Leve','😶 Moderado','😤 Alto','😰 Muy estresado'];
+const scoreMsgs = {
+  1: '😔 Parece que has tenido una semana difícil. Hablamos.',
+  2: '😔 Hay margen de mejora — no te rindas.',
+  3: '😐 Semana complicada. Vamos a trabajar en ello.',
+  4: '🙂 Hay progreso, aunque con dudas. Es normal.',
+  5: '🙂 Progreso constante. Estás en el camino.',
+  6: '😊 Bien encaminado/a. Sigues avanzando.',
+  7: '😊 Buena semana. El esfuerzo se nota.',
+  8: '💪 Muy bien — estás rendiendo al máximo.',
+  9: '🔥 Semana excepcional. ¡A mantener ese nivel!',
+  10: '🌟 ¡Perfecto! Semana de 10 — esto es lo que buscamos.'
+};
+
+const photoFiles = [];
+let selectedScore = null;
+
+// ─── NAVIGATION ──────────────────────────────────────────────────────────────
+function startForm() {
+  document.getElementById('introScreen').style.display = 'none';
+  document.getElementById('navWrap').style.display = 'flex';
+  document.getElementById('progressPill').style.display = 'block';
+  goTo(1);
+}
+
+function goTo(n) {
+  // Hide all
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  // Show target
+  const sec = document.getElementById('sec' + n);
+  if (sec) {
+    sec.classList.add('active');
+    sec.style.animation = 'none';
+    sec.offsetHeight; // reflow
+    sec.style.animation = '';
+  }
+  current = n;
+  updateProgress();
+  updateNav();
+  updateAccent();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function navNext() {
+  if (current < TOTAL) goTo(current + 1);
+}
+
+function navPrev() {
+  if (current > 1) goTo(current - 1);
+}
+
+function updateProgress() {
+  const pct = ((current - 1) / (TOTAL - 1)) * 100;
+  document.getElementById('progressFill').style.width = Math.max(pct, 3) + '%';
+  document.getElementById('progressPill').textContent = current + ' / ' + TOTAL;
+}
+
+function updateNav() {
+  const prev = document.getElementById('prevBtn');
+  const next = document.getElementById('nextBtn');
+  const sub  = document.getElementById('submitBtn');
+  prev.style.display = current > 1 ? 'flex' : 'none';
+  if (current === TOTAL) {
+    next.style.display = 'none';
+    sub.style.display  = 'flex';
+  } else {
+    next.style.display = 'flex';
+    sub.style.display  = 'none';
+  }
+}
+
+function updateAccent() {
+  const c = sectionColors[current] || '#6366f1';
+  document.documentElement.style.setProperty('--accent', c);
+  document.documentElement.style.setProperty('--accent2', sectionColors[Math.min(current+1, TOTAL)] || c);
+  document.getElementById('headerDot').style.background = c;
+  document.getElementById('headerDot').style.boxShadow = `0 0 12px ${c}`;
+  // Update next button color
+  document.getElementById('nextBtn').style.background = c;
+  document.getElementById('nextBtn').style.borderColor = c;
+  document.getElementById('nextBtn').style.boxShadow = `0 4px 20px ${c}66`;
+}
+
+// ─── WEEK BADGE ──────────────────────────────────────────────────────────────
+function updateWeekBadge() {
+  const num  = document.getElementById('semanaNum').value;
+  const fecha = document.getElementById('semanaFecha').value;
+  let text = '';
+  if (num) text = num;
+  if (fecha) {
+    const d = new Date(fecha + 'T00:00:00');
+    const opts = { day: 'numeric', month: 'short' };
+    text += (text ? ' · ' : '') + d.toLocaleDateString('es-ES', opts);
+  }
+  document.getElementById('weekBadge').textContent = text || 'Semana —';
+}
+
+// ─── SELECTORS ───────────────────────────────────────────────────────────────
+function selectPill(groupId, el) {
+  document.querySelectorAll('#' + groupId + ' .pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function selectEmoji(groupId, el) {
+  document.querySelectorAll('#' + groupId + ' .emoji-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function selectYN(groupId, val, conditionalId) {
+  const btns = document.querySelectorAll('#' + groupId + ' .yn-btn');
+  btns[0].classList.remove('selected-yes');
+  btns[1].classList.remove('selected-no');
+  if (val === 'si') btns[0].classList.add('selected-yes');
+  else btns[1].classList.add('selected-no');
+
+  const cond = document.getElementById(conditionalId);
+  if (cond) {
+    if (val === 'si') cond.classList.add('visible');
+    else cond.classList.remove('visible');
+  }
+}
+
+function selectAdherencia(el) {
+  document.querySelectorAll('#adherenciaWrap .adh-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function selectStar(groupId, n) {
+  const stars = document.querySelectorAll('#' + groupId + ' .star');
+  stars.forEach((s, i) => {
+    if (i < n) s.classList.add('lit');
+    else s.classList.remove('lit');
+  });
+}
+
+function selectSleep(el) {
+  document.querySelectorAll('#suenoHoras .sleep-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function selectEnergy(el) {
+  document.querySelectorAll('#energiaWrap .energy-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function updateStressVal(input) {
+  document.getElementById('estresVal').textContent = stressLabels[input.value];
+}
+
+function selectScore(n) {
+  selectedScore = n;
+  const colors = {
+    1:'#ef4444', 2:'#f97316', 3:'#fb923c',
+    4:'#facc15', 5:'#a3e635', 6:'#4ade80',
+    7:'#34d399', 8:'#2dd4bf', 9:'#38bdf8', 10:'#818cf8'
+  };
+  document.querySelectorAll('#scoreGrid .score-btn').forEach((b, i) => {
+    const num = i + 1;
+    if (num <= n) {
+      b.style.background = colors[num] + '33';
+      b.style.borderColor = colors[num];
+      b.style.color = colors[num];
+    } else {
+      b.style.background = '';
+      b.style.borderColor = '';
+      b.style.color = '';
+    }
+  });
+  document.getElementById('scoreMsg').textContent = scoreMsgs[n] || '';
+}
+
+// ─── PHOTOS ──────────────────────────────────────────────────────────────────
+function handlePhotos(files) {
+  Array.from(files).slice(0, 10 - photoFiles.length).forEach(f => {
+    photoFiles.push(f);
+    const reader = new FileReader();
+    reader.onload = e => addThumb(e.target.result, photoFiles.length - 1);
+    reader.readAsDataURL(f);
+  });
+}
+
+function addThumb(src, idx) {
+  const previews = document.getElementById('photoPreviews');
+  const thumb = document.createElement('div');
+  thumb.className = 'photo-thumb';
+  thumb.innerHTML = `<img src="${src}" alt="foto" /><button class="photo-thumb-remove" onclick="removeThumb(${idx})">×</button>`;
+  previews.appendChild(thumb);
+}
+
+function removeThumb(idx) {
+  const thumbs = document.querySelectorAll('.photo-thumb');
+  if (thumbs[idx]) thumbs[idx].remove();
+}
+
+// Drag & drop
+const dz = document.getElementById('dropZone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+dz.addEventListener('drop', e => {
+  e.preventDefault();
+  dz.classList.remove('dragover');
+  handlePhotos(e.dataTransfer.files);
+});
+
+// ─── CONFIG ──────────────────────────────────────────────────────────────────
+const FORMSPREE_URL   = 'https://formspree.io/f/xwvzerpq';
+const GOOGLE_SHEET_URL = ''; // Pega aquí la URL del Apps Script cuando la tengas
+
+// ─── COLLECT DATA ────────────────────────────────────────────────────────────
+function collectFormData() {
+  const get = id => (document.getElementById(id) || {}).value || '';
+
+  const selectedPill = groupId => {
+    const el = document.querySelector('#' + groupId + ' .pill.selected');
+    return el ? el.textContent.trim() : '';
+  };
+
+  const selectedEmojiBtn = groupId => {
+    const el = document.querySelector('#' + groupId + ' .emoji-btn.selected .emoji-label');
+    return el ? el.textContent.trim() : '';
+  };
+
+  const selectedYN = groupId => {
+    const btns = document.querySelectorAll('#' + groupId + ' .yn-btn');
+    if (btns[0].classList.contains('selected-yes')) return 'Sí';
+    if (btns[1].classList.contains('selected-no'))  return 'No';
+    return '';
+  };
+
+  const selectedAdherencia = () => {
+    const el = document.querySelector('#adherenciaWrap .adh-option.selected .adh-label');
+    return el ? el.textContent.trim() : '';
+  };
+
+  const selectedSleep = () => {
+    const el = document.querySelector('#suenoHoras .sleep-btn.selected');
+    return el ? el.textContent.trim() : '';
+  };
+
+  const selectedEnergy = () => {
+    const el = document.querySelector('#energiaWrap .energy-btn.selected .e-num');
+    return el ? el.textContent.trim() : '';
+  };
+
+  const starCount = groupId => {
+    return document.querySelectorAll('#' + groupId + ' .star.lit').length || '';
+  };
+
+  return {
+    'Nombre Completo':              get('nombreCompleto'),
+    'Semana':                       get('semanaNum'),
+    'Fecha':                        get('semanaFecha'),
+    'Peso medio (kg)':              get('pesoMedio'),
+    'Peso hoy mañana (kg)':         get('pesoHoy'),
+    'Cintura (cm)':                 get('cintura'),
+    'Entrenos completados':         selectedPill('entrenosPills'),
+    'Sensación en entrenos':        selectedEmojiBtn('entrenoSensacion'),
+    'Molestia o dolor':             selectedYN('molestiaYN'),
+    'Detalle molestia':             get('molestiaText'),
+    'Adherencia nutrición':         selectedAdherencia(),
+    'Comida fuera del plan':        selectedYN('fueraPlanYN'),
+    'Veces fuera del plan':         selectedPill('fueraPlanVeces'),
+    'Detalle fuera del plan':       get('fueraPlanText'),
+    'Digestiones':                  selectedPill('digestionPills'),
+    'Nivel de energía':             selectedEnergy(),
+    'Horas de sueño':               selectedSleep(),
+    'Calidad del sueño (estrellas)':starCount('suenoCalidad'),
+    'Nivel de estrés (1-5)':        get('estresSlider'),
+    'Algo que afectó la semana':    get('afectadoSemana'),
+    'Lo mejor de la semana':        get('mejorHecho'),
+    'A mejorar la próxima semana':  get('mejoraria'),
+    'Dudas para el coach':          get('dudas'),
+    'Valoración del progreso (1-10)': selectedScore || '',
+    '_replyto':                     get('nombreCompleto'),
+  };
+}
+
+// ─── SUBMIT ──────────────────────────────────────────────────────────────────
+async function submitForm() {
+  const btn = document.getElementById('submitBtn');
+  btn.innerHTML = '<span class="spinner"></span> Enviando…';
+  btn.disabled = true;
+
+  const data = collectFormData();
+
+  const sends = [];
+
+  // — Formspree —
+  sends.push(
+    fetch(FORMSPREE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    }).catch(() => null)
+  );
+
+  // — Google Sheets (si está configurado) —
+  if (GOOGLE_SHEET_URL) {
+    sends.push(
+      fetch(GOOGLE_SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }).catch(() => null)
+    );
+  }
+
+  await Promise.all(sends);
+
+  const name = data['Nombre Completo'] || 'campeón/a';
+  document.getElementById('successName').textContent = name.split(' ')[0];
+  document.getElementById('successScreen').classList.add('active');
+  launchConfetti();
+}
+
+// ─── CONFETTI ────────────────────────────────────────────────────────────────
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const colors = ['#6366f1','#8b5cf6','#f59e0b','#10b981','#3b82f6','#ec4899','#f97316','#14b8a6','#fff'];
+  const pieces = Array.from({ length: 120 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * -canvas.height,
+    w: Math.random() * 10 + 5,
+    h: Math.random() * 6 + 3,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    rot: Math.random() * Math.PI * 2,
+    vx: (Math.random() - 0.5) * 3,
+    vy: Math.random() * 3 + 2,
+    vr: (Math.random() - 0.5) * 0.1,
+    alpha: 1
+  }));
+
+  let frame;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let alive = false;
+    pieces.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      if (p.y > canvas.height * 0.6) p.alpha = Math.max(0, p.alpha - 0.015);
+      if (p.alpha > 0) { alive = true; }
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    });
+    if (alive) frame = requestAnimationFrame(draw);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  draw();
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+document.getElementById('semanaFecha').valueAsDate = new Date();
+updateWeekBadge();
+updateStressVal(document.getElementById('estresSlider'));
+</script>
+</body>
+</html>
