@@ -434,6 +434,9 @@ function seedItems() {
     mk('vidres-recep', 'Vidrios aplacado recepción (Franquet Barrau FBP261136)', 'mobiliario', 2889.19, 'EUR', 21, 'pending'),
     mk('rotol-legion', 'Rótulo LEGION letras corpóreas + LED (Franquet Barrau ENP261169)', 'rotulos', 6748.00, 'EUR', 21, 'pending'),
     mk('rotol-xixo', 'Lonas / decoración La Xixo (Franquet Barrau FBP261143)', 'rotulos', 388.10, 'EUR', 21, 'pending', 'Presupuesto a nombre de La Xixo — confirmar si es del gimnasio'),
+    mk('carulla-pagado', 'Carulla Energía — pagado a cuenta', 'electrica', 25361.12, 'EUR', 12.6, 'paid', '40% sin IVA → IVA efectivo 12,6%. Pagado por banco (28.556,62 €)'),
+    mk('carulla-pend', 'Carulla Energía — pendiente', 'electrica', 9769.10, 'EUR', 12.6, 'pending', 'Pendiente por pagar ≈ 11.000 € (IVA efectivo 12,6%)'),
+    mk('lm-pendiente', 'Luis Miguel — trabajos por concretar', 'obra', 0, 'EUR', 21, 'pending', 'Techo vestuario + mano de obra montaje material + pared separatoria tras mostrador. Pendiente de presupuestar'),
     mk('transporte', 'Transporte marítimo + aduana equipos (estimado)', 'transporte', 30000, 'EUR', 0, 'pending', 'Estimación aduana + transporte ≈ 30.000 €'),
   ];
 }
@@ -504,6 +507,14 @@ function load() {
       tr.nota = 'Estimación aduana + transporte ≈ 30.000 €';
     }
     state.migTransporte30k = true;
+    migrated = true;
+  }
+
+  // Migración puntual: fijar presupuesto total = 430.000 € (240.000 ya
+  // aportados + 190.000 que faltan por meter entre los socios).
+  if (!state.migBudget430) {
+    if (!state.budget || state.budget === 0) state.budget = 430000;
+    state.migBudget430 = true;
     migrated = true;
   }
 
