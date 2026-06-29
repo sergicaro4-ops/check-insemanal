@@ -438,7 +438,7 @@ function seedItems() {
     mk('rotol-xixo', 'Lonas / decoración La Xixo (Franquet Barrau FBP261143)', 'rotulos', 388.10, 'EUR', 21, 'pending', 'Presupuesto a nombre de La Xixo — confirmar si es del gimnasio'),
     mk('carulla-pagado', 'Carulla Energía — pagado 25% (con IVA)', 'electrica', 23600.51, 'EUR', 21, 'paid', '25% pagado = 28.556,62 € con IVA. Total Carulla ≈ 106.297 €'),
     mk('carulla-pend-iva', 'Carulla Energía — pendiente 35% (con IVA)', 'electrica', 33040.72, 'EUR', 21, 'pending', '35% pendiente = 39.979 € con IVA'),
-    mk('carulla-pend-siniva', 'Carulla Energía — pendiente 40% (SIN IVA)', 'electrica', 37760.82, 'EUR', 0, 'pending', '40% sin IVA = 37.761 €'),
+    mk('carulla-pend-siniva', 'Carulla Energía — pendiente 40% (con IVA)', 'electrica', 37760.82, 'EUR', 21, 'pending', '40% final con IVA'),
     mk('taquillas-bellum', 'Taquillas + cabinas sanitarias vestuarios (Bellum Logistics)', 'vestuarios', 15681.50, 'EUR', 21, 'pending', 'Taquillas 9.628,38 + cabinas 5.053,12 + envío 1.000 €. Pago 50% firma / 50% antes de envío'),
     mk('pulir-suelo', 'Pulir suelo', 'suelo', 5000, 'EUR', 21, 'pending', 'Estimación'),
     mk('pintura-gral', 'Pintura (general)', 'pintura', 8000, 'EUR', 21, 'pending', 'Estimación'),
@@ -527,6 +527,14 @@ function load() {
     state.items = state.items.filter(i => !old.includes(i.sk));
     state.seededKeys = state.seededKeys.filter(k => !old.includes(k));
     state.migCarullaV3 = true;
+    migrated = true;
+  }
+
+  // Migración puntual: el 40% de Carulla pasa a llevar IVA (antes 0%).
+  if (!state.migCarullaIva) {
+    const cs = state.items.find(i => i.sk === 'carulla-pend-siniva');
+    if (cs && cs.iva === 0) { cs.iva = 21; cs.concepto = 'Carulla Energía — pendiente 40% (con IVA)'; cs.nota = '40% final con IVA'; }
+    state.migCarullaIva = true;
     migrated = true;
   }
 

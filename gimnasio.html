@@ -171,7 +171,7 @@ function seedItems(){
     mk('rotol-xixo','Lonas / decoración La Xixo','rotulos',388.10,'EUR',21,'pending','A nombre de La Xixo — confirmar'),
     mk('carulla-pagado','Carulla Energía — pagado 25% (con IVA)','electrica',23600.51,'EUR',21,'paid','25% pagado = 28.556,62 € con IVA'),
     mk('carulla-pend-iva','Carulla Energía — pendiente 35% (con IVA)','electrica',33040.72,'EUR',21,'pending'),
-    mk('carulla-pend-siniva','Carulla Energía — pendiente 40% (SIN IVA)','electrica',37760.82,'EUR',0,'pending','40% sin IVA'),
+    mk('carulla-pend-siniva','Carulla Energía — pendiente 40% (con IVA)','electrica',37760.82,'EUR',21,'pending','40% final con IVA'),
     mk('taquillas-bellum','Taquillas + cabinas sanitarias (Bellum Logistics)','vestuarios',15681.50,'EUR',21,'pending'),
     mk('pulir-suelo','Pulir suelo','suelo',5000,'EUR',21,'pending'),
     mk('pintura-gral','Pintura (general)','pintura',8000,'EUR',21,'pending'),
@@ -267,6 +267,9 @@ function load(){
   try{ const raw=localStorage.getItem(RK); if(raw){ const o=JSON.parse(raw); R={budget:o.budget||430000,usdRate:o.usdRate||0.92,ivaDefault:o.ivaDefault||21,items:Array.isArray(o.items)?o.items:[]}; } }catch(e){}
   if(!R.items.length) R.items=seedItems();
   R.items.forEach(i=>{ if(!i.id) i.id=uid(); });
+  // Migración puntual: el 40% de Carulla pasa a llevar IVA (antes 0%).
+  const cs=R.items.find(i=>i.sk==='carulla-pend-siniva');
+  if(cs && cs.iva===0 && !localStorage.getItem('migCarullaIva')){ cs.iva=21; cs.concepto='Carulla Energía — pendiente 40% (con IVA)'; cs.nota='40% final con IVA'; localStorage.setItem('migCarullaIva','1'); saveR(); }
   try{ const raw=localStorage.getItem(BK); if(raw){ const o=JSON.parse(raw); B={saldo:typeof o.saldo==='number'?o.saldo:SALDO_DEF,mov:Array.isArray(o.mov)?o.mov:[]}; } }catch(e){}
   if(!B.mov.length) B.mov=seedMov();
 }
