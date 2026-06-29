@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Legion Club · Oportunidad de Inversión</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  :root {
+    --bg:#070709; --bg2:#0f0f15; --bg3:#15151e;
+    --border:rgba(255,255,255,0.08); --border-bright:rgba(255,255,255,0.16);
+    --text:#f4f4fa; --muted:#9a9ab8; --dim:#5a5a72;
+    --gold:#d4a838; --gold2:#f0c860; --green:#22c55e; --red:#ef4444;
+    --radius:18px; --radius-sm:11px;
+  }
+  body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; }
+  .toolbar { position:sticky; top:0; z-index:50; background:rgba(7,7,9,0.85); backdrop-filter:blur(14px); border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; padding:12px 20px; }
+  .toolbar .tb-brand { font-family:'Space Grotesk',sans-serif; font-weight:700; letter-spacing:0.18em; font-size:13px; }
+  .toolbar .tb-actions { display:flex; gap:8px; }
+  .btn { font-family:'Space Grotesk',sans-serif; font-size:12px; font-weight:600; padding:8px 15px; border-radius:20px; border:1px solid var(--border-bright); background:transparent; color:var(--muted); cursor:pointer; text-decoration:none; }
+  .btn.gold { background:linear-gradient(135deg,var(--gold),var(--gold2)); border:none; color:#1a1405; }
+  .btn:hover { color:var(--text); }
+
+  .wrap { max-width:960px; margin:0 auto; padding:0 22px; }
+  .sec { padding:56px 0; border-top:1px solid var(--border); }
+  .sec:first-of-type { border-top:none; }
+  .eyebrow { font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); margin-bottom:14px; }
+  h2 { font-family:'Space Grotesk',sans-serif; font-size:30px; font-weight:700; line-height:1.15; margin-bottom:16px; letter-spacing:-0.01em; }
+  h3 { font-family:'Space Grotesk',sans-serif; font-size:17px; font-weight:700; margin-bottom:8px; }
+  p.lead { color:var(--muted); font-size:16px; max-width:680px; }
+  p { color:var(--muted); }
+
+  /* HERO */
+  .hero { padding:90px 0 70px; text-align:center; position:relative; overflow:hidden; }
+  .hero::before { content:''; position:absolute; inset:0; background:
+    radial-gradient(700px 360px at 50% -10%, rgba(212,168,56,0.18), transparent),
+    radial-gradient(600px 300px at 50% 120%, rgba(99,102,241,0.10), transparent); pointer-events:none; }
+  .hero-badge { display:inline-block; font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); border:1px solid color-mix(in srgb,var(--gold) 40%,transparent); border-radius:30px; padding:7px 18px; margin-bottom:26px; }
+  .hero h1 { font-family:'Space Grotesk',sans-serif; font-size:58px; font-weight:700; line-height:1; letter-spacing:0.02em; margin-bottom:10px; }
+  .hero .tagline { font-family:'Space Grotesk',sans-serif; font-size:14px; letter-spacing:0.3em; text-transform:uppercase; color:var(--muted); margin-bottom:28px; }
+  .hero .pitch-line { font-size:20px; color:var(--text); max-width:620px; margin:0 auto 36px; }
+  .hero-stats { display:flex; justify-content:center; gap:14px; flex-wrap:wrap; }
+  .hstat { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:18px 26px; min-width:150px; }
+  .hstat .v { font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:700; color:var(--gold2); }
+  .hstat .l { font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-top:4px; }
+
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  @media (max-width:720px){ .grid2,.grid3{ grid-template-columns:1fr; } .hero h1{ font-size:42px; } h2{ font-size:24px; } }
+
+  .card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:24px; }
+  .card .ic { font-size:24px; margin-bottom:12px; }
+  .card p { font-size:14px; }
+
+  .feature-list { display:grid; grid-template-columns:1fr 1fr; gap:10px 24px; margin-top:8px; }
+  @media (max-width:720px){ .feature-list{ grid-template-columns:1fr; } }
+  .feature { display:flex; gap:10px; align-items:flex-start; font-size:14px; color:var(--text); }
+  .feature .chk { color:var(--gold); font-weight:700; }
+  .feature small { color:var(--dim); }
+
+  /* valuation */
+  .val-method { display:flex; align-items:center; gap:18px; padding:18px 0; border-bottom:1px solid var(--border); }
+  .val-method:last-child { border-bottom:none; }
+  .val-num { font-family:'Space Grotesk',sans-serif; font-size:26px; font-weight:700; color:var(--gold2); min-width:130px; }
+  .val-desc { font-size:14px; }
+  .val-conclusion { margin-top:22px; background:linear-gradient(135deg, color-mix(in srgb,var(--gold) 16%,var(--bg2)), var(--bg2)); border:1px solid color-mix(in srgb,var(--gold) 35%,transparent); border-radius:var(--radius); padding:22px; text-align:center; }
+  .val-conclusion .big { font-family:'Space Grotesk',sans-serif; font-size:40px; font-weight:700; color:var(--gold2); }
+
+  /* assumptions + table */
+  .assume { background:var(--bg3); border:1px dashed var(--border-bright); border-radius:var(--radius-sm); padding:16px 18px; margin-bottom:18px; display:flex; gap:18px; flex-wrap:wrap; align-items:flex-end; }
+  .af label { display:block; font-family:'Space Grotesk',sans-serif; font-size:10px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+  .af input { background:var(--bg); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; padding:8px 10px; width:120px; outline:none; }
+  .af input:focus { border-color:var(--gold); }
+  .af .u { color:var(--dim); font-size:12px; margin-left:4px; }
+
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  thead th { text-align:right; font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:var(--dim); padding:12px; border-bottom:1px solid var(--border-bright); }
+  thead th:first-child { text-align:left; }
+  td { padding:12px; border-bottom:1px solid var(--border); text-align:right; font-family:'Space Grotesk',sans-serif; }
+  td:first-child { text-align:left; font-family:'Inter',sans-serif; color:var(--muted); }
+  tr.ebitda td { font-weight:700; color:var(--text); border-top:1px solid var(--border-bright); }
+  tr.ebitda td:first-child { color:var(--gold2); }
+
+  .offer-box { background:linear-gradient(135deg,var(--bg2),var(--bg3)); border:1px solid var(--border-bright); border-radius:var(--radius); padding:30px; }
+  .offer-headline { font-family:'Space Grotesk',sans-serif; font-size:32px; font-weight:700; margin-bottom:8px; }
+  .offer-headline .gold { color:var(--gold2); }
+  .ret-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:22px; }
+  @media (max-width:720px){ .ret-grid{ grid-template-columns:1fr; } }
+  .ret { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px; }
+  .ret .v { font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:700; color:var(--green); }
+  .ret .l { font-size:12px; color:var(--muted); margin-top:4px; }
+
+  .uses { display:flex; flex-direction:column; gap:10px; }
+  .use-row { display:flex; align-items:center; gap:14px; }
+  .use-bar { flex:1; height:30px; background:var(--bg3); border-radius:8px; overflow:hidden; border:1px solid var(--border); position:relative; }
+  .use-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--gold2)); display:flex; align-items:center; padding-left:12px; font-size:12px; font-weight:600; color:#1a1405; font-family:'Space Grotesk',sans-serif; }
+  .use-amt { font-family:'Space Grotesk',sans-serif; font-weight:700; min-width:90px; text-align:right; }
+
+  .risk { display:flex; gap:14px; padding:14px 0; border-bottom:1px solid var(--border); }
+  .risk:last-child { border-bottom:none; }
+  .risk .r { color:var(--red); font-weight:700; font-size:13px; min-width:160px; font-family:'Space Grotesk',sans-serif; }
+  .risk .m { font-size:13.5px; }
+  .risk .m b { color:var(--green); }
+
+  .disclaimer { font-size:12px; color:var(--dim); line-height:1.6; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px 18px; }
+  .footer { text-align:center; padding:40px 0 60px; color:var(--dim); font-size:13px; }
+  .footer .big { font-family:'Space Grotesk',sans-serif; color:var(--gold2); font-size:18px; font-weight:700; letter-spacing:0.1em; margin-bottom:8px; }
+
+  @media print {
+    .toolbar { display:none; }
+    body { background:#fff; color:#111; }
+    .card,.offer-box,.val-conclusion,.assume,.disclaimer { border-color:#ccc; background:#fff; }
+    .sec { page-break-inside:avoid; padding:24px 0; }
+    .hero { padding:30px 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="tb-brand">LEGION CLUB</div>
+  <div class="tb-actions">
+    <a class="btn" href="resumen.html">Datos internos</a>
+    <button class="btn gold" onclick="window.print()">Descargar PDF</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-badge">Oportunidad de inversión · 2026</div>
+    <h1>LEGION CLUB</h1>
+    <div class="tagline">Heroes take the hard way</div>
+    <p class="pitch-line">Un gimnasio premium llave en mano en Sant Fruitós de Bages. La inversión y el riesgo de obra ya están asumidos: <b style="color:var(--text)">buscamos socios para abrir y crecer.</b></p>
+    <div class="hero-stats">
+      <div class="hstat"><div class="v">500.000 €</div><div class="l">Valoración</div></div>
+      <div class="hstat"><div class="v">50.000 €</div><div class="l">Ticket · 10%</div></div>
+      <div class="hstat"><div class="v" id="hsEbitda">—</div><div class="l">EBITDA objetivo (año 3)</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- RESUMEN EJECUTIVO -->
+<section class="sec"><div class="wrap">
+  <div class="eyebrow">Resumen ejecutivo</div>
+  <h2>La oportunidad</h2>
+  <p class="lead">Legion Club es un centro fitness de nueva creación con una inversión de primer nivel ya ejecutada. Entrar ahora significa hacerlo justo antes de la apertura, con el grueso del riesgo (obra, licencias, instalaciones) ya superado.</p>
+  <div class="grid3" style="margin-top:26px">
+    <div class="card"><div class="ic">🏗️</div><h3>Riesgo de obra superado</h3><p>Más de medio millón de euros invertidos en instalaciones, maquinaria y acondicionamiento. No se invierte en una idea, sino en un activo real casi terminado.</p></div>
+    <div class="card"><div class="ic">📍</div><h3>Ubicación e inmueble estable</h3><p>Nave de 500.000 € propiedad de la familia fundadora, con contrato de arrendamiento estable. Sin riesgo de pérdida del local.</p></div>
+    <div class="card"><div class="ic">📈</div><h3>Potencial de rentabilidad</h3><p>Modelo de cuotas recurrentes con márgenes atractivos a partir del segundo año y recorrido de crecimiento.</p></div>
+  </div>
+</div></section>
+
+<!-- EL PROYECTO -->
+<section class="sec"><div class="wrap">
+  <div class="eyebrow">El proyecto</div>
+  <h2>Un equipamiento de gama alta, ya instalado</h2>
+  <p class="lead">El capital ya invertido se traduce en instalaciones que la mayoría de gimnasios tardan años en costear. Esto es valor tangible que el inversor encuentra hecho desde el día uno.</p>
+  <div class="feature-list">
+    <div class="feature"><span class="chk">✦</span><div>Climatización profesional 4×14 kW <small>· confort todo el año</small></div></div>
+    <div class="feature"><span class="chk">✦</span><div>Agua caliente por aerotermia de alta eficiencia <small>· coste energético bajo</small></div></div>
+    <div class="feature"><span class="chk">✦</span><div>Maquinaria profesional importada <small>· catálogo completo de musculación y cardio</small></div></div>
+    <div class="feature"><span class="chk">✦</span><div>Vestuarios con taquillas y cabinas fenólicas <small>· acabado premium</small></div></div>
+    <div class="feature"><span class="chk">✦</span><div>Control de acceso con tornos y lector QR <small>· operativa 24h sin personal</small></div></div>
+    <div class="feature"><span class="chk">✦</span><div>Instalación eléctrica, renovación de aire RITE y contraincendios <small>· normativa al día</small></div></div>
+  </div>
+</div></section>
+
+<!-- VALORACIÓN -->
+<section class="sec"><div class="wrap">
+  <div class="eyebrow">Tesis de valoración</div>
+  <h2>Por qué vale 500.000 €</h2>
+  <p class="lead">La valoración se sostiene por tres vías independientes que convergen en la misma cifra.</p>
+  <div style="margin-top:20px">
+    <div class="val-method"><div class="val-num" id="vmAct">—</div><div class="val-desc"><b>Por activos e inversión realizada.</b> Coste real ya ejecutado en instalaciones, maquinaria y obra. Un comprador partiría de cero con este desembolso.</div></div>
+    <div class="val-method"><div class="val-num" id="vmEbitda">—</div><div class="val-desc"><b>Por múltiplo de EBITDA.</b> El sector fitness se transacciona habitualmente a 3–5× EBITDA. Aplicado al EBITDA objetivo de año 3.</div></div>
+    <div class="val-method"><div class="val-num" id="vmRev">—</div><div class="val-desc"><b>Por múltiplo de ingresos.</b> ~1,3× la facturación anual objetivo, ratio habitual para centros consolidados.</div></div>
+  </div>
+  <div class="val-conclusion">
+    <div style="font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px">Valoración de referencia</div>
+    <div class="big">500.000 €</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:6px">Punto de encuentro de los tres métodos</div>
+  </div>
+</div></section>
+
+<!-- PROYECCIÓN -->
+<section class="sec"><div class="wrap">
+  <div class="eyebrow">Proyección financiera</div>
+  <h2>El negocio en números</h2>
+  <p class="lead">Modelo a 3 años basado en cuotas recurrentes. Ajusta los supuestos para ver distintos escenarios.</p>
+  <div class="assume">
+    <div class="af"><label>Cuota media / mes</label><input type="number" id="cuota" step="1" /><span class="u">€</span></div>
+    <div class="af"><label>Socios objetivo (año 3)</label><input type="number" id="socios" step="50" /></div>
+    <div class="af"><label>Alquiler nave / mes</label><input type="number" id="alquiler" step="100" /><span class="u">€</span></div>
+  </div>
+  <table>
+    <thead><tr><th>Concepto</th><th>Año 1</th><th>Año 2</th><th>Año 3</th></tr></thead>
+    <tbody id="projBody"></tbody>
+  </table>
+  <p style="font-size:11.5px;color:var(--dim);margin-top:10px">Rampa de ocupación estimada: 50% / 75% / 100% del objetivo. Otros costes operativos (suministros, mantenimiento, marketing) estimados en el 25% de los ingresos. Cifras ilustrativas, no garantizadas.</p>
+</div></section>
+
+<!-- OFERTA -->
+<section class="sec"><div class="wrap">
+  <div class="eyebrow">La oferta</div>
+  <h2>Qué ofrecemos al inversor</h2>
+  <div class="offer-box">
+    <div class="offer-headline"><span class="gold">10%</span> del capital por <span class="gold">50.000 €</span></div>
+    <p style="font-size:15px">Entrada como socio mediante ampliación de capital, sobre una valoración de 500.000 €. Posibilidad de varios tickets del 10%.</p>
+    <div class="ret-grid">
+      <div class="ret"><div class="v" id="retBen">—</div><div class="l">Beneficio anual atribuible al 10% (objetivo año 3, sobre EBITDA)</div></div>
+      <div class="ret"><div class="v" id="retYield">—</div><div class="l">Rentabilidad anual sobre la inversión (objetivo, a plena ocupación)</div></div>
+      <div class="ret"><div class="v" id="retPay">—</div><div class="l">Payback orientativo de la inversión</div></div>
+    </div>
+    <p style="font-size:12px;color:var(--dim);margin-top:16px">Cifras objetivo, dependientes de la ocupación real. El retorno se materializa vía reparto de beneficios y/o revalorización de la participación.</p>
+  </div>
+</div></section>
+
+<!-- USO DE FONDOS -->
+<section class="sec"><div class="wrap">
+  <div class="eyebrow">Uso de los fondos</div>
+  <h2>A qué se destina el capital</h2>
+  <p class="lead">La inversión entrante completa la reforma pendiente y dota de margen para una apertura sólida.</p>
+  <div class="uses" style="margin-top:22px">
+    <div class="use-row"><div class="use-bar"><div class="use-fill" style="width:78%">Finalizar reforma e instalaciones</div></div><div class="use-amt">~80%</div></div>
+    <div class="use-row"><div class="use-bar"><div class="use-fill" style="width:14%">Apertura y marketing</div></div><div class="use-amt">~12%</div></div>
+    <div class="use-row"><div class="use-bar"><div class="use-fill" style="width:9%">Colchón / circulante</div></div><div class="use-amt">~8%</div></div>
+  </div>
+</div></section>
+
+<!-- POR QUÉ AHORA -->
+<section class="sec"><div class="wrap">
+  <div class="eyebrow">Ventajas competitivas</div>
+  <h2>Por qué ahora</h2>
+  <div class="grid2" style="margin-top:8px">
+    <div class="card"><h3>🔒 Barrera de entrada ya pagada</h3><p>El gran desembolso de obra e instalaciones está hecho. El inversor entra después del riesgo más alto y antes de generar ingresos: el mejor punto de la curva.</p></div>
+    <div class="card"><h3>🏠 Inmueble familiar estable</h3><p>La nave es propiedad de la familia fundadora. Compromiso a largo plazo y sin riesgo de que el negocio pierda su local.</p></div>
+    <div class="card"><h3>💸 Eficiencia energética</h3><p>Aerotermia y climatización modernas reducen el mayor coste recurrente de un gimnasio: la energía.</p></div>
+    <div class="card"><h3>🤝 Fundadores implicados</h3><p>5 socios fundadores con capital y trabajo ya comprometidos. Intereses alineados con el nuevo inversor.</p></div>
+  </div>
+</div></section>
+
+<!-- RIESGOS -->
+<section class="sec"><div class="wrap">
+  <div class="eyebrow">Transparencia</div>
+  <h2>Riesgos y mitigantes</h2>
+  <div style="margin-top:8px">
+    <div class="risk"><div class="r">Ocupación más lenta</div><div class="m">Que captar socios cueste más de lo previsto. <b>Mitigante:</b> rampa conservadora (50% el primer año) y presupuesto de marketing dedicado.</div></div>
+    <div class="risk"><div class="r">Sobrecoste de obra</div><div class="m">Desviaciones en las partidas pendientes. <b>Mitigante:</b> la mayor parte de la obra ya está contratada y pagada; queda poco abierto.</div></div>
+    <div class="risk"><div class="r">Inmueble no propiedad de la S.L.</div><div class="m">El local se arrienda a la CB familiar. <b>Mitigante:</b> contrato estable a largo plazo y a precio de mercado, con la familia como fundadora.</div></div>
+    <div class="risk"><div class="r">Liquidez de la participación</div><div class="m">No cotiza; salida no inmediata. <b>Mitigante:</b> pacto de socios con cláusulas de salida y derecho de acompañamiento.</div></div>
+  </div>
+</div></section>
+
+<!-- CONTACTO -->
+<section class="sec"><div class="wrap">
+  <div class="disclaimer">
+    <b>Aviso legal.</b> Este documento es un resumen comercial con fines informativos y no constituye una oferta de valores ni asesoramiento de inversión. Las proyecciones son estimaciones basadas en supuestos y no garantizan resultados futuros. Cualquier inversión debe formalizarse mediante la correspondiente due diligence, pacto de socios y escritura de ampliación de capital ante un asesor profesional. Sant Fruitós de Bages, 2026.
+  </div>
+</div></section>
+
+<div class="footer">
+  <div class="big">LEGION CLUB</div>
+  <div>Caro Legión S.L. · Carrer Ensija 32, Sant Fruitós de Bages</div>
+  <div>Contacto: Sergi Caro · sergicaro4@gmail.com · 609 502 410</div>
+</div>
+
+<script>
+const f = n => Math.round(n).toLocaleString('es-ES')+' €';
+const fk = n => Math.round(n/1000)+'k €';
+
+// coste real invertido (de reforma.html si está disponible)
+function loadCoste(){
+  try {
+    const raw = localStorage.getItem('gym_reforma_v2');
+    if (raw){
+      const r = JSON.parse(raw);
+      const rate=(typeof r.usdRate==='number'&&r.usdRate)?r.usdRate:0.92;
+      let t=0; (r.items||[]).forEach(i=>{ const be=i.currency==='USD'?(i.base||0)*rate:(i.base||0); t+=be*(1+(i.iva||0)/100); });
+      if (t>0) return Math.round(t);
+    }
+  } catch(e){}
+  return 525000;
+}
+const COSTE = loadCoste();
+
+const state = { cuota: 39.90, socios: 800, alquiler: 3500 };
+
+function render(){
+  const { cuota, socios, alquiler } = state;
+  const ramp = [0.50, 0.75, 1.00];
+  const personal = [60000, 78000, 90000];
+  const rows = ramp.map((r,idx)=>{
+    const sActivos = Math.round(socios*r);
+    const ingresos = sActivos*cuota*12;
+    const alq = alquiler*12;
+    const otros = ingresos*0.25;
+    const costes = alq + personal[idx] + otros;
+    const ebitda = ingresos - costes;
+    return { sActivos, ingresos, alq, pers:personal[idx], otros, costes, ebitda };
+  });
+
+  document.getElementById('projBody').innerHTML = `
+    <tr><td>Socios activos (media)</td>${rows.map(r=>`<td>${r.sActivos.toLocaleString('es-ES')}</td>`).join('')}</tr>
+    <tr><td>Ingresos por cuotas</td>${rows.map(r=>`<td>${f(r.ingresos)}</td>`).join('')}</tr>
+    <tr><td>· Alquiler nave</td>${rows.map(r=>`<td>-${f(r.alq)}</td>`).join('')}</tr>
+    <tr><td>· Personal</td>${rows.map(r=>`<td>-${f(r.pers)}</td>`).join('')}</tr>
+    <tr><td>· Otros costes (25%)</td>${rows.map(r=>`<td>-${f(r.otros)}</td>`).join('')}</tr>
+    <tr class="ebitda"><td>EBITDA</td>${rows.map(r=>`<td>${f(r.ebitda)}</td>`).join('')}</tr>`;
+
+  const ebitda3 = rows[2].ebitda;
+  const ingresos3 = rows[2].ingresos;
+  document.getElementById('hsEbitda').textContent = fk(ebitda3);
+
+  // valoración por métodos
+  document.getElementById('vmAct').textContent = fk(COSTE);
+  document.getElementById('vmEbitda').textContent = fk(ebitda3*3)+'–'+fk(ebitda3*5);
+  document.getElementById('vmRev').textContent = fk(ingresos3*1.3);
+
+  // retorno inversor (10%)
+  const benef10 = ebitda3*0.10;
+  const yield10 = benef10/50000;
+  const payback = benef10>0 ? (50000/benef10) : 0;
+  document.getElementById('retBen').textContent = f(benef10);
+  document.getElementById('retYield').textContent = (yield10*100).toFixed(0)+'%';
+  document.getElementById('retPay').textContent = payback>0 ? payback.toFixed(1)+' años' : '—';
+
+  document.getElementById('cuota').value = cuota;
+  document.getElementById('socios').value = socios;
+  document.getElementById('alquiler').value = alquiler;
+}
+
+['cuota','socios','alquiler'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', e=>{
+    const v=parseFloat(e.target.value); state[id]=isNaN(v)?0:v; render();
+  });
+});
+render();
+</script>
+</body>
+</html>
