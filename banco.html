@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Movimientos del Banco · Gimnasio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:#09090f; --bg2:#111118; --bg3:#16161f;
+    --border:rgba(255,255,255,0.07); --border-bright:rgba(255,255,255,0.15);
+    --text:#f0f0f8; --text-muted:#8888aa; --text-dim:#55556a;
+    --c1:#6366f1; --c2:#8b5cf6; --c3:#f59e0b; --c4:#10b981; --c5:#3b82f6;
+    --c6:#ec4899; --c7:#f97316; --c8:#14b8a6;
+    --red:#ef4444; --green:#10b981;
+    --radius:16px; --radius-sm:10px;
+  }
+  html { scroll-behavior:smooth; }
+  body {
+    font-family:'Inter',sans-serif;
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(59,130,246,0.10), transparent),
+      radial-gradient(900px 500px at -10% 10%, rgba(16,185,129,0.07), transparent),
+      var(--bg);
+    color:var(--text); min-height:100vh; padding:0 16px 80px;
+  }
+  .header { max-width:1040px; margin:0 auto; padding:28px 0 8px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+  .brand { font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px; letter-spacing:0.12em; text-transform:uppercase; display:flex; align-items:center; gap:10px; }
+  .brand-dot { width:8px; height:8px; border-radius:50%; background:var(--c5); box-shadow:0 0 12px var(--c5); }
+  .header-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .ghost-btn { font-family:'Space Grotesk',sans-serif; font-size:12px; font-weight:600; letter-spacing:0.04em; padding:8px 14px; border-radius:20px; background:rgba(255,255,255,0.05); border:1px solid var(--border-bright); color:var(--text-muted); cursor:pointer; transition:all 0.2s; text-decoration:none; display:inline-block; }
+  .ghost-btn:hover { color:var(--text); border-color:var(--text-muted); }
+  .wrap { max-width:1040px; margin:0 auto; }
+  .title { font-family:'Space Grotesk',sans-serif; font-size:34px; font-weight:700; line-height:1.1; margin:18px 0 6px; background:linear-gradient(135deg,#fff 30%,#888aaa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .subtitle { color:var(--text-muted); font-size:15px; line-height:1.6; margin-bottom:24px; max-width:640px; }
+  .label { display:block; font-family:'Space Grotesk',sans-serif; font-size:12px; font-weight:600; letter-spacing:0.06em; color:var(--text-muted); text-transform:uppercase; margin-bottom:8px; }
+
+  .kpis { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px; }
+  @media (max-width:760px){ .kpis{ grid-template-columns:repeat(2,1fr);} }
+  .kpi { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:18px; }
+  .kpi-label { font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+  .kpi-value { font-family:'Space Grotesk',sans-serif; font-size:25px; font-weight:700; line-height:1.1; }
+  .kpi-sub { font-size:12px; color:var(--text-dim); margin-top:6px; line-height:1.4; }
+  .kpi.in .kpi-value { color:var(--c4); }
+  .kpi.out .kpi-value { color:var(--c7); }
+  .kpi.tax .kpi-value { color:var(--c6); }
+  .kpi.bal .kpi-value { color:var(--c5); }
+
+  .summary { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:24px; position:relative; overflow:hidden; }
+  .summary::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,var(--c5) 50%,transparent); opacity:0.5; }
+  .summary h3 { font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:700; margin-bottom:14px; }
+  .sum-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; }
+  .sum-item { background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px 16px; }
+  .sum-item .l { font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-muted); font-family:'Space Grotesk',sans-serif; font-weight:600; margin-bottom:6px; }
+  .sum-item .v { font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:700; }
+  .highlight { border-color:color-mix(in srgb,var(--c6) 45%,transparent); background:color-mix(in srgb,var(--c6) 10%,var(--bg3)); }
+  .highlight .v { color:var(--c6); }
+  .saldo-edit { display:flex; align-items:center; gap:8px; margin-top:14px; flex-wrap:wrap; }
+  .saldo-input { background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); padding:9px 12px; font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:700; color:var(--text); outline:none; width:160px; -moz-appearance:textfield; }
+  .saldo-input::-webkit-outer-spin-button,.saldo-input::-webkit-inner-spin-button{-webkit-appearance:none;}
+  .saldo-input:focus { border-color:var(--c5); box-shadow:0 0 0 3px color-mix(in srgb,var(--c5) 15%,transparent); }
+
+  h3.block-title { font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:700; margin:28px 0 14px; display:flex; align-items:center; gap:10px; }
+
+  .cat-breakdown { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:12px; }
+  .cat-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px 16px; }
+  .cat-card-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .cat-card-name { font-size:13px; font-weight:600; color:var(--text); display:flex; align-items:center; gap:7px; }
+  .cat-card-total { font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:14px; }
+  .mini-bar { height:6px; border-radius:3px; background:var(--bg3); overflow:hidden; }
+  .mini-bar-fill { height:100%; border-radius:3px; background:linear-gradient(90deg,var(--c7),var(--c3)); }
+
+  .table-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; overflow-x:auto; }
+  .filters { display:flex; gap:8px; padding:16px 18px 8px; flex-wrap:wrap; }
+  .chip { padding:6px 14px; border-radius:20px; border:1px solid var(--border-bright); background:var(--bg3); color:var(--text-muted); font-family:'Space Grotesk',sans-serif; font-size:12px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .chip.active { background:var(--c5); border-color:var(--c5); color:#fff; }
+  table { width:100%; border-collapse:collapse; min-width:820px; }
+  thead th { text-align:left; font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-dim); padding:14px 16px; border-bottom:1px solid var(--border); white-space:nowrap; }
+  th.num,td.num { text-align:right; font-family:'Space Grotesk',sans-serif; }
+  tbody td { padding:11px 16px; border-bottom:1px solid var(--border); font-size:13.5px; vertical-align:middle; }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr:hover { background:rgba(255,255,255,0.02); }
+  .fecha { font-family:'Space Grotesk',sans-serif; color:var(--text-muted); white-space:nowrap; font-size:12.5px; }
+  .ben { font-weight:600; }
+  .con { font-size:11.5px; color:var(--text-dim); }
+  .imp-pos { color:var(--c4); font-weight:700; }
+  .imp-neg { color:var(--text); font-weight:700; }
+  .mini-select { background:var(--bg3); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:12px; padding:5px 8px; outline:none; cursor:pointer; font-family:'Inter',sans-serif; }
+  .mini-select:focus { border-color:var(--c5); }
+  tfoot td { padding:16px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px; border-top:1px solid var(--border-bright); background:var(--bg3); }
+  .footer-note { text-align:center; color:var(--text-dim); font-size:12px; margin-top:32px; line-height:1.6; }
+  .tag-tipo { font-size:11px; font-weight:700; padding:3px 9px; border-radius:20px; font-family:'Space Grotesk',sans-serif; white-space:nowrap; }
+  .tt-aportacion { color:var(--c4); background:color-mix(in srgb,var(--c4) 14%,transparent); border:1px solid color-mix(in srgb,var(--c4) 40%,transparent); }
+  .tt-gasto { color:var(--c7); background:color-mix(in srgb,var(--c7) 14%,transparent); border:1px solid color-mix(in srgb,var(--c7) 40%,transparent); }
+  .tt-impuesto { color:var(--c6); background:color-mix(in srgb,var(--c6) 14%,transparent); border:1px solid color-mix(in srgb,var(--c6) 40%,transparent); }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="brand"><span class="brand-dot"></span> Movimientos del Banco</div>
+  <div class="header-actions">
+    <a class="ghost-btn" href="reforma.html">📋 Ver presupuesto</a>
+    <button class="ghost-btn" onclick="exportCSV()">⬇ Exportar CSV</button>
+    <button class="ghost-btn" onclick="resetAll()">↺ Reiniciar</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <h1 class="title">Movimientos del banco</h1>
+  <p class="subtitle">Histórico real de la cuenta de CARO LEGION S.L. (BBVA). Separa el dinero aportado (préstamos) del gastado en la obra, y lo cruza con el presupuesto para ver cuánto falta por meter. Puedes recategorizar cualquier movimiento.</p>
+
+  <div class="kpis">
+    <div class="kpi in">
+      <div class="kpi-label">⬇️ Aportado (préstamos)</div>
+      <div class="kpi-value" id="kpiIn">0 €</div>
+      <div class="kpi-sub" id="kpiInSub">Capital metido en la S.L.</div>
+    </div>
+    <div class="kpi out">
+      <div class="kpi-label">🔨 Gastado en obra</div>
+      <div class="kpi-value" id="kpiOut">0 €</div>
+      <div class="kpi-sub" id="kpiOutSub">Pagos reales a proveedores</div>
+    </div>
+    <div class="kpi tax">
+      <div class="kpi-label">🏛️ Impuestos / comisiones</div>
+      <div class="kpi-value" id="kpiTax">0 €</div>
+      <div class="kpi-sub">Tributos y gastos de banco</div>
+    </div>
+    <div class="kpi bal">
+      <div class="kpi-label">🏦 Saldo en banco</div>
+      <div class="kpi-value" id="kpiBal">0 €</div>
+      <div class="kpi-sub">Último extracto (editable abajo)</div>
+    </div>
+  </div>
+
+  <!-- RESUMEN GLOBAL: cruza banco + presupuesto -->
+  <div class="summary">
+    <h3>🎯 ¿Cuánto falta por meter?</h3>
+    <div class="sum-grid">
+      <div class="sum-item">
+        <div class="l">Presupuesto total estimado</div>
+        <div class="v" id="sPresu">—</div>
+      </div>
+      <div class="sum-item">
+        <div class="l">Pendiente de pagar (presup.)</div>
+        <div class="v" id="sPend">—</div>
+      </div>
+      <div class="sum-item">
+        <div class="l">Saldo disponible en banco</div>
+        <div class="v" id="sSaldo">—</div>
+      </div>
+      <div class="sum-item highlight">
+        <div class="l">Falta meter (estimado)</div>
+        <div class="v" id="sFalta">—</div>
+      </div>
+    </div>
+    <div class="saldo-edit">
+      <span class="label" style="margin:0">Saldo actual en banco:</span>
+      <input class="saldo-input" type="number" id="saldoInput" step="0.01" />
+      <span style="color:var(--text-dim);font-size:12px">€ &nbsp;·&nbsp; lo rellené con el último extracto (19/06/2026). Actualízalo cuando quieras.</span>
+    </div>
+    <div id="presuNote" style="color:var(--text-dim);font-size:12px;margin-top:12px;line-height:1.5"></div>
+  </div>
+
+  <h3 class="block-title">📊 Gasto por categoría <span style="font-size:12px;font-weight:400;color:var(--text-dim)">(pagos reales)</span></h3>
+  <div class="cat-breakdown" id="catBreakdown"></div>
+
+  <h3 class="block-title">🧾 Todos los movimientos</h3>
+  <div class="table-card">
+    <div class="filters" id="filters">
+      <div class="chip active" data-filter="all" onclick="setFilter('all')">Todos</div>
+      <div class="chip" data-filter="aportacion" onclick="setFilter('aportacion')">⬇️ Aportaciones</div>
+      <div class="chip" data-filter="gasto" onclick="setFilter('gasto')">🔨 Gastos</div>
+      <div class="chip" data-filter="impuesto" onclick="setFilter('impuesto')">🏛️ Impuestos</div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Beneficiario / concepto</th>
+          <th>Tipo</th>
+          <th>Categoría</th>
+          <th class="num">Importe</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+      <tfoot>
+        <tr>
+          <td colspan="4">SUMA VISIBLE</td>
+          <td class="num" id="footTotal">0 €</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <p class="footer-note">
+    Datos extraídos del histórico BBVA (01/01/2026–29/06/2026). Las liquidaciones de remesa de comercios (céntimos del TPV) no se incluyen por ser irrelevantes.<br/>
+    Si recategorizas un movimiento, se guarda en este navegador. Usa <b>Exportar CSV</b> para tener copia.
+  </p>
+</div>
+
+<script>
+// ─── CATEGORIES (alineadas con reforma.html) ─────────────────────────────────
+const CATEGORIES = [
+  { key:'obra', label:'Obra / albañilería', icon:'🧱' },
+  { key:'electrica', label:'Electricidad', icon:'💡' },
+  { key:'incendios', label:'Contraincendios / seguridad', icon:'🧯' },
+  { key:'fontaneria', label:'Fontanería / agua', icon:'🚰' },
+  { key:'clima', label:'Climatización / aire', icon:'❄️' },
+  { key:'suelo', label:'Suelo / pavimento', icon:'🟫' },
+  { key:'pintura', label:'Pintura', icon:'🎨' },
+  { key:'vestuarios', label:'Vestuarios / baños', icon:'🚿' },
+  { key:'maquinaria', label:'Maquinaria / pesas', icon:'🏋️' },
+  { key:'mobiliario', label:'Mobiliario / recepción', icon:'🪑' },
+  { key:'rotulos', label:'Rótulos / imagen', icon:'🪧' },
+  { key:'licencias', label:'Licencias / proyecto', icon:'📄' },
+  { key:'transporte', label:'Transporte / aduana', icon:'🚢' },
+  { key:'otros', label:'Otros', icon:'📦' },
+];
+const CAT_MAP = Object.fromEntries(CATEGORIES.map(c=>[c.key,c]));
+
+// ─── SEED: movimientos reales del extracto BBVA ──────────────────────────────
+function seedMov() {
+  // [fecha, beneficiario, concepto, importe, tipo, categoria]
+  const raw = [
+    ['2026-06-17','COMACE IMPORT S.L.','Alquiler pulidora',-2058.21,'gasto','otros'],
+    ['2026-06-11','SIRA, S.L.U.','Factura 2026043',-365.00,'gasto','otros'],
+    ['2026-06-08','CAT FOC','Repaso ignifugación estructura R-90',-4616.15,'gasto','incendios'],
+    ['2026-06-08','Luis Miguel Rubiralta','Tabiques de pladur vestuario',-10000.00,'gasto','obra'],
+    ['2026-06-08','BBVA','Comisión uso token',-2.16,'impuesto','otros'],
+    ['2026-06-03','Polar Fluid','Aigua dipòsit',-134.00,'gasto','fontaneria'],
+    ['2026-06-03','MACOCERSA','Formigó',-571.73,'gasto','obra'],
+    ['2026-06-02','Josep Selga Brunet','Adeudo (recibo domiciliado)',-278.81,'gasto','otros'],
+    ['2026-05-29','Vilà Vila Serveis Ambientals','Residus',-85.00,'gasto','otros'],
+    ['2026-05-29','Vilà Vila Serveis Ambientals','Residus',-150.00,'gasto','otros'],
+    ['2026-05-28','SIRA SLU','Página web LegionClub.es',-935.00,'gasto','otros'],
+    ['2026-05-28','HPRATGINESTOS','Runa',-744.14,'gasto','otros'],
+    ['2026-05-28','Luis Miguel Rubiralta','Aplacado de pladur',-5324.00,'gasto','obra'],
+    ['2026-05-27','Caro Folch Sergi','Préstamo Sergi Caro',20000.00,'aportacion','otros'],
+    ['2026-05-27','Carulla Energia','Pressupost Caro Legion SL',-28556.62,'gasto','electrica'],
+    ['2026-05-27','Caro Folch Sergi','Préstamo Sergi Caro Folch',30000.00,'aportacion','otros'],
+    ['2026-05-26','Antonio Larriba Egea','Transporte de maquinaria y materiales',-1434.00,'gasto','transporte'],
+    ['2026-05-21','Adrisa Aqua S.L.','Recargar agua',-134.19,'gasto','fontaneria'],
+    ['2026-05-21','MACOCERSA S.L.','Material de obra',-922.58,'gasto','obra'],
+    ['2026-05-20','Polar Fluid SL','Subministrament aigua per obres',-134.00,'gasto','fontaneria'],
+    ['2026-05-20','Caro Folch Arnau','Préstamo Arnau Caro',30000.00,'aportacion','otros'],
+    ['2026-05-19','Daunis S.A.','Estación automática GEO 500',-3144.49,'gasto','otros'],
+    ['2026-05-18','Patrick Oviedo Núñez','Proyecto electricidad',-8376.86,'gasto','electrica'],
+    ['2026-05-14','Joysat','Lloguer plataformes',-1051.49,'gasto','otros'],
+    ['2026-05-13','CAT FOC','Repaso ignifugación R-90',-1978.35,'gasto','incendios'],
+    ['2026-05-13','Aigües de Manresa','Comptador obras',-1917.81,'gasto','fontaneria'],
+    ['2026-05-04','Josep Selga Brunet','Adeudo (recibo domiciliado)',-278.81,'gasto','otros'],
+    ['2026-04-16','HPRATGINESTOS','Entrega y recogida de residuos',-1207.23,'gasto','otros'],
+    ['2026-04-09','HSE Fitness Equipment','Maquinaria (transferencia en divisas)',-46908.60,'gasto','maquinaria'],
+    ['2026-04-02','BBVA','Comisión alta TPV',-121.00,'impuesto','otros'],
+    ['2026-04-01','Josep Selga Brunet','Adeudo (recibo domiciliado)',-278.81,'gasto','otros'],
+    ['2026-03-20','HPRATGINESTOS','Servicio residuos',-774.65,'gasto','otros'],
+    ['2026-03-20','Raul Mayor Garcia','Trabajos',-2524.79,'gasto','obra'],
+    ['2026-03-13','Luis Miguel Rubiralta','Trabajos varios',-1633.50,'gasto','obra'],
+    ['2026-03-11','Luis Miguel Rubiralta','Material obras La Especialista',-5630.32,'gasto','obra'],
+    ['2026-03-09','Hacienda','Pago de impuestos/tributos',-293.56,'impuesto','otros'],
+    ['2026-03-09','Hacienda','Pago de impuestos/tributos',-293.56,'impuesto','otros'],
+    ['2026-03-06','Luis Miguel Rubiralta','Trabajos',-686.68,'gasto','obra'],
+    ['2026-03-02','Jose M. Cambre Soler','Horas reparación y consumibles',-3267.00,'gasto','obra'],
+    ['2026-03-02','Remi Rent S.L.','Adeudo alquiler material',-239.58,'gasto','otros'],
+    ['2026-02-23','Luis Miguel Rubiralta','Limpieza general',-1663.75,'gasto','obra'],
+    ['2026-02-17','EDistribución Redes Digitales','Conexión / acometida (CNX 0001139986)',-1997.23,'gasto','electrica'],
+    ['2026-02-17','Marta Folch Gorina','Préstamo',10000.00,'aportacion','otros'],
+    ['2026-02-16','Luis Miguel Rubiralta','IVA',-456.75,'gasto','obra'],
+    ['2026-02-16','Luis Miguel Rubiralta','Trabajos',-2175.00,'gasto','obra'],
+    ['2026-02-16','Marta Folch Gorina','Préstamo',15000.00,'aportacion','otros'],
+    ['2026-02-16','Marta Folch Gorina','Préstamo',15000.00,'aportacion','otros'],
+    ['2026-02-12','Hacienda','Pago de impuestos/tributos',-353.80,'impuesto','otros'],
+    ['2026-02-10','HSE Fitness Equipment','Maquinaria (transferencia en divisas)',-19740.84,'gasto','maquinaria'],
+    ['2026-02-09','Luis Miguel Rubiralta','Tareas varias',-1796.85,'gasto','obra'],
+    ['2026-02-09','Serveis intel·ligència robòtica','Software Keygo',-3015.00,'gasto','otros'],
+    ['2026-02-03','Avinguda Tudela Lloguers C.B.','Fiança Incasol (alquiler local)',-5200.00,'gasto','otros'],
+    ['2026-02-02','Josep Selga Brunet','Adeudo (recibo domiciliado)',-29.04,'gasto','otros'],
+    ['2026-01-29','Luis Miguel Rubiralta','Retirada de planché',-1815.00,'gasto','obra'],
+    ['2026-01-27','Luis Miguel Rubiralta','Sacar techos, tabiques e instalaciones',-1243.28,'gasto','obra'],
+    ['2026-01-27','Marta Folch Gorina','Préstamo',10000.00,'aportacion','otros'],
+    ['2026-01-27','Marta Folch Gorina','Préstamo',15000.00,'aportacion','otros'],
+    ['2026-01-23','Caro Folch Sergi','Préstamo Sergi Caro',10000.00,'aportacion','otros'],
+    ['2026-01-22','Marta Folch Gorina','Préstamo',15000.00,'aportacion','otros'],
+    ['2026-01-22','Caro Folch Sergi','Préstamo',30000.00,'aportacion','otros'],
+    ['2026-01-22','Caro Folch Oscar','Préstamo',10000.00,'aportacion','otros'],
+    ['2026-01-21','Vilà Vila Serveis Ambientals','Contenedor de runa limpia',-186.15,'gasto','otros'],
+    ['2026-01-20','Luis Miguel Rubiralta','Desmontaje de techo e instalaciones',-2196.15,'gasto','obra'],
+    ['2026-01-20','Caro Folch Oscar','Préstamo',30000.00,'aportacion','otros'],
+    ['2026-01-12','Vilà Vila Serveis Ambientals','Portada/retirada/gestión runa',-322.01,'gasto','otros'],
+    ['2026-01-12','Luis Miguel Rubiralta','Quitar tabiquería',-1506.45,'gasto','obra'],
+  ];
+  return raw.map((r,idx)=>({ id:'m'+idx, f:r[0], ben:r[1], con:r[2], imp:r[3], t:r[4], c:r[5] }));
+}
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+const LS_KEY = 'gym_banco_v1';
+const SALDO_DEFAULT = 63245.73; // último saldo del extracto 19/06/2026
+let state = { saldo: SALDO_DEFAULT, mov: [] };
+let filter = 'all';
+
+function load() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) state = JSON.parse(raw);
+  } catch(e){}
+  if (!Array.isArray(state.mov) || !state.mov.length) state.mov = seedMov();
+  if (typeof state.saldo !== 'number') state.saldo = SALDO_DEFAULT;
+}
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+
+const fmt = n => (n<0?'-':'') + Math.abs(Math.round(n)).toLocaleString('es-ES') + ' €';
+const fmtSigned = n => (n>0?'+':n<0?'-':'') + Math.abs(Math.round(n)).toLocaleString('es-ES') + ' €';
+
+// ─── totals ──────────────────────────────────────────────────────────────────
+function sums() {
+  let inn=0, out=0, tax=0;
+  state.mov.forEach(m=>{
+    if (m.t==='aportacion') inn += m.imp;
+    else if (m.t==='impuesto') tax += m.imp;
+    else out += m.imp; // gasto
+  });
+  return { inn, out, tax };
+}
+
+// ─── read presupuesto de reforma.html (mismo localStorage) ───────────────────
+function readPresupuesto() {
+  try {
+    const raw = localStorage.getItem('gym_reforma_v2');
+    if (!raw) return null;
+    const r = JSON.parse(raw);
+    const rate = (typeof r.usdRate==='number' && r.usdRate) ? r.usdRate : 0.92;
+    let total=0, pending=0;
+    (r.items||[]).forEach(i=>{
+      const baseEUR = i.currency==='USD' ? (i.base||0)*rate : (i.base||0);
+      const t = baseEUR * (1 + (i.iva||0)/100);
+      total += t;
+      if (i.estado!=='paid') pending += t;
+    });
+    return { total, pending, budget: r.budget||0 };
+  } catch(e){ return null; }
+}
+
+// ─── render ──────────────────────────────────────────────────────────────────
+function renderKpis() {
+  const { inn, out, tax } = sums();
+  document.getElementById('kpiIn').textContent = fmt(inn);
+  document.getElementById('kpiOut').textContent = fmt(Math.abs(out));
+  document.getElementById('kpiTax').textContent = fmt(Math.abs(tax));
+  document.getElementById('kpiBal').textContent = fmt(state.saldo);
+  const nAp = state.mov.filter(m=>m.t==='aportacion').length;
+  document.getElementById('kpiInSub').textContent = `${nAp} préstamos de socios/familia`;
+  const nG = state.mov.filter(m=>m.t==='gasto').length;
+  document.getElementById('kpiOutSub').textContent = `${nG} pagos reales a proveedores`;
+  document.getElementById('saldoInput').value = state.saldo;
+}
+
+function renderSummary() {
+  const p = readPresupuesto();
+  const elP = document.getElementById('sPresu');
+  const elPend = document.getElementById('sPend');
+  const elS = document.getElementById('sSaldo');
+  const elF = document.getElementById('sFalta');
+  const note = document.getElementById('presuNote');
+  document.getElementById('sSaldo').textContent = fmt(state.saldo);
+
+  if (!p) {
+    elP.textContent = '—'; elPend.textContent='—'; elF.textContent='—';
+    note.innerHTML = 'ℹ️ Abre primero <a href="reforma.html" style="color:var(--c5)">el presupuesto</a> (para que se guarde en este navegador) y aquí verás cuánto falta por meter.';
+    return;
+  }
+  elP.textContent = fmt(p.total);
+  elPend.textContent = fmt(p.pending);
+  const falta = p.pending - state.saldo;
+  elF.textContent = falta > 0 ? fmt(falta) : '0 € ✓';
+  note.innerHTML = falta > 0
+    ? `Con el saldo actual (${fmt(state.saldo)}) y lo que aún queda por pagar del presupuesto (${fmt(p.pending)}), necesitarás meter <b style="color:var(--c6)">~${fmt(falta)}</b> más para terminar. <span style="color:var(--text-dim)">Marca como «pagadas» en el presupuesto las partidas que ya hayas abonado para afinar el cálculo.</span>`
+    : `👍 El saldo en banco cubre lo que queda por pagar del presupuesto. <span style="color:var(--text-dim)">Recuerda marcar como «pagadas» las partidas ya abonadas en el presupuesto.</span>`;
+}
+
+function renderBreakdown() {
+  const cont = document.getElementById('catBreakdown');
+  const byCat = {};
+  state.mov.filter(m=>m.t==='gasto').forEach(m=>{ byCat[m.c]=(byCat[m.c]||0)+Math.abs(m.imp); });
+  const max = Math.max(1, ...Object.values(byCat));
+  const used = CATEGORIES.filter(c=>byCat[c.key]);
+  if (!used.length){ cont.innerHTML='<div style="grid-column:1/-1;color:var(--text-dim);font-size:13px">Sin gastos.</div>'; return; }
+  cont.innerHTML = used.sort((a,b)=>byCat[b.key]-byCat[a.key]).map(c=>`
+    <div class="cat-card">
+      <div class="cat-card-head">
+        <span class="cat-card-name">${c.icon} ${c.label}</span>
+        <span class="cat-card-total">${fmt(byCat[c.key])}</span>
+      </div>
+      <div class="mini-bar"><div class="mini-bar-fill" style="width:${(byCat[c.key]/max)*100}%"></div></div>
+    </div>`).join('');
+}
+
+function renderTable() {
+  const tbody = document.getElementById('tbody');
+  let mov = state.mov.slice();
+  if (filter!=='all') mov = mov.filter(m=>m.t===filter);
+  const catOpts = c => CATEGORIES.map(o=>`<option value="${o.key}" ${o.key===c?'selected':''}>${o.icon} ${o.label}</option>`).join('');
+  tbody.innerHTML = mov.map(m=>{
+    const d = m.f.split('-').reverse().join('/');
+    const tipoTag = `<span class="tag-tipo tt-${m.t}">${m.t==='aportacion'?'Aportación':m.t==='gasto'?'Gasto':'Impuesto'}</span>`;
+    const catCell = m.t==='aportacion'
+      ? '<span style="color:var(--text-dim);font-size:12px">—</span>'
+      : `<select class="mini-select" onchange="changeCat('${m.id}',this.value)">${catOpts(m.c)}</select>`;
+    const impCls = m.imp>0 ? 'imp-pos' : 'imp-neg';
+    return `<tr>
+      <td class="fecha">${d}</td>
+      <td><div class="ben">${esc(m.ben)}</div><div class="con">${esc(m.con)}</div></td>
+      <td><select class="mini-select" onchange="changeTipo('${m.id}',this.value)">
+        <option value="aportacion" ${m.t==='aportacion'?'selected':''}>⬇️ Aportación</option>
+        <option value="gasto" ${m.t==='gasto'?'selected':''}>🔨 Gasto</option>
+        <option value="impuesto" ${m.t==='impuesto'?'selected':''}>🏛️ Impuesto</option>
+      </select></td>
+      <td>${catCell}</td>
+      <td class="num ${impCls}">${fmtSigned(m.imp)}</td>
+    </tr>`;
+  }).join('');
+  const vis = mov.reduce((s,m)=>s+m.imp,0);
+  document.getElementById('footTotal').textContent = fmtSigned(vis);
+}
+
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function changeTipo(id,val){ const m=state.mov.find(x=>x.id===id); if(m){ m.t=val; save(); render(); } }
+function changeCat(id,val){ const m=state.mov.find(x=>x.id===id); if(m){ m.c=val; save(); render(); } }
+function onSaldoChange(){ const v=parseFloat(document.getElementById('saldoInput').value); state.saldo=isNaN(v)?0:v; save(); renderKpis(); renderSummary(); }
+function setFilter(f){ filter=f; document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active',c.dataset.filter===f)); renderTable(); }
+
+function render(){ renderKpis(); renderSummary(); renderBreakdown(); renderTable(); }
+
+function exportCSV(){
+  const rows = [['Fecha','Beneficiario','Concepto','Tipo','Categoria','Importe EUR']];
+  state.mov.forEach(m=>{
+    const cat = m.t==='aportacion' ? '' : (CAT_MAP[m.c]||{label:m.c}).label;
+    rows.push([m.f, m.ben, m.con, m.t, cat, m.imp]);
+  });
+  const { inn, out, tax } = sums();
+  rows.push([]);
+  rows.push(['Aportaciones','','','','',Math.round(inn)]);
+  rows.push(['Gastos obra','','','','',Math.round(out)]);
+  rows.push(['Impuestos/comisiones','','','','',Math.round(tax)]);
+  rows.push(['Saldo en banco','','','','',state.saldo]);
+  const csv = rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='movimientos-banco.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function resetAll(){
+  if(!confirm('¿Volver a cargar los movimientos originales del extracto? Perderás tus recategorizaciones.')) return;
+  state = { saldo: SALDO_DEFAULT, mov: seedMov() }; save(); render();
+}
+
+// boot
+load();
+document.getElementById('saldoInput').addEventListener('input', onSaldoChange);
+render();
+</script>
+</body>
+</html>
