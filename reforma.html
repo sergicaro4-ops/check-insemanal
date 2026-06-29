@@ -47,9 +47,8 @@
     padding: 0 16px 80px;
   }
 
-  /* ─── HEADER ─── */
   .header {
-    max-width: 920px;
+    max-width: 980px;
     margin: 0 auto;
     padding: 28px 0 8px;
     display: flex;
@@ -58,7 +57,6 @@
     flex-wrap: wrap;
     gap: 12px;
   }
-
   .brand {
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
@@ -69,334 +67,116 @@
     align-items: center;
     gap: 10px;
   }
-
-  .brand-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--c4);
-    box-shadow: 0 0 12px var(--c4);
-  }
-
+  .brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c4); box-shadow: 0 0 12px var(--c4); }
   .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-
   .ghost-btn {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    padding: 8px 14px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid var(--border-bright);
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: all 0.2s;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
+    padding: 8px 14px; border-radius: 20px;
+    background: rgba(255,255,255,0.05); border: 1px solid var(--border-bright);
+    color: var(--text-muted); cursor: pointer; transition: all 0.2s;
   }
   .ghost-btn:hover { color: var(--text); border-color: var(--text-muted); }
 
-  .wrap { max-width: 920px; margin: 0 auto; }
-
+  .wrap { max-width: 980px; margin: 0 auto; }
   .title {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 34px;
-    font-weight: 700;
-    line-height: 1.1;
-    margin: 18px 0 6px;
+    font-size: 34px; font-weight: 700; line-height: 1.1; margin: 18px 0 6px;
     background: linear-gradient(135deg, #fff 30%, #888aaa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
-  .subtitle { color: var(--text-muted); font-size: 15px; line-height: 1.6; margin-bottom: 28px; max-width: 560px; }
-
-  /* ─── BUDGET CARD ─── */
-  .budget-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 24px;
-    margin-bottom: 20px;
-    position: relative;
-    overflow: hidden;
-  }
-  .budget-card::before {
-    content:''; position:absolute; top:0; left:0; right:0; height:1px;
-    background: linear-gradient(90deg, transparent, var(--c4) 50%, transparent);
-    opacity: 0.5;
-  }
-
-  .budget-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .subtitle { color: var(--text-muted); font-size: 15px; line-height: 1.6; margin-bottom: 28px; max-width: 620px; }
 
   .label {
     display: block;
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    margin-bottom: 8px;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
+    color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;
   }
 
-  .money-input-wrap { display: flex; align-items: center; gap: 10px; }
+  /* config row: budget + usd rate + iva default */
+  .config-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  @media (max-width: 720px) { .config-grid { grid-template-columns: 1fr; } }
+  .config-card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 20px; position: relative; overflow: hidden;
+  }
+  .config-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:1px;
+    background: linear-gradient(90deg, transparent, var(--c4) 50%, transparent); opacity: 0.5;
+  }
+  .money-input-wrap { display: flex; align-items: center; gap: 8px; }
   .money-input {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 12px 16px;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--text);
-    outline: none;
-    width: 220px;
-    -moz-appearance: textfield;
+    background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 11px 14px;
+    font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; color: var(--text);
+    outline: none; width: 100%; -moz-appearance: textfield;
     transition: border-color 0.25s, box-shadow 0.25s;
   }
-  .money-input::-webkit-outer-spin-button,
-  .money-input::-webkit-inner-spin-button { -webkit-appearance: none; }
-  .money-input:focus {
-    border-color: var(--c4);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--c4) 15%, transparent);
-  }
-  .euro { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; color: var(--text-dim); }
+  .money-input::-webkit-outer-spin-button, .money-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .money-input:focus { border-color: var(--c4); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c4) 15%, transparent); }
+  .unit { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: var(--text-dim); white-space: nowrap; }
+  .config-hint { color: var(--text-dim); font-size: 11px; margin-top: 8px; line-height: 1.5; }
 
-  /* ─── KPIS ─── */
-  .kpis {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 20px;
-  }
+  /* KPIS */
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
   @media (max-width: 720px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
-
-  .kpi {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px;
-    position: relative;
-    overflow: hidden;
-  }
+  .kpi { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
   .kpi-label {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 10px;
-    display: flex; align-items: center; gap: 6px;
+    font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted);
+    margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
   }
-  .kpi-value {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 26px;
-    font-weight: 700;
-    line-height: 1.1;
-  }
-  .kpi-sub { font-size: 12px; color: var(--text-dim); margin-top: 6px; }
+  .kpi-value { font-family: 'Space Grotesk', sans-serif; font-size: 25px; font-weight: 700; line-height: 1.1; }
+  .kpi-sub { font-size: 12px; color: var(--text-dim); margin-top: 6px; line-height: 1.4; }
   .kpi.accent-spent .kpi-value { color: var(--c3); }
   .kpi.accent-pending .kpi-value { color: var(--c7); }
   .kpi.accent-need .kpi-value { color: var(--c6); }
-  .kpi.accent-total .kpi-value { color: var(--text); }
 
-  /* progress */
-  .progress-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px 22px;
-    margin-bottom: 20px;
-  }
+  .progress-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; margin-bottom: 20px; }
   .progress-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
   .progress-head .label { margin: 0; }
   .progress-pct { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; color: var(--text-muted); }
-  .bar {
-    height: 14px;
-    border-radius: 8px;
-    background: var(--bg3);
-    overflow: hidden;
-    display: flex;
-    border: 1px solid var(--border);
-  }
+  .bar { height: 14px; border-radius: 8px; background: var(--bg3); overflow: hidden; display: flex; border: 1px solid var(--border); }
   .bar-paid { background: linear-gradient(90deg, var(--c4), #34d399); height: 100%; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
   .bar-pending { background: linear-gradient(90deg, var(--c7), #fb923c); height: 100%; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); opacity: 0.85; }
   .legend { display: flex; gap: 18px; margin-top: 12px; flex-wrap: wrap; }
   .legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--text-muted); }
   .dot { width: 10px; height: 10px; border-radius: 3px; }
-  .dot.paid { background: var(--c4); }
-  .dot.pending { background: var(--c7); }
+  .dot.paid { background: var(--c4); } .dot.pending { background: var(--c7); }
   .dot.free { background: var(--bg3); border: 1px solid var(--border-bright); }
 
-  .alert {
-    margin-top: 16px;
-    padding: 12px 16px;
-    border-radius: var(--radius-sm);
-    font-size: 13px;
-    line-height: 1.5;
-    display: flex; gap: 10px; align-items: flex-start;
-  }
+  .alert { margin-top: 16px; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.5; display: flex; gap: 10px; align-items: flex-start; }
   .alert.ok  { background: color-mix(in srgb, var(--green) 12%, transparent); border: 1px solid color-mix(in srgb, var(--green) 30%, transparent); color: #6ee7b7; }
   .alert.bad { background: color-mix(in srgb, var(--red) 12%, transparent); border: 1px solid color-mix(in srgb, var(--red) 30%, transparent); color: #fca5a5; }
 
-  /* ─── ADD FORM ─── */
-  .section-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    margin: 8px 0 14px;
-    display: flex; align-items: center; gap: 10px;
-  }
+  h3.block-title { font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:700; margin: 28px 0 14px; display:flex; align-items:center; gap:10px; }
 
-  .add-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px;
-    margin-bottom: 20px;
-  }
-  .add-grid {
-    display: grid;
-    grid-template-columns: 2fr 1.3fr 1fr 1fr auto;
-    gap: 10px;
-    align-items: end;
-  }
-  @media (max-width: 720px) { .add-grid { grid-template-columns: 1fr 1fr; } }
-
+  .add-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; }
+  .add-grid { display: grid; grid-template-columns: 2fr 1.3fr 0.9fr 0.7fr 0.7fr 0.9fr auto; gap: 10px; align-items: end; }
+  @media (max-width: 860px) { .add-grid { grid-template-columns: 1fr 1fr; } }
   .field label {
-    display: block;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 6px;
+    display: block; font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;
   }
   .input, .select {
-    width: 100%;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 11px 13px;
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    color: var(--text);
-    outline: none;
+    width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 11px 13px; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text); outline: none;
     transition: border-color 0.25s, box-shadow 0.25s;
   }
-  .input:focus, .select:focus {
-    border-color: var(--c4);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--c4) 15%, transparent);
-  }
+  .input:focus, .select:focus { border-color: var(--c4); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c4) 15%, transparent); }
   .select { cursor: pointer; }
   .input[type=number] { font-family: 'Space Grotesk', sans-serif; font-weight: 600; }
-
   .add-btn {
-    padding: 11px 22px;
-    border-radius: var(--radius-sm);
-    background: linear-gradient(135deg, var(--c4), var(--c5));
-    border: none;
-    color: #fff;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
-    box-shadow: 0 4px 18px color-mix(in srgb, var(--c4) 35%, transparent);
+    padding: 11px 22px; border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, var(--c4), var(--c5)); border: none; color: #fff;
+    font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer;
+    transition: all 0.2s; white-space: nowrap; box-shadow: 0 4px 18px color-mix(in srgb, var(--c4) 35%, transparent);
   }
   .add-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px color-mix(in srgb, var(--c4) 45%, transparent); }
-  @media (max-width: 720px) { .add-btn { grid-column: 1 / -1; } }
+  @media (max-width: 860px) { .add-btn { grid-column: 1 / -1; } }
 
-  /* ─── TABLE ─── */
-  .table-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-  .filters { display: flex; gap: 8px; padding: 16px 18px 8px; flex-wrap: wrap; }
-  .chip {
-    padding: 6px 14px;
-    border-radius: 20px;
-    border: 1px solid var(--border-bright);
-    background: var(--bg3);
-    color: var(--text-muted);
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .chip.active { background: var(--c4); border-color: var(--c4); color: #fff; }
-
-  table { width: 100%; border-collapse: collapse; }
-  thead th {
-    text-align: left;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--border);
-  }
-  th.num, td.num { text-align: right; font-family: 'Space Grotesk', sans-serif; }
-  tbody td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
-  tbody tr:last-child td { border-bottom: none; }
-  tbody tr:hover { background: rgba(255,255,255,0.02); }
-
-  .cat-tag {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 12px; font-weight: 600;
-    padding: 3px 10px; border-radius: 20px;
-    background: var(--bg3); border: 1px solid var(--border-bright);
-    color: var(--text-muted);
-  }
-
-  .state-toggle {
-    cursor: pointer;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    padding: 5px 11px;
-    border-radius: 20px;
-    border: 1px solid;
-    transition: all 0.2s;
-    user-select: none;
-    white-space: nowrap;
-  }
-  .state-toggle.paid    { color: var(--green); border-color: color-mix(in srgb, var(--green) 45%, transparent); background: color-mix(in srgb, var(--green) 12%, transparent); }
-  .state-toggle.pending { color: var(--c7);   border-color: color-mix(in srgb, var(--c7) 45%, transparent);   background: color-mix(in srgb, var(--c7) 12%, transparent); }
-
-  .del-btn {
-    background: none; border: none; color: var(--text-dim);
-    cursor: pointer; font-size: 16px; padding: 4px 8px; border-radius: 6px;
-    transition: all 0.2s;
-  }
-  .del-btn:hover { color: var(--red); background: color-mix(in srgb, var(--red) 12%, transparent); }
-
-  tfoot td {
-    padding: 16px;
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 15px;
-    border-top: 1px solid var(--border-bright);
-    background: var(--bg3);
-  }
-
-  .empty {
-    text-align: center;
-    padding: 48px 20px;
-    color: var(--text-dim);
-  }
-  .empty-icon { font-size: 40px; margin-bottom: 12px; }
-
-  /* category breakdown */
-  .cat-breakdown { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-bottom: 28px; }
+  .cat-breakdown { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
   .cat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; }
   .cat-card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .cat-card-name { font-size: 13px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 7px; }
@@ -404,10 +184,43 @@
   .mini-bar { height: 6px; border-radius: 3px; background: var(--bg3); overflow: hidden; }
   .mini-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--c4), var(--c5)); }
 
-  .footer-note { text-align: center; color: var(--text-dim); font-size: 12px; margin-top: 32px; line-height: 1.6; }
-  .footer-note a { color: var(--text-muted); }
+  .table-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; overflow-x: auto; }
+  .filters { display: flex; gap: 8px; padding: 16px 18px 8px; flex-wrap: wrap; }
+  .chip {
+    padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border-bright); background: var(--bg3);
+    color: var(--text-muted); font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .chip.active { background: var(--c4); border-color: var(--c4); color: #fff; }
 
-  h3.block-title { font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:700; margin: 28px 0 14px; display:flex; align-items:center; gap:10px;}
+  table { width: 100%; border-collapse: collapse; min-width: 720px; }
+  thead th {
+    text-align: left; font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-dim);
+    padding: 14px 16px; border-bottom: 1px solid var(--border); white-space: nowrap;
+  }
+  th.num, td.num { text-align: right; font-family: 'Space Grotesk', sans-serif; }
+  tbody td { padding: 13px 16px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,0.02); }
+  .cat-tag {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600;
+    padding: 3px 10px; border-radius: 20px; background: var(--bg3); border: 1px solid var(--border-bright); color: var(--text-muted); white-space: nowrap;
+  }
+  .sub-cell { font-size: 11px; color: var(--text-dim); }
+  .state-toggle {
+    cursor: pointer; font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.04em; padding: 5px 11px; border-radius: 20px; border: 1px solid; transition: all 0.2s; user-select: none; white-space: nowrap;
+  }
+  .state-toggle.paid    { color: var(--green); border-color: color-mix(in srgb, var(--green) 45%, transparent); background: color-mix(in srgb, var(--green) 12%, transparent); }
+  .state-toggle.pending { color: var(--c7);   border-color: color-mix(in srgb, var(--c7) 45%, transparent);   background: color-mix(in srgb, var(--c7) 12%, transparent); }
+  .del-btn { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 16px; padding: 4px 8px; border-radius: 6px; transition: all 0.2s; }
+  .del-btn:hover { color: var(--red); background: color-mix(in srgb, var(--red) 12%, transparent); }
+  tfoot td { padding: 16px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; border-top: 1px solid var(--border-bright); background: var(--bg3); }
+  .empty { text-align: center; padding: 48px 20px; color: var(--text-dim); }
+  .empty-icon { font-size: 40px; margin-bottom: 12px; }
+
+  .footer-note { text-align: center; color: var(--text-dim); font-size: 12px; margin-top: 32px; line-height: 1.6; }
 </style>
 </head>
 <body>
@@ -415,6 +228,7 @@
 <header class="header">
   <div class="brand"><span class="brand-dot"></span> Control de Reforma</div>
   <div class="header-actions">
+    <button class="ghost-btn" onclick="loadSeed(true)">↻ Cargar partidas de ejemplo</button>
     <button class="ghost-btn" onclick="exportCSV()">⬇ Exportar CSV</button>
     <button class="ghost-btn" onclick="resetAll()">↺ Reiniciar</button>
   </div>
@@ -422,19 +236,33 @@
 
 <div class="wrap">
   <h1 class="title">Inversión de la reforma</h1>
-  <p class="subtitle">Apunta cada gasto del montaje del gimnasio, marca lo que ya está pagado y lo que queda pendiente. Verás al momento cuánto te falta por meter para abrir. Los datos se guardan solos en este navegador.</p>
+  <p class="subtitle">Controla cada partida del montaje del gimnasio: base, IVA, lo pagado y lo pendiente. Maneja euros y dólares, y te dice cuánto dinero te falta por meter para abrir. Los datos se guardan solos en este navegador.</p>
 
-  <!-- BUDGET -->
-  <div class="budget-card">
-    <span class="label">💰 Presupuesto total disponible para la reforma</span>
-    <div class="budget-row">
+  <!-- CONFIG: budget + usd rate + iva default -->
+  <div class="config-grid">
+    <div class="config-card">
+      <span class="label">💰 Presupuesto total disponible</span>
       <div class="money-input-wrap">
         <input class="money-input" type="number" id="budgetInput" placeholder="0" min="0" step="100" oninput="onBudgetChange()" />
-        <span class="euro">€</span>
+        <span class="unit">€</span>
       </div>
-      <div style="color:var(--text-dim);font-size:13px;line-height:1.5;max-width:360px">
-        Lo que tienes pensado invertir en total. Déjalo en blanco si aún no lo sabes — igualmente verás cuánto llevas gastado.
+      <div class="config-hint">Lo que tienes pensado invertir en total (con IVA). Déjalo vacío si aún no lo sabes.</div>
+    </div>
+    <div class="config-card">
+      <span class="label">💵 Cambio USD → EUR</span>
+      <div class="money-input-wrap">
+        <input class="money-input" type="number" id="usdRateInput" placeholder="0.92" min="0" step="0.001" oninput="onRateChange()" />
+        <span class="unit">€/$</span>
       </div>
+      <div class="config-hint">1 USD = ? EUR. Ajusta al cambio real de tu transferencia.</div>
+    </div>
+    <div class="config-card">
+      <span class="label">🧾 IVA por defecto</span>
+      <div class="money-input-wrap">
+        <input class="money-input" type="number" id="ivaDefaultInput" placeholder="21" min="0" max="100" step="1" oninput="onIvaDefaultChange()" />
+        <span class="unit">%</span>
+      </div>
+      <div class="config-hint">Se aplica a cada partida nueva (puedes cambiarlo por partida).</div>
     </div>
   </div>
 
@@ -443,12 +271,12 @@
     <div class="kpi accent-total">
       <div class="kpi-label">📋 Coste total estimado</div>
       <div class="kpi-value" id="kpiTotal">0 €</div>
-      <div class="kpi-sub">Todo lo apuntado (pagado + pendiente)</div>
+      <div class="kpi-sub" id="kpiTotalSub">IVA incluido</div>
     </div>
     <div class="kpi accent-spent">
       <div class="kpi-label">✅ Ya pagado</div>
       <div class="kpi-value" id="kpiPaid">0 €</div>
-      <div class="kpi-sub" id="kpiPaidSub">Dinero que ya ha salido</div>
+      <div class="kpi-sub">Dinero que ya ha salido</div>
     </div>
     <div class="kpi accent-pending">
       <div class="kpi-label">⏳ Pendiente de pagar</div>
@@ -458,7 +286,7 @@
     <div class="kpi accent-need">
       <div class="kpi-label">🎯 Falta por meter</div>
       <div class="kpi-value" id="kpiNeed">0 €</div>
-      <div class="kpi-sub" id="kpiNeedSub">Para llegar al presupuesto</div>
+      <div class="kpi-sub" id="kpiNeedSub">Dinero pendiente de desembolsar</div>
     </div>
   </div>
 
@@ -481,7 +309,7 @@
   </div>
 
   <!-- ADD -->
-  <h3 class="block-title">➕ Añadir gasto</h3>
+  <h3 class="block-title">➕ Añadir partida</h3>
   <div class="add-card">
     <div class="add-grid">
       <div class="field">
@@ -493,8 +321,19 @@
         <select class="select" id="fCategoria"></select>
       </div>
       <div class="field">
-        <label>Importe (€)</label>
-        <input class="input" type="number" id="fImporte" placeholder="0" min="0" step="1" onkeydown="if(event.key==='Enter')addItem()" />
+        <label>Base</label>
+        <input class="input" type="number" id="fBase" placeholder="0" min="0" step="0.01" onkeydown="if(event.key==='Enter')addItem()" />
+      </div>
+      <div class="field">
+        <label>Moneda</label>
+        <select class="select" id="fMoneda">
+          <option value="EUR">€ EUR</option>
+          <option value="USD">$ USD</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>IVA %</label>
+        <input class="input" type="number" id="fIva" placeholder="21" min="0" max="100" step="1" onkeydown="if(event.key==='Enter')addItem()" />
       </div>
       <div class="field">
         <label>Estado</label>
@@ -508,23 +347,25 @@
   </div>
 
   <!-- CATEGORY BREAKDOWN -->
-  <h3 class="block-title">📊 Gasto por categoría</h3>
+  <h3 class="block-title">📊 Gasto por categoría <span style="font-size:12px;font-weight:400;color:var(--text-dim)">(IVA incl., en €)</span></h3>
   <div class="cat-breakdown" id="catBreakdown"></div>
 
   <!-- TABLE -->
-  <h3 class="block-title">🧾 Detalle de gastos</h3>
+  <h3 class="block-title">🧾 Detalle de partidas</h3>
   <div class="table-card">
     <div class="filters" id="filters">
-      <div class="chip active" data-filter="all" onclick="setFilter('all')">Todos</div>
+      <div class="chip active" data-filter="all" onclick="setFilter('all')">Todas</div>
       <div class="chip" data-filter="pending" onclick="setFilter('pending')">⏳ Pendientes</div>
-      <div class="chip" data-filter="paid" onclick="setFilter('paid')">✅ Pagados</div>
+      <div class="chip" data-filter="paid" onclick="setFilter('paid')">✅ Pagadas</div>
     </div>
     <table>
       <thead>
         <tr>
           <th>Concepto</th>
           <th>Categoría</th>
-          <th class="num">Importe</th>
+          <th class="num">Base</th>
+          <th class="num">IVA</th>
+          <th class="num">Total (€)</th>
           <th>Estado</th>
           <th></th>
         </tr>
@@ -532,7 +373,7 @@
       <tbody id="tbody"></tbody>
       <tfoot>
         <tr>
-          <td colspan="2">TOTAL VISIBLE</td>
+          <td colspan="4">TOTAL VISIBLE (IVA incl.)</td>
           <td class="num" id="footTotal">0 €</td>
           <td colspan="2"></td>
         </tr>
@@ -541,8 +382,8 @@
   </div>
 
   <p class="footer-note">
-    Los datos se guardan automáticamente en este dispositivo/navegador.<br/>
-    Usa <b>Exportar CSV</b> para tener una copia o abrirlo en Excel / Google Sheets.
+    Los datos se guardan automáticamente en este dispositivo/navegador. Usa <b>Exportar CSV</b> para tener copia o abrirlo en Excel / Google Sheets.<br/>
+    Nota: el IVA de una S.L. suele ser recuperable, pero el dinero igualmente sale de caja al pagar.
   </p>
 </div>
 
@@ -551,7 +392,7 @@
 const CATEGORIES = [
   { key: 'obra',       label: 'Obra / albañilería', icon: '🧱' },
   { key: 'electrica',  label: 'Electricidad',       icon: '💡' },
-  { key: 'fontaneria', label: 'Fontanería',         icon: '🚰' },
+  { key: 'fontaneria', label: 'Fontanería / agua',  icon: '🚰' },
   { key: 'clima',      label: 'Climatización / aire', icon: '❄️' },
   { key: 'suelo',      label: 'Suelo / pavimento',  icon: '🟫' },
   { key: 'pintura',    label: 'Pintura',            icon: '🎨' },
@@ -559,28 +400,69 @@ const CATEGORIES = [
   { key: 'maquinaria', label: 'Maquinaria / pesas', icon: '🏋️' },
   { key: 'mobiliario', label: 'Mobiliario / recepción', icon: '🪑' },
   { key: 'rotulos',    label: 'Rótulos / imagen',   icon: '🪧' },
-  { key: 'licencias',  label: 'Licencias / permisos', icon: '📄' },
+  { key: 'licencias',  label: 'Licencias / proyecto', icon: '📄' },
+  { key: 'transporte', label: 'Transporte / aduana', icon: '🚢' },
   { key: 'otros',      label: 'Otros',              icon: '📦' },
 ];
 const CAT_MAP = Object.fromEntries(CATEGORIES.map(c => [c.key, c]));
 
+// ─── SEED (partidas reales aportadas) ────────────────────────────────────────
+// Importes "base" = sin IVA. La maquinaria está en USD (factura FOB HSE Fitness).
+function seedItems() {
+  const mk = (concepto, categoria, base, currency, iva, estado, nota) =>
+    ({ id: uid(), concepto, categoria, base, currency, iva, estado, nota: nota || '' });
+  return [
+    mk('Climatización: 4 uds Haier 14 kW (oferta 991)', 'clima', 17855.46, 'EUR', 21, 'pending'),
+    mk('Agua fría y caliente interior vestuarios (oferta 994)', 'fontaneria', 18265.75, 'EUR', 21, 'pending'),
+    mk('Producción ACS: aerotermia + depósito 1000 L (oferta 992)', 'fontaneria', 19928.77, 'EUR', 21, 'pending'),
+    mk('Renovación aire RITE + extracción vestuarios (oferta 995)', 'clima', 38352.09, 'EUR', 21, 'pending'),
+    mk('Maquinaria HSE Fitness (factura HSE20260412, FOB)', 'maquinaria', 76750.00, 'USD', 21, 'pending', 'FOB: no incluye transporte ni aduana'),
+    mk('Transporte marítimo + aduana equipos (por confirmar)', 'transporte', 0, 'EUR', 21, 'pending', 'Rellenar al tener el coste'),
+  ];
+}
+
 // ─── STATE ───────────────────────────────────────────────────────────────────
-const LS_KEY = 'gym_reforma_v1';
-let state = { budget: 0, items: [] };
+const LS_KEY = 'gym_reforma_v2';
+let state = { budget: 0, usdRate: 0.92, ivaDefault: 21, items: [] };
 let filter = 'all';
+
+function uid() { return Date.now() + '-' + Math.floor(Math.random() * 1e6); }
 
 function load() {
   try {
     const raw = localStorage.getItem(LS_KEY);
-    if (raw) state = JSON.parse(raw);
-  } catch (e) {}
+    if (raw) { state = JSON.parse(raw); }
+    else {
+      // migración suave desde la versión 1 (solo €, con campo "importe")
+      const old = localStorage.getItem('gym_reforma_v1');
+      if (old) {
+        const o = JSON.parse(old);
+        state.budget = o.budget || 0;
+        state.items = (o.items || []).map(i => ({
+          id: i.id || uid(), concepto: i.concepto, categoria: i.categoria,
+          base: i.importe || 0, currency: 'EUR', iva: 0, estado: i.estado, nota: ''
+        }));
+      } else {
+        state.items = seedItems(); // primera visita: cargar partidas reales
+      }
+    }
+  } catch (e) { state.items = seedItems(); }
+
   if (!Array.isArray(state.items)) state.items = [];
   if (typeof state.budget !== 'number') state.budget = 0;
+  if (typeof state.usdRate !== 'number' || !state.usdRate) state.usdRate = 0.92;
+  if (typeof state.ivaDefault !== 'number') state.ivaDefault = 21;
 }
 function save() { localStorage.setItem(LS_KEY, JSON.stringify(state)); }
 
-// ─── FORMAT ──────────────────────────────────────────────────────────────────
+// ─── MONEY HELPERS ───────────────────────────────────────────────────────────
 const fmt = n => (Math.round(n)).toLocaleString('es-ES') + ' €';
+const fmtCur = (n, cur) => (Math.round(n)).toLocaleString('es-ES') + (cur === 'USD' ? ' $' : ' €');
+
+// base de una partida en EUR (sin IVA)
+function baseEUR(i) { return i.currency === 'USD' ? i.base * state.usdRate : i.base; }
+// total de una partida en EUR (con IVA)
+function totalEUR(i) { return baseEUR(i) * (1 + (i.iva || 0) / 100); }
 
 // ─── INIT UI ─────────────────────────────────────────────────────────────────
 function initCategorySelect() {
@@ -592,19 +474,20 @@ function initCategorySelect() {
 function addItem() {
   const concepto = document.getElementById('fConcepto').value.trim();
   const categoria = document.getElementById('fCategoria').value;
-  const importe = parseFloat(document.getElementById('fImporte').value);
+  const base = parseFloat(document.getElementById('fBase').value);
+  const currency = document.getElementById('fMoneda').value;
+  let iva = parseFloat(document.getElementById('fIva').value);
   const estado = document.getElementById('fEstado').value;
+  if (isNaN(iva)) iva = state.ivaDefault;
 
   if (!concepto) { flash('fConcepto'); return; }
-  if (isNaN(importe) || importe < 0) { flash('fImporte'); return; }
+  if (isNaN(base) || base < 0) { flash('fBase'); return; }
 
-  state.items.unshift({
-    id: Date.now() + '-' + Math.floor(Math.random() * 1e6),
-    concepto, categoria, importe, estado
-  });
+  state.items.unshift({ id: uid(), concepto, categoria, base, currency, iva, estado, nota: '' });
   save();
   document.getElementById('fConcepto').value = '';
-  document.getElementById('fImporte').value = '';
+  document.getElementById('fBase').value = '';
+  document.getElementById('fIva').value = state.ivaDefault;
   document.getElementById('fConcepto').focus();
   render();
 }
@@ -615,194 +498,166 @@ function flash(id) {
   el.style.boxShadow = '0 0 0 3px color-mix(in srgb, var(--red) 20%, transparent)';
   setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 1200);
 }
-
-function removeItem(id) {
-  state.items = state.items.filter(i => i.id !== id);
-  save();
-  render();
-}
-
+function removeItem(id) { state.items = state.items.filter(i => i.id !== id); save(); render(); }
 function toggleState(id) {
   const it = state.items.find(i => i.id === id);
   if (it) { it.estado = it.estado === 'paid' ? 'pending' : 'paid'; save(); render(); }
 }
+function onBudgetChange() { const v = parseFloat(document.getElementById('budgetInput').value); state.budget = isNaN(v) ? 0 : v; save(); renderSummary(); }
+function onRateChange() { const v = parseFloat(document.getElementById('usdRateInput').value); state.usdRate = (isNaN(v) || v <= 0) ? state.usdRate : v; save(); render(); }
+function onIvaDefaultChange() { const v = parseFloat(document.getElementById('ivaDefaultInput').value); state.ivaDefault = isNaN(v) ? 21 : v; save(); }
+function setFilter(f) { filter = f; document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.dataset.filter === f)); renderTable(); }
 
-function onBudgetChange() {
-  const v = parseFloat(document.getElementById('budgetInput').value);
-  state.budget = isNaN(v) ? 0 : v;
-  save();
-  renderSummary();
-}
-
-function setFilter(f) {
-  filter = f;
-  document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.dataset.filter === f));
-  renderTable();
+// ─── TOTALS ──────────────────────────────────────────────────────────────────
+function totals() {
+  let paid = 0, pending = 0, base = 0;
+  state.items.forEach(i => {
+    const t = totalEUR(i);
+    base += baseEUR(i);
+    if (i.estado === 'paid') paid += t; else pending += t;
+  });
+  return { paid, pending, total: paid + pending, base };
 }
 
 // ─── RENDER ──────────────────────────────────────────────────────────────────
-function totals() {
-  let paid = 0, pending = 0;
-  state.items.forEach(i => { if (i.estado === 'paid') paid += i.importe; else pending += i.importe; });
-  return { paid, pending, total: paid + pending };
-}
-
 function renderSummary() {
-  const { paid, pending, total } = totals();
+  const { paid, pending, total, base } = totals();
   const budget = state.budget || 0;
+  const iva = total - base;
 
   document.getElementById('kpiTotal').textContent = fmt(total);
+  document.getElementById('kpiTotalSub').textContent = `Sin IVA: ${fmt(base)} · IVA: ${fmt(iva)}`;
   document.getElementById('kpiPaid').textContent = fmt(paid);
   document.getElementById('kpiPending').textContent = fmt(pending);
 
-  // "Falta por meter": lo que aún tienes que desembolsar.
-  // Si hay presupuesto: lo máximo entre (pendiente) y (presupuesto - pagado) no es lo correcto.
-  // Lo que falta meter = pendiente de pagar + lo que falte hasta cubrir el presupuesto si el presupuesto > total.
-  // Interpretación práctica: dinero que todavía tienes que aportar = pendiente de pagar.
-  // Y aparte mostramos margen vs presupuesto.
-  const faltaPagar = pending;
   const needEl = document.getElementById('kpiNeed');
   const needSub = document.getElementById('kpiNeedSub');
-
+  needEl.textContent = fmt(pending);
   if (budget > 0) {
-    const restantePresu = budget - total; // margen que te queda del presupuesto
-    // Dinero que aún debes desembolsar para terminar lo contratado:
-    needEl.textContent = fmt(faltaPagar);
-    if (restantePresu >= 0) {
-      needSub.textContent = `Pendiente de pagar · te sobran ${fmt(restantePresu)} de presupuesto`;
-    } else {
-      needSub.textContent = `Pendiente de pagar · ⚠️ te has pasado ${fmt(Math.abs(restantePresu))} del presupuesto`;
-    }
+    const restante = budget - total;
+    needSub.textContent = restante >= 0
+      ? `Pendiente de pagar · te sobran ${fmt(restante)} de presupuesto`
+      : `Pendiente de pagar · ⚠️ te pasas ${fmt(Math.abs(restante))} del presupuesto`;
   } else {
-    needEl.textContent = fmt(faltaPagar);
     needSub.textContent = 'Dinero pendiente de desembolsar';
   }
 
-  // progress bar (relative to budget if set, else to total)
-  const base = budget > 0 ? budget : total;
-  const paidPct = base > 0 ? Math.min(100, (paid / base) * 100) : 0;
-  const pendPct = base > 0 ? Math.min(100 - paidPct, (pending / base) * 100) : 0;
+  const baseRef = budget > 0 ? budget : total;
+  const paidPct = baseRef > 0 ? Math.min(100, (paid / baseRef) * 100) : 0;
+  const pendPct = baseRef > 0 ? Math.min(100 - paidPct, (pending / baseRef) * 100) : 0;
   document.getElementById('barPaid').style.width = paidPct + '%';
   document.getElementById('barPending').style.width = pendPct + '%';
 
   const pctEl = document.getElementById('progressPct');
-  if (budget > 0) {
-    pctEl.textContent = Math.round((total / budget) * 100) + '% del presupuesto comprometido';
-  } else if (total > 0) {
-    pctEl.textContent = Math.round((paid / total) * 100) + '% ya pagado';
-  } else {
-    pctEl.textContent = '—';
-  }
+  if (budget > 0) pctEl.textContent = Math.round((total / budget) * 100) + '% del presupuesto comprometido';
+  else if (total > 0) pctEl.textContent = Math.round((paid / total) * 100) + '% ya pagado';
+  else pctEl.textContent = '—';
 
-  // alert
   const box = document.getElementById('alertBox');
   if (budget > 0 && total > budget) {
-    box.innerHTML = `<div class="alert bad">🚨 <div>El coste estimado (${fmt(total)}) <b>supera tu presupuesto</b> (${fmt(budget)}) en <b>${fmt(total - budget)}</b>. Tendrás que recortar o conseguir más financiación.</div></div>`;
+    box.innerHTML = `<div class="alert bad">🚨 <div>El coste estimado (${fmt(total)}) <b>supera tu presupuesto</b> (${fmt(budget)}) en <b>${fmt(total - budget)}</b>. Habrá que recortar o conseguir más financiación.</div></div>`;
   } else if (budget > 0 && pending > (budget - paid)) {
-    box.innerHTML = `<div class="alert bad">⚠️ <div>Lo pendiente de pagar (${fmt(pending)}) es más que lo que te queda de presupuesto (${fmt(budget - paid)}). Revísalo.</div></div>`;
+    box.innerHTML = `<div class="alert bad">⚠️ <div>Lo pendiente de pagar (${fmt(pending)}) supera lo que te queda de presupuesto (${fmt(budget - paid)}).</div></div>`;
   } else if (budget > 0) {
-    box.innerHTML = `<div class="alert ok">👍 <div>Vas dentro de presupuesto. Te quedan <b>${fmt(budget - total)}</b> de margen y aún debes desembolsar <b>${fmt(pending)}</b> de lo ya contratado.</div></div>`;
+    box.innerHTML = `<div class="alert ok">👍 <div>Vas dentro de presupuesto. Margen de <b>${fmt(budget - total)}</b> y aún debes desembolsar <b>${fmt(pending)}</b> de lo contratado.</div></div>`;
   } else {
     box.innerHTML = '';
   }
 
   document.getElementById('budgetInput').value = budget > 0 ? budget : '';
+  document.getElementById('usdRateInput').value = state.usdRate;
+  document.getElementById('ivaDefaultInput').value = state.ivaDefault;
 }
 
 function renderBreakdown() {
   const cont = document.getElementById('catBreakdown');
   const byCat = {};
-  state.items.forEach(i => { byCat[i.categoria] = (byCat[i.categoria] || 0) + i.importe; });
+  state.items.forEach(i => { byCat[i.categoria] = (byCat[i.categoria] || 0) + totalEUR(i); });
   const max = Math.max(1, ...Object.values(byCat));
   const used = CATEGORIES.filter(c => byCat[c.key]);
-
-  if (!used.length) {
-    cont.innerHTML = `<div style="grid-column:1/-1;color:var(--text-dim);font-size:13px;padding:8px 0">Aún no has añadido gastos.</div>`;
-    return;
-  }
-  cont.innerHTML = used
-    .sort((a, b) => byCat[b.key] - byCat[a.key])
-    .map(c => `
-      <div class="cat-card">
-        <div class="cat-card-head">
-          <span class="cat-card-name">${c.icon} ${c.label}</span>
-          <span class="cat-card-total">${fmt(byCat[c.key])}</span>
-        </div>
-        <div class="mini-bar"><div class="mini-bar-fill" style="width:${(byCat[c.key] / max) * 100}%"></div></div>
-      </div>`).join('');
+  if (!used.length) { cont.innerHTML = `<div style="grid-column:1/-1;color:var(--text-dim);font-size:13px">Aún no has añadido partidas.</div>`; return; }
+  cont.innerHTML = used.sort((a, b) => byCat[b.key] - byCat[a.key]).map(c => `
+    <div class="cat-card">
+      <div class="cat-card-head">
+        <span class="cat-card-name">${c.icon} ${c.label}</span>
+        <span class="cat-card-total">${fmt(byCat[c.key])}</span>
+      </div>
+      <div class="mini-bar"><div class="mini-bar-fill" style="width:${(byCat[c.key] / max) * 100}%"></div></div>
+    </div>`).join('');
 }
 
 function renderTable() {
   const tbody = document.getElementById('tbody');
   let items = state.items;
   if (filter !== 'all') items = items.filter(i => i.estado === filter);
-
   if (!items.length) {
-    tbody.innerHTML = `<tr><td colspan="5"><div class="empty"><div class="empty-icon">🗒️</div>No hay gastos ${filter === 'all' ? 'todavía' : (filter === 'paid' ? 'pagados' : 'pendientes')}.<br/>Añade el primero arriba.</div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty"><div class="empty-icon">🗒️</div>No hay partidas ${filter === 'all' ? 'todavía' : (filter === 'paid' ? 'pagadas' : 'pendientes')}.</div></td></tr>`;
     document.getElementById('footTotal').textContent = fmt(0);
     return;
   }
-
   tbody.innerHTML = items.map(i => {
     const cat = CAT_MAP[i.categoria] || { icon: '📦', label: i.categoria };
     const isPaid = i.estado === 'paid';
+    const baseTxt = fmtCur(i.base, i.currency) + (i.currency === 'USD' ? `<div class="sub-cell">≈ ${fmt(baseEUR(i))}</div>` : '');
+    const nota = i.nota ? `<div class="sub-cell">${escapeHtml(i.nota)}</div>` : '';
     return `<tr>
-      <td>${escapeHtml(i.concepto)}</td>
+      <td>${escapeHtml(i.concepto)}${nota}</td>
       <td><span class="cat-tag">${cat.icon} ${cat.label}</span></td>
-      <td class="num">${fmt(i.importe)}</td>
+      <td class="num">${baseTxt}</td>
+      <td class="num">${i.iva || 0}%</td>
+      <td class="num">${fmt(totalEUR(i))}</td>
       <td><span class="state-toggle ${isPaid ? 'paid' : 'pending'}" onclick="toggleState('${i.id}')">${isPaid ? '✅ Pagado' : '⏳ Pendiente'}</span></td>
       <td class="num"><button class="del-btn" title="Eliminar" onclick="removeItem('${i.id}')">🗑️</button></td>
     </tr>`;
   }).join('');
-
-  const visTotal = items.reduce((s, i) => s + i.importe, 0);
+  const visTotal = items.reduce((s, i) => s + totalEUR(i), 0);
   document.getElementById('footTotal').textContent = fmt(visTotal);
 }
 
-function escapeHtml(s) {
-  return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+function render() { renderSummary(); renderBreakdown(); renderTable(); }
+
+// ─── SEED / EXPORT / RESET ───────────────────────────────────────────────────
+function loadSeed(ask) {
+  if (ask && !confirm('Esto añadirá las partidas de ejemplo (climatización, agua, ACS, renovación de aire y maquinaria). ¿Continuar?')) return;
+  state.items = seedItems().concat(state.items);
+  save();
+  render();
 }
 
-function render() {
-  renderSummary();
-  renderBreakdown();
-  renderTable();
-}
-
-// ─── EXPORT / RESET ──────────────────────────────────────────────────────────
 function exportCSV() {
-  const rows = [['Concepto', 'Categoria', 'Importe (EUR)', 'Estado']];
+  const rows = [['Concepto', 'Categoria', 'Base', 'Moneda', 'Base EUR', 'IVA %', 'Total EUR', 'Estado', 'Nota']];
   state.items.forEach(i => {
     const cat = CAT_MAP[i.categoria] || { label: i.categoria };
-    rows.push([i.concepto, cat.label, i.importe, i.estado === 'paid' ? 'Pagado' : 'Pendiente']);
+    rows.push([i.concepto, cat.label, i.base, i.currency, Math.round(baseEUR(i)), i.iva || 0, Math.round(totalEUR(i)), i.estado === 'paid' ? 'Pagado' : 'Pendiente', i.nota || '']);
   });
-  const { paid, pending, total } = totals();
+  const { paid, pending, total, base } = totals();
   rows.push([]);
-  rows.push(['Presupuesto', '', state.budget || 0, '']);
-  rows.push(['Total estimado', '', total, '']);
-  rows.push(['Pagado', '', paid, '']);
-  rows.push(['Pendiente', '', pending, '']);
-
+  rows.push(['Cambio USD->EUR', state.usdRate]);
+  rows.push(['Presupuesto', state.budget || 0]);
+  rows.push(['Base (sin IVA)', Math.round(base)]);
+  rows.push(['Total (con IVA)', Math.round(total)]);
+  rows.push(['Pagado', Math.round(paid)]);
+  rows.push(['Pendiente', Math.round(pending)]);
   const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
   const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = 'reforma-gimnasio.csv';
-  a.click();
+  a.href = url; a.download = 'reforma-gimnasio.csv'; a.click();
   URL.revokeObjectURL(url);
 }
 
 function resetAll() {
-  if (!confirm('¿Seguro que quieres borrar TODOS los gastos y el presupuesto? Esto no se puede deshacer.')) return;
-  state = { budget: 0, items: [] };
-  save();
-  render();
+  if (!confirm('¿Seguro que quieres borrar TODAS las partidas y la configuración? Esto no se puede deshacer.')) return;
+  state = { budget: 0, usdRate: 0.92, ivaDefault: 21, items: [] };
+  save(); render();
 }
 
 // ─── BOOT ────────────────────────────────────────────────────────────────────
 load();
 initCategorySelect();
+document.getElementById('fIva').value = state.ivaDefault;
 render();
 </script>
 </body>
