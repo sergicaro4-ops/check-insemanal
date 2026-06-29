@@ -392,6 +392,7 @@
 const CATEGORIES = [
   { key: 'obra',       label: 'Obra / albañilería', icon: '🧱' },
   { key: 'electrica',  label: 'Electricidad',       icon: '💡' },
+  { key: 'incendios',  label: 'Contraincendios / seguridad', icon: '🧯' },
   { key: 'fontaneria', label: 'Fontanería / agua',  icon: '🚰' },
   { key: 'clima',      label: 'Climatización / aire', icon: '❄️' },
   { key: 'suelo',      label: 'Suelo / pavimento',  icon: '🟫' },
@@ -408,25 +409,44 @@ const CAT_MAP = Object.fromEntries(CATEGORIES.map(c => [c.key, c]));
 
 // ─── SEED (partidas reales aportadas) ────────────────────────────────────────
 // Importes "base" = sin IVA. La maquinaria está en USD (factura FOB HSE Fitness).
+// "sk" = clave estable de cada partida de ejemplo, para añadir nuevas sin duplicar.
 function seedItems() {
-  const mk = (concepto, categoria, base, currency, iva, estado, nota) =>
-    ({ id: uid(), concepto, categoria, base, currency, iva, estado, nota: nota || '' });
+  const mk = (sk, concepto, categoria, base, currency, iva, estado, nota) =>
+    ({ id: uid(), sk, concepto, categoria, base, currency, iva, estado, nota: nota || '' });
   return [
-    mk('Climatización: 4 uds Haier 14 kW (oferta 991)', 'clima', 17855.46, 'EUR', 21, 'pending'),
-    mk('Agua fría y caliente interior vestuarios (oferta 994)', 'fontaneria', 18265.75, 'EUR', 21, 'pending'),
-    mk('Producción ACS: aerotermia + depósito 1000 L (oferta 992)', 'fontaneria', 19928.77, 'EUR', 21, 'pending'),
-    mk('Renovación aire RITE + extracción vestuarios (oferta 995)', 'clima', 38352.09, 'EUR', 21, 'pending'),
-    mk('Maquinaria HSE Fitness (factura HSE20260412, FOB)', 'maquinaria', 76750.00, 'USD', 21, 'pending', 'FOB: no incluye transporte ni aduana'),
-    mk('Transporte marítimo + aduana equipos (por confirmar)', 'transporte', 0, 'EUR', 21, 'pending', 'Rellenar al tener el coste'),
+    mk('clima-991', 'Climatización: 4 uds Haier 14 kW (oferta 991)', 'clima', 17855.46, 'EUR', 21, 'pending'),
+    mk('agua-994', 'Agua fría y caliente interior vestuarios (oferta 994)', 'fontaneria', 18265.75, 'EUR', 21, 'pending'),
+    mk('acs-992', 'Producción ACS: aerotermia + depósito 1000 L (oferta 992)', 'fontaneria', 19928.77, 'EUR', 21, 'pending'),
+    mk('rite-995', 'Renovación aire RITE + extracción vestuarios (oferta 995)', 'clima', 38352.09, 'EUR', 21, 'pending'),
+    mk('maq-hse', 'Maquinaria HSE Fitness (factura HSE20260412, FOB)', 'maquinaria', 76750.00, 'USD', 21, 'pending', 'FOB: no incluye transporte ni aduana'),
+    mk('elec-gimnas', 'Instalación eléctrica gimnasio (Patrick Oviedo)', 'electrica', 34615.12, 'EUR', 21, 'pending', '20% al aceptar, resto facturado mensual. No incluye luces decorativas LED ni medios de elevación'),
+    mk('elec-incendi', 'Detección de incendios (central + 37 detectores)', 'incendios', 9611.46, 'EUR', 21, 'pending', 'Incluye certificación contraincendios'),
+    mk('elec-comptadors', 'Suministro caja de contadores (TMF-10 + armario)', 'electrica', 2252.90, 'EUR', 21, 'pending'),
+    mk('transporte', 'Transporte marítimo + aduana equipos (por confirmar)', 'transporte', 0, 'EUR', 21, 'pending', 'Rellenar al tener el coste'),
   ];
 }
 
 // ─── STATE ───────────────────────────────────────────────────────────────────
 const LS_KEY = 'gym_reforma_v2';
-let state = { budget: 0, usdRate: 0.92, ivaDefault: 21, items: [] };
+let state = { budget: 0, usdRate: 0.92, ivaDefault: 21, items: [], seededKeys: [] };
 let filter = 'all';
 
 function uid() { return Date.now() + '-' + Math.floor(Math.random() * 1e6); }
+
+// Añade las partidas de ejemplo que aún no se hayan inyectado nunca (sin duplicar
+// ni resucitar las que el usuario haya borrado a propósito). Devuelve cuántas añadió.
+function mergeSeed() {
+  if (!Array.isArray(state.seededKeys)) state.seededKeys = [];
+  let added = 0;
+  seedItems().forEach(s => {
+    if (!state.seededKeys.includes(s.sk)) {
+      state.items.push(s);
+      state.seededKeys.push(s.sk);
+      added++;
+    }
+  });
+  return added;
+}
 
 function load() {
   try {
@@ -442,16 +462,28 @@ function load() {
           id: i.id || uid(), concepto: i.concepto, categoria: i.categoria,
           base: i.importe || 0, currency: 'EUR', iva: 0, estado: i.estado, nota: ''
         }));
-      } else {
-        state.items = seedItems(); // primera visita: cargar partidas reales
       }
     }
-  } catch (e) { state.items = seedItems(); }
+  } catch (e) { state.items = []; }
 
   if (!Array.isArray(state.items)) state.items = [];
+  if (!Array.isArray(state.seededKeys)) state.seededKeys = [];
   if (typeof state.budget !== 'number') state.budget = 0;
   if (typeof state.usdRate !== 'number' || !state.usdRate) state.usdRate = 0.92;
   if (typeof state.ivaDefault !== 'number') state.ivaDefault = 21;
+
+  // Migración: partidas de ejemplo anteriores no tenían "sk". Las emparejamos
+  // por concepto para no duplicarlas al fusionar las nuevas.
+  let migrated = false;
+  const skByConcepto = {};
+  seedItems().forEach(s => { skByConcepto[s.concepto] = s.sk; });
+  state.items.forEach(i => {
+    if (!i.sk && skByConcepto[i.concepto]) { i.sk = skByConcepto[i.concepto]; migrated = true; }
+    if (i.sk && !state.seededKeys.includes(i.sk)) { state.seededKeys.push(i.sk); migrated = true; }
+  });
+
+  // Primera visita o partidas de ejemplo nuevas: inyectarlas sin duplicar.
+  if (mergeSeed() || migrated) save();
 }
 function save() { localStorage.setItem(LS_KEY, JSON.stringify(state)); }
 
@@ -620,10 +652,13 @@ function render() { renderSummary(); renderBreakdown(); renderTable(); }
 
 // ─── SEED / EXPORT / RESET ───────────────────────────────────────────────────
 function loadSeed(ask) {
-  if (ask && !confirm('Esto añadirá las partidas de ejemplo (climatización, agua, ACS, renovación de aire y maquinaria). ¿Continuar?')) return;
-  state.items = seedItems().concat(state.items);
+  if (ask && !confirm('Esto recargará las partidas de ejemplo que falten (no duplica las que ya tienes). ¿Continuar?')) return;
+  // permite reinyectar incluso las borradas: limpia la marca y vuelve a fusionar
+  state.seededKeys = [];
+  const n = mergeSeed();
   save();
   render();
+  alert(n ? `Añadidas ${n} partida(s).` : 'Ya tenías todas las partidas de ejemplo.');
 }
 
 function exportCSV() {
@@ -650,7 +685,7 @@ function exportCSV() {
 
 function resetAll() {
   if (!confirm('¿Seguro que quieres borrar TODAS las partidas y la configuración? Esto no se puede deshacer.')) return;
-  state = { budget: 0, usdRate: 0.92, ivaDefault: 21, items: [] };
+  state = { budget: 0, usdRate: 0.92, ivaDefault: 21, items: [], seededKeys: [] };
   save(); render();
 }
 
