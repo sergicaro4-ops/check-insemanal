@@ -436,8 +436,9 @@ function seedItems() {
     mk('vidres-recep', 'Vidrios aplacado recepción (Franquet Barrau FBP261136)', 'mobiliario', 2889.19, 'EUR', 21, 'pending'),
     mk('rotol-legion', 'Rótulo LEGION letras corpóreas + LED (Franquet Barrau ENP261169)', 'rotulos', 6748.00, 'EUR', 21, 'pending'),
     mk('rotol-xixo', 'Lonas / decoración La Xixo (Franquet Barrau FBP261143)', 'rotulos', 388.10, 'EUR', 21, 'pending', 'Presupuesto a nombre de La Xixo — confirmar si es del gimnasio'),
-    mk('carulla-pagado', 'Carulla Energía — pagado a cuenta', 'electrica', 25361.12, 'EUR', 12.6, 'paid', '40% sin IVA → IVA efectivo 12,6%. Pagado por banco (28.556,62 €)'),
-    mk('carulla-pend', 'Carulla Energía — pendiente', 'electrica', 9769.10, 'EUR', 12.6, 'pending', 'Pendiente por pagar ≈ 11.000 € (IVA efectivo 12,6%)'),
+    mk('carulla-pagado', 'Carulla Energía — pagado 25% (con IVA)', 'electrica', 23600.51, 'EUR', 21, 'paid', '25% pagado = 28.556,62 € con IVA. Total Carulla ≈ 106.297 €'),
+    mk('carulla-pend-iva', 'Carulla Energía — pendiente 35% (con IVA)', 'electrica', 33040.72, 'EUR', 21, 'pending', '35% pendiente = 39.979 € con IVA'),
+    mk('carulla-pend-siniva', 'Carulla Energía — pendiente 40% (SIN IVA)', 'electrica', 37760.82, 'EUR', 0, 'pending', '40% sin IVA = 37.761 €'),
     mk('taquillas-bellum', 'Taquillas + cabinas sanitarias vestuarios (Bellum Logistics)', 'vestuarios', 15681.50, 'EUR', 21, 'pending', 'Taquillas 9.628,38 + cabinas 5.053,12 + envío 1.000 €. Pago 50% firma / 50% antes de envío'),
     mk('pulir-suelo', 'Pulir suelo', 'suelo', 5000, 'EUR', 21, 'pending', 'Estimación'),
     mk('pintura-gral', 'Pintura (general)', 'pintura', 8000, 'EUR', 21, 'pending', 'Estimación'),
@@ -516,6 +517,16 @@ function load() {
       tr.nota = 'Estimación aduana + transporte ≈ 30.000 €';
     }
     state.migTransporte30k = true;
+    migrated = true;
+  }
+
+  // Migración puntual: rehacer Carulla con la estructura real de pago
+  // (25% pagado con IVA + 35% pendiente con IVA + 40% pendiente sin IVA).
+  if (!state.migCarullaV3) {
+    const old = ['carulla-pagado', 'carulla-pend'];
+    state.items = state.items.filter(i => !old.includes(i.sk));
+    state.seededKeys = state.seededKeys.filter(k => !old.includes(k));
+    state.migCarullaV3 = true;
     migrated = true;
   }
 
