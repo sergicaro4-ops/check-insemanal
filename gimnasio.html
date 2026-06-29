@@ -445,10 +445,10 @@ function renderResumen(){
 }
 
 // ══════════ TAB: SOCIOS ══════════
-let SO={valoracion:500000,aportacion:50000};
+let SO={valoracion:500000,aportacion:50000,extraFund:0};
 function renderSocios(){
   const t=totalsR();
-  const coste=t.tot, aportado=APORTADO, deficit=Math.max(0,coste-aportado);
+  const coste=t.tot, aportado=APORTADO+(SO.extraFund||0), deficit=Math.max(0,coste-aportado);
   const V=SO.valoracion,P=SO.aportacion;
   const pps=V>0?P/V:0;
   const n=(P>0&&deficit>0)?Math.ceil(deficit/P):0;
@@ -467,10 +467,11 @@ function renderSocios(){
     <h1>Simulador de socios</h1>
     <p class="sub">Cuánto capital levantas, qué % vendes y cómo os diluís para cubrir el déficit.</p>
     <div class="disc" style="margin-bottom:16px">⚠️ Orientación, no asesoramiento. La ampliación de capital y el leasing de la nave (operación vinculada) los formaliza un asesor.</div>
-    <div class="grid g3">
+    <div class="grid g4">
       <div class="kpi"><div class="l">Coste total</div><div class="v">${f(coste)}</div></div>
-      <div class="kpi"><div class="l">Ya aportado</div><div class="v">${f(aportado)}</div></div>
-      <div class="kpi"><div class="l">Déficit a financiar</div><div class="v" style="color:var(--c3)">${f(deficit)}</div></div>
+      <div class="kpi"><div class="l">Aportado fundadores</div><div class="v">${f(APORTADO)}</div></div>
+      <div class="card" style="margin:0"><span class="label">+ Aportación extra fundadores</span><input class="num-in" type="number" step="5000" value="${SO.extraFund||0}" oninput="setSO('extraFund',this.value)"><div class="hint">Como préstamo no cambia los %; reduce lo que captas de fuera.</div></div>
+      <div class="kpi"><div class="l">Déficit a captar (fuera)</div><div class="v" style="color:var(--c3)">${f(deficit)}</div></div>
     </div>
     <h3 class="bt">Simula la entrada</h3>
     <div class="grid g3">
