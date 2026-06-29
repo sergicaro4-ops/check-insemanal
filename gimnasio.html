@@ -494,7 +494,7 @@ function renderSocios(){
 function setSO(k,v){ SO[k]=parseFloat(v)||0; renderSocios(); }
 
 // ══════════ TAB: DOSSIER ══════════
-let DO={cuota:50,socios:800,alquiler:3500,preinscritos:220,cuotaPre:40};
+let DO={cuota:50,socios:800,alquiler:2600,preinscritos:220,cuotaPre:40};
 function renderDossier(){
   const t=totalsR(), coste=t.tot;
   const {cuota,socios,alquiler,preinscritos,cuotaPre}=DO;
@@ -541,6 +541,30 @@ function renderDossier(){
       <div class="kpi"><div class="l">Rentabilidad objetivo</div><div class="v" style="color:var(--c4)">${(yld*100).toFixed(0)}%</div></div>
       <div class="kpi"><div class="l">Payback</div><div class="v" style="color:var(--c4)">${pay>0?pay.toFixed(1)+' años':'—'}</div></div>
     </div>
+    <h3 class="bt">👥 Equipo y solidez</h3>
+    <div class="card"><p style="font-size:14px;color:var(--muted);line-height:1.7">Sociedad familiar de <b style="color:var(--text)">5 socios</b>: cuatro son <b style="color:var(--text)">dentistas</b> —respaldo financiero sólido y estable— y el administrador, <b style="color:var(--text)">Sergi Caro</b>, es graduado en <b style="color:var(--text)">ADE</b> y culturista: formación en gestión empresarial y conocimiento profundo del sector fitness.</p></div>
+
+    <h3 class="bt">📍 Mercado y punto de equilibrio</h3>
+    <div class="card">
+      <div class="grid g3" style="margin-bottom:12px">
+        <div class="kpi"><div class="l">Mercado (radio 20 km)</div><div class="v">130.000 hab.</div></div>
+        <div class="kpi"><div class="l">Equilibrio operativo</div><div class="v">220 socios</div></div>
+        <div class="kpi"><div class="l">Equilibrio + préstamo</div><div class="v">300 socios</div></div>
+      </div>
+      <ul style="padding-left:18px;color:var(--muted);font-size:13px;line-height:1.8">
+        <li>Con los <b style="color:var(--text)">220 preinscritos</b> ya se cubren los gastos operativos desde la apertura.</li>
+        <li>Con <b style="color:var(--text)">300 socios</b> se cubre además la devolución del préstamo de socios.</li>
+        <li>El objetivo de 800 socios es solo el <b style="color:var(--text)">0,6%</b> del mercado de la zona: amplio recorrido.</li>
+      </ul>
+    </div>
+
+    <h3 class="bt">💶 Estructura financiera y reparto</h3>
+    <div class="card"><ul style="padding-left:18px;color:var(--muted);font-size:13px;line-height:1.8">
+      <li>Préstamo de socios fundadores: <b style="color:var(--text)">290.000 € a devolver en 10 años</b> (~29.000 €/año), ya contemplado en el equilibrio de 300 socios.</li>
+      <li>Alquiler de la nave: <b style="color:var(--text)">2.600 €/mes + IVA</b>, contrato estable con la propiedad (familia fundadora).</li>
+      <li>Reparto de beneficios: <b style="color:var(--text)">junta anual</b> que decide la distribución, proporcional a la participación de cada socio. Administrador: Sergi Caro.</li>
+    </ul></div>
+
     <h3 class="bt">🤝 Cómo comprar participaciones</h3>
     <div class="card">
       <div class="grid g3" style="margin-bottom:12px">
