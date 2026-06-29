@@ -503,8 +503,8 @@ function renderDossier(){
   const eb3=rows[2].eb, ing3=rows[2].ing;
   const ben=eb3*0.1, yld=ben/50000, pay=ben>0?50000/ben:0;
   document.getElementById('t-dossier').innerHTML=`
-    <h1>🚀 Dossier de inversión</h1>
-    <p class="sub">Resumen para captar inversores. <button class="btn gold" onclick="printTab('dossier')" style="margin-left:8px">🖨️ Descargar PDF</button></p>
+    <h1>🚀 Compra de participaciones</h1>
+    <p class="sub">Oportunidad de entrar como socio de Legion Club adquiriendo participaciones. <button class="btn gold" onclick="printTab('dossier')" style="margin-left:8px">🖨️ Descargar PDF</button></p>
     <div class="verdict" style="border-color:color-mix(in srgb,var(--gold) 40%,transparent);background:linear-gradient(135deg,color-mix(in srgb,var(--gold) 12%,var(--bg2)),var(--bg2))">
       <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><div style="font-family:'Space Grotesk';font-size:42px;font-weight:700;color:var(--gold)">${preinscritos}</div><div><div class="vh" style="color:var(--gold);margin:0">Socios ya preinscritos antes de abrir</div><p>Demanda validada sin haber abierto ni hecho campaña. No es previsión: es interés real.</p></div></div>
     </div>
@@ -540,6 +540,20 @@ function renderDossier(){
       <div class="kpi"><div class="l">Beneficio anual (año 3)</div><div class="v" style="color:var(--c4)">${f(ben)}</div></div>
       <div class="kpi"><div class="l">Rentabilidad objetivo</div><div class="v" style="color:var(--c4)">${(yld*100).toFixed(0)}%</div></div>
       <div class="kpi"><div class="l">Payback</div><div class="v" style="color:var(--c4)">${pay>0?pay.toFixed(1)+' años':'—'}</div></div>
+    </div>
+    <h3 class="bt">🤝 Cómo comprar participaciones</h3>
+    <div class="card">
+      <div class="grid g3" style="margin-bottom:12px">
+        <div class="kpi"><div class="l">Ticket de entrada</div><div class="v" style="color:var(--gold)">50.000 €</div></div>
+        <div class="kpi"><div class="l">Participación</div><div class="v">10%</div></div>
+        <div class="kpi"><div class="l">Valoración</div><div class="v">500.000 €</div></div>
+      </div>
+      <ul style="padding-left:18px;color:var(--muted);font-size:13px;line-height:1.8">
+        <li>Entras como socio mediante <b style="color:var(--text)">ampliación de capital</b> (participaciones nuevas de Caro Legión S.L.).</li>
+        <li>Obtienes el <b style="color:var(--text)">10% de la propiedad</b>, con derecho a voto y a participar en los beneficios (dividendos) de forma proporcional.</li>
+        <li>Posibilidad de adquirir <b style="color:var(--text)">varios tramos del 10%</b>.</li>
+        <li>Operación formalizada ante notario con <b style="color:var(--text)">pacto de socios</b> (cláusulas de salida y derecho de acompañamiento).</li>
+      </ul>
     </div>
     <div class="disc" style="margin-top:18px"><b>Aviso legal.</b> Documento comercial informativo, no es oferta de valores ni asesoramiento. Las proyecciones son estimaciones, no garantías. Toda inversión requiere due diligence y pacto de socios ante asesor.</div>`;
 }
