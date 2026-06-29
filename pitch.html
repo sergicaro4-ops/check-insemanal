@@ -136,6 +136,7 @@
     <div class="tagline">Heroes take the hard way</div>
     <p class="pitch-line">Un gimnasio premium en Sant Fruitós de Bages. Los fundadores ya han aportado ~290.000 € y gran parte de la obra está ejecutada: <b style="color:var(--text)">buscamos socios para completar la inversión, abrir y crecer.</b></p>
     <div class="hero-stats">
+      <div class="hstat"><div class="v" id="hsPre">220</div><div class="l">Socios preinscritos</div></div>
       <div class="hstat"><div class="v">500.000 €</div><div class="l">Valoración</div></div>
       <div class="hstat"><div class="v">50.000 €</div><div class="l">Ticket · 10%</div></div>
       <div class="hstat"><div class="v" id="hsEbitda">—</div><div class="l">EBITDA objetivo (año 3)</div></div>
@@ -147,7 +148,13 @@
 <section class="sec"><div class="wrap">
   <div class="eyebrow">Resumen ejecutivo</div>
   <h2>La oportunidad</h2>
-  <p class="lead">Legion Club es un centro fitness de nueva creación con una inversión de primer nivel ya ejecutada. Entrar ahora significa hacerlo justo antes de la apertura, con el grueso del riesgo (obra, licencias, instalaciones) ya superado.</p>
+  <p class="lead">Legion Club es un centro fitness de nueva creación con una inversión de primer nivel muy avanzada. Entrar ahora significa hacerlo justo antes de la apertura, con el grueso del riesgo (obra, licencias, instalaciones) ya superado.</p>
+  <div class="card" style="margin-top:22px;border-color:color-mix(in srgb,var(--gold) 40%,transparent);background:linear-gradient(135deg,color-mix(in srgb,var(--gold) 12%,var(--bg2)),var(--bg2))">
+    <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:46px;font-weight:700;color:var(--gold2);line-height:1">220</div>
+      <div><h3 style="margin-bottom:4px">Socios ya preinscritos — antes de abrir</h3><p style="font-size:14px;margin:0">La demanda está validada sin haber abierto puertas ni hecho campaña. No es una previsión: es interés real y comprometido de clientes en la zona.</p></div>
+    </div>
+  </div>
   <div class="grid3" style="margin-top:26px">
     <div class="card"><div class="ic">🏗️</div><h3>Inversión muy avanzada</h3><p>Los fundadores ya han aportado ~290.000 € de los ~525.000 € que cuesta el proyecto completo. La obra está muy avanzada: no se invierte en una idea, sino en un proyecto real en marcha.</p></div>
     <div class="card"><div class="ic">📍</div><h3>Ubicación e inmueble estable</h3><p>Nave de 500.000 € propiedad de la familia fundadora, con contrato de arrendamiento estable. Sin riesgo de pérdida del local.</p></div>
@@ -193,15 +200,17 @@
   <h2>El negocio en números</h2>
   <p class="lead">Modelo a 3 años basado en cuotas recurrentes. Ajusta los supuestos para ver distintos escenarios.</p>
   <div class="assume">
-    <div class="af"><label>Cuota media / mes</label><input type="number" id="cuota" step="1" /><span class="u">€</span></div>
     <div class="af"><label>Socios objetivo (año 3)</label><input type="number" id="socios" step="50" /></div>
+    <div class="af"><label>Cuota regular / mes</label><input type="number" id="cuota" step="1" /><span class="u">€</span></div>
+    <div class="af"><label>Preinscritos</label><input type="number" id="preinscritos" step="10" /></div>
+    <div class="af"><label>Cuota preinscrito / mes</label><input type="number" id="cuotaPre" step="1" /><span class="u">€</span></div>
     <div class="af"><label>Alquiler nave / mes</label><input type="number" id="alquiler" step="100" /><span class="u">€</span></div>
   </div>
   <table>
     <thead><tr><th>Concepto</th><th>Año 1</th><th>Año 2</th><th>Año 3</th></tr></thead>
     <tbody id="projBody"></tbody>
   </table>
-  <p style="font-size:11.5px;color:var(--dim);margin-top:10px">Rampa de ocupación estimada: 50% / 75% / 100% del objetivo. Otros costes operativos (suministros, mantenimiento, marketing) estimados en el 25% de los ingresos. Cifras ilustrativas, no garantizadas.</p>
+  <p style="font-size:11.5px;color:var(--dim);margin-top:10px">Los primeros 220 socios (preinscritos) pagan cuota reducida; el resto, cuota regular. Rampa de ocupación estimada: 50% / 75% / 100% del objetivo. Otros costes operativos (suministros, mantenimiento, marketing) estimados en el 25% de los ingresos. Cifras ilustrativas, no garantizadas.</p>
 </div></section>
 
 <!-- OFERTA -->
@@ -288,15 +297,17 @@ function loadCoste(){
 }
 const COSTE = loadCoste();
 
-const state = { cuota: 50, socios: 800, alquiler: 3500 };
+const state = { cuota: 50, socios: 800, alquiler: 3500, preinscritos: 220, cuotaPre: 40 };
 
 function render(){
-  const { cuota, socios, alquiler } = state;
+  const { cuota, socios, alquiler, preinscritos, cuotaPre } = state;
   const ramp = [0.50, 0.75, 1.00];
   const personal = [60000, 78000, 90000];
   const rows = ramp.map((r,idx)=>{
     const sActivos = Math.round(socios*r);
-    const ingresos = sActivos*cuota*12;
+    const pre = Math.min(sActivos, preinscritos);      // preinscritos con cuota reducida
+    const reg = Math.max(0, sActivos - preinscritos);  // resto a cuota regular
+    const ingresos = pre*cuotaPre*12 + reg*cuota*12;
     const alq = alquiler*12;
     const otros = ingresos*0.25;
     const costes = alq + personal[idx] + otros;
@@ -332,9 +343,12 @@ function render(){
   document.getElementById('cuota').value = cuota;
   document.getElementById('socios').value = socios;
   document.getElementById('alquiler').value = alquiler;
+  document.getElementById('preinscritos').value = preinscritos;
+  document.getElementById('cuotaPre').value = cuotaPre;
+  document.getElementById('hsPre').textContent = preinscritos;
 }
 
-['cuota','socios','alquiler'].forEach(id=>{
+['cuota','socios','alquiler','preinscritos','cuotaPre'].forEach(id=>{
   document.getElementById(id).addEventListener('input', e=>{
     const v=parseFloat(e.target.value); state[id]=isNaN(v)?0:v; render();
   });
