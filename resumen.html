@@ -33,6 +33,22 @@
   .title { font-family:'Space Grotesk',sans-serif; font-size:34px; font-weight:700; line-height:1.1; margin:18px 0 6px; background:linear-gradient(135deg,#fff 30%,#888aaa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
   .subtitle { color:var(--text-muted); font-size:15px; line-height:1.6; margin-bottom:26px; max-width:640px; }
 
+  /* VERDICT (para socios) */
+  .verdict { border-radius:var(--radius); padding:24px; margin-bottom:22px; border:1px solid; }
+  .verdict.ok   { background:linear-gradient(135deg, rgba(16,185,129,0.16), rgba(16,185,129,0.04)); border-color:rgba(16,185,129,0.4); }
+  .verdict.warn { background:linear-gradient(135deg, rgba(245,158,11,0.16), rgba(245,158,11,0.04)); border-color:rgba(245,158,11,0.4); }
+  .verdict.bad  { background:linear-gradient(135deg, rgba(239,68,68,0.16), rgba(239,68,68,0.05)); border-color:rgba(239,68,68,0.45); }
+  .verdict-tag { font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px; }
+  .verdict-title { font-family:'Space Grotesk',sans-serif; font-size:26px; font-weight:700; line-height:1.15; margin-bottom:8px; }
+  .verdict-msg { font-size:14px; color:var(--text-muted); line-height:1.6; max-width:720px; }
+  .verdict-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:18px; }
+  @media (max-width:680px){ .verdict-grid{ grid-template-columns:repeat(2,1fr); } }
+  .vg { background:rgba(0,0,0,0.25); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; }
+  .vg.hl { border-color:var(--border-bright); background:rgba(255,255,255,0.04); }
+  .vl { font-family:'Space Grotesk',sans-serif; font-size:10px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; }
+  .vv { font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:700; }
+  .verdict-pend { margin-top:16px; font-size:12.5px; color:var(--text-muted); line-height:1.5; background:rgba(0,0,0,0.2); border-radius:var(--radius-sm); padding:12px 14px; }
+
   /* TOTALS */
   .totals { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:24px; }
   @media (max-width:680px){ .totals{ grid-template-columns:1fr; } }
@@ -114,7 +130,7 @@
 
 <div class="wrap">
   <h1 class="title">Resumen de la inversión</h1>
-  <p class="subtitle">Todas las partidas de la reforma desglosadas en base (sin IVA), IVA y total. Se actualiza con los datos de tu presupuesto.</p>
+  <p class="subtitle">Informe para los socios capitalistas: estado de la inversión de la reforma, si hace falta ampliar capital y el desglose de todas las partidas (base, IVA y total).</p>
 
   <div id="content"></div>
 
@@ -137,6 +153,7 @@ const CATEGORIES = [
   { key:'maquinaria', label:'Maquinaria / pesas', icon:'🏋️', color:'#6366f1' },
   { key:'mobiliario', label:'Mobiliario / recepción', icon:'🪑', color:'#8b5cf6' },
   { key:'rotulos', label:'Rótulos / imagen', icon:'🪧', color:'#d946ef' },
+  { key:'acceso', label:'Control de acceso', icon:'🎫', color:'#22c55e' },
   { key:'licencias', label:'Licencias / proyecto', icon:'📄', color:'#64748b' },
   { key:'transporte', label:'Transporte / aduana', icon:'🚢', color:'#0ea5e9' },
   { key:'otros', label:'Otros', icon:'📦', color:'#94a3b8' },
@@ -165,23 +182,31 @@ function seedItems(){
     mk('pulir-suelo','Pulir suelo','suelo',5000,'EUR',21,'pending','Estimación'),
     mk('pintura-gral','Pintura (general)','pintura',8000,'EUR',21,'pending','Estimación'),
     mk('pintura-fachada','Pintura paredes + fachada','pintura',5000,'EUR',21,'pending','Estimación'),
+    mk('tornos','Tornos de acceso','acceso',10000,'EUR',21,'pending','Estimación ≈ 10.000 €'),
+    mk('puerta-qr','Puerta de cristal exterior con lector QR','acceso',0,'EUR',21,'pending','Por presupuestar'),
+    mk('accesibilidad','Rampa nueva o elevador para minusválidos','obra',0,'EUR',21,'pending','A decidir: rampa nueva o elevador. Por presupuestar'),
     mk('lm-pendiente','Luis Miguel — trabajos por concretar','obra',0,'EUR',21,'pending','Techo vestuario + mano de obra + pared mostrador'),
     mk('transporte','Transporte marítimo + aduana equipos (estimado)','transporte',30000,'EUR',0,'pending','Estimación ≈ 30.000 €'),
   ];
 }
 
 // ─── leer datos ──────────────────────────────────────────────────────────────
-let usdRate = 0.92, items = [];
+let usdRate = 0.92, items = [], budget = 0;
+// Capital ya aportado por los socios (préstamos en el banco) y el que falta.
+const APORTADO = 240000;        // ya metido entre los socios
+const POR_APORTAR = 190000;     // comprometido por meter
 function loadData(){
   try {
     const raw = localStorage.getItem('gym_reforma_v2');
     if (raw){
       const r = JSON.parse(raw);
       if (typeof r.usdRate==='number' && r.usdRate) usdRate = r.usdRate;
+      if (typeof r.budget==='number') budget = r.budget;
       items = Array.isArray(r.items) ? r.items : [];
     }
   } catch(e){}
   if (!items.length) items = seedItems();
+  if (!budget) budget = APORTADO + POR_APORTAR; // 430.000 € previstos
 }
 
 const f = n => Math.round(n).toLocaleString('es-ES') + ' €';
@@ -277,7 +302,43 @@ function render(){
       }).join('')}</ul>
     </div>` : '';
 
-  cont.innerHTML = `
+  // ── veredicto para socios capitalistas ──
+  const sinPresupuestar = items.filter(i => baseEUR(i) === 0);
+  const margen = budget - totTotal;            // margen sobre la inversión prevista
+  const necesitaCapital = margen < 0;
+  let verdictClass, verdictIcon, verdictTitle, verdictMsg;
+  if (necesitaCapital) {
+    verdictClass = 'bad'; verdictIcon = '🔴';
+    verdictTitle = `Hacen falta ${f(Math.abs(margen))} más de capital`;
+    verdictMsg = `El coste estimado (${f(totTotal)}) supera la inversión prevista de ${f(budget)}. Habría que ampliar capital o ajustar partidas.`;
+  } else if (margen < 30000) {
+    verdictClass = 'warn'; verdictIcon = '🟡';
+    verdictTitle = `Cubierto, pero con margen ajustado (${f(margen)})`;
+    verdictMsg = `Con la inversión prevista de ${f(budget)} se cubre el coste actual, pero el colchón es pequeño${sinPresupuestar.length?` y aún quedan ${sinPresupuestar.length} partidas por presupuestar`:''}. Conviene vigilar.`;
+  } else {
+    verdictClass = 'ok'; verdictIcon = '🟢';
+    verdictTitle = `No se necesita capital adicional (margen ${f(margen)})`;
+    verdictMsg = `La inversión prevista de ${f(budget)} cubre el coste estimado${sinPresupuestar.length?`, aunque quedan ${sinPresupuestar.length} partidas por presupuestar`:''}.`;
+  }
+  const pendList = sinPresupuestar.length
+    ? `<div class="verdict-pend">⏳ Pendientes de presupuestar (aún sin importe): ${sinPresupuestar.map(i=>esc(i.concepto)).join(' · ')}</div>`
+    : '';
+
+  const verdict = `
+    <div class="verdict ${verdictClass}">
+      <div class="verdict-tag">Informe para socios · ¿Necesitamos capital?</div>
+      <div class="verdict-title">${verdictIcon} ${verdictTitle}</div>
+      <div class="verdict-msg">${verdictMsg}</div>
+      <div class="verdict-grid">
+        <div class="vg"><div class="vl">Coste total estimado</div><div class="vv">${f(totTotal)}</div></div>
+        <div class="vg"><div class="vl">Capital ya aportado</div><div class="vv">${f(APORTADO)}</div></div>
+        <div class="vg"><div class="vl">Capital comprometido por meter</div><div class="vv">${f(POR_APORTAR)}</div></div>
+        <div class="vg hl"><div class="vl">${necesitaCapital?'Capital adicional necesario':'Margen disponible'}</div><div class="vv">${f(Math.abs(margen))}</div></div>
+      </div>
+      ${pendList}
+    </div>`;
+
+  cont.innerHTML = verdict + `
     <div class="totals">
       <div class="tcard base"><div class="l">Base imponible (sin IVA)</div><div class="v">${f(totBase)}</div><div class="sub">Suma de todas las bases</div></div>
       <div class="tcard iva"><div class="l">IVA</div><div class="v">${f(totIva)}</div><div class="sub">Recuperable por la S.L.</div></div>

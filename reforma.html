@@ -410,6 +410,7 @@ const CATEGORIES = [
   { key: 'maquinaria', label: 'Maquinaria / pesas', icon: '🏋️' },
   { key: 'mobiliario', label: 'Mobiliario / recepción', icon: '🪑' },
   { key: 'rotulos',    label: 'Rótulos / imagen',   icon: '🪧' },
+  { key: 'acceso',     label: 'Control de acceso',  icon: '🎫' },
   { key: 'licencias',  label: 'Licencias / proyecto', icon: '📄' },
   { key: 'transporte', label: 'Transporte / aduana', icon: '🚢' },
   { key: 'otros',      label: 'Otros',              icon: '📦' },
@@ -441,6 +442,9 @@ function seedItems() {
     mk('pulir-suelo', 'Pulir suelo', 'suelo', 5000, 'EUR', 21, 'pending', 'Estimación'),
     mk('pintura-gral', 'Pintura (general)', 'pintura', 8000, 'EUR', 21, 'pending', 'Estimación'),
     mk('pintura-fachada', 'Pintura paredes + fachada', 'pintura', 5000, 'EUR', 21, 'pending', 'Estimación'),
+    mk('tornos', 'Tornos de acceso', 'acceso', 10000, 'EUR', 21, 'pending', 'Estimación ≈ 10.000 €'),
+    mk('puerta-qr', 'Puerta de cristal exterior con lector QR', 'acceso', 0, 'EUR', 21, 'pending', 'Por presupuestar'),
+    mk('accesibilidad', 'Rampa nueva o elevador para minusválidos', 'obra', 0, 'EUR', 21, 'pending', 'A decidir: rampa nueva o elevador. Por presupuestar'),
     mk('lm-pendiente', 'Luis Miguel — trabajos por concretar', 'obra', 0, 'EUR', 21, 'pending', 'Techo vestuario + mano de obra montaje material + pared separatoria tras mostrador. Pendiente de presupuestar'),
     mk('transporte', 'Transporte marítimo + aduana equipos (estimado)', 'transporte', 30000, 'EUR', 0, 'pending', 'Estimación aduana + transporte ≈ 30.000 €'),
   ];
