@@ -208,6 +208,13 @@
     padding: 3px 10px; border-radius: 20px; background: var(--bg3); border: 1px solid var(--border-bright); color: var(--text-muted); white-space: nowrap;
   }
   .sub-cell { font-size: 11px; color: var(--text-dim); }
+  .row-select, .row-cur { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 12px; padding: 6px 8px; outline: none; cursor: pointer; font-family: 'Inter', sans-serif; }
+  .row-select:focus, .row-cur:focus { border-color: var(--c4); }
+  .base-edit { display: flex; align-items: center; gap: 6px; justify-content: flex-end; }
+  .row-num { width: 92px; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; padding: 6px 8px; outline: none; text-align: right; -moz-appearance: textfield; }
+  .row-num::-webkit-outer-spin-button, .row-num::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .row-num:focus { border-color: var(--c4); box-shadow: 0 0 0 2px color-mix(in srgb, var(--c4) 15%, transparent); }
+  .row-iva { width: 56px; }
   .state-toggle {
     cursor: pointer; font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 700;
     letter-spacing: 0.04em; padding: 5px 11px; border-radius: 20px; border: 1px solid; transition: all 0.2s; user-select: none; white-space: nowrap;
@@ -427,7 +434,7 @@ function seedItems() {
     mk('vidres-recep', 'Vidrios aplacado recepción (Franquet Barrau FBP261136)', 'mobiliario', 2889.19, 'EUR', 21, 'pending'),
     mk('rotol-legion', 'Rótulo LEGION letras corpóreas + LED (Franquet Barrau ENP261169)', 'rotulos', 6748.00, 'EUR', 21, 'pending'),
     mk('rotol-xixo', 'Lonas / decoración La Xixo (Franquet Barrau FBP261143)', 'rotulos', 388.10, 'EUR', 21, 'pending', 'Presupuesto a nombre de La Xixo — confirmar si es del gimnasio'),
-    mk('transporte', 'Transporte marítimo + aduana equipos (por confirmar)', 'transporte', 0, 'EUR', 21, 'pending', 'Rellenar al tener el coste'),
+    mk('transporte', 'Transporte marítimo + aduana equipos (estimado)', 'transporte', 30000, 'EUR', 0, 'pending', 'Estimación aduana + transporte ≈ 30.000 €'),
   ];
 }
 
@@ -487,6 +494,19 @@ function load() {
     if (i.sk && !state.seededKeys.includes(i.sk)) { state.seededKeys.push(i.sk); migrated = true; }
   });
 
+  // Migración puntual: fijar la estimación de aduana/transporte (~30.000 €)
+  // en quienes ya tenían la partida creada en 0 €.
+  if (!state.migTransporte30k) {
+    const tr = state.items.find(i => i.sk === 'transporte');
+    if (tr && (!tr.base || tr.base === 0)) {
+      tr.base = 30000; tr.iva = 0; tr.currency = 'EUR';
+      tr.concepto = 'Transporte marítimo + aduana equipos (estimado)';
+      tr.nota = 'Estimación aduana + transporte ≈ 30.000 €';
+    }
+    state.migTransporte30k = true;
+    migrated = true;
+  }
+
   // Primera visita o partidas de ejemplo nuevas: inyectarlas sin duplicar.
   if (mergeSeed() || migrated) save();
 }
@@ -536,6 +556,18 @@ function flash(id) {
   setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 1200);
 }
 function removeItem(id) { state.items = state.items.filter(i => i.id !== id); save(); render(); }
+function changeField(id, field, val) {
+  const it = state.items.find(i => i.id === id);
+  if (!it) return;
+  if (field === 'base' || field === 'iva') {
+    const n = parseFloat(val);
+    it[field] = isNaN(n) ? 0 : n;
+  } else {
+    it[field] = val;
+  }
+  save();
+  render();
+}
 function toggleState(id) {
   const it = state.items.find(i => i.id === id);
   if (it) { it.estado = it.estado === 'paid' ? 'pending' : 'paid'; save(); render(); }
@@ -632,16 +664,24 @@ function renderTable() {
     document.getElementById('footTotal').textContent = fmt(0);
     return;
   }
+  const catOpts = c => CATEGORIES.map(o => `<option value="${o.key}" ${o.key === c ? 'selected' : ''}>${o.icon} ${o.label}</option>`).join('');
   tbody.innerHTML = items.map(i => {
-    const cat = CAT_MAP[i.categoria] || { icon: '📦', label: i.categoria };
     const isPaid = i.estado === 'paid';
-    const baseTxt = fmtCur(i.base, i.currency) + (i.currency === 'USD' ? `<div class="sub-cell">≈ ${fmt(baseEUR(i))}</div>` : '');
+    const eqUsd = i.currency === 'USD' ? `<div class="sub-cell">≈ ${fmt(baseEUR(i))}</div>` : '';
     const nota = i.nota ? `<div class="sub-cell">${escapeHtml(i.nota)}</div>` : '';
     return `<tr>
       <td>${escapeHtml(i.concepto)}${nota}</td>
-      <td><span class="cat-tag">${cat.icon} ${cat.label}</span></td>
-      <td class="num">${baseTxt}</td>
-      <td class="num">${i.iva || 0}%</td>
+      <td><select class="row-select" onchange="changeField('${i.id}','categoria',this.value)">${catOpts(i.categoria)}</select></td>
+      <td class="num">
+        <div class="base-edit">
+          <input class="row-num" type="number" min="0" step="0.01" value="${i.base}" onchange="changeField('${i.id}','base',this.value)" />
+          <select class="row-cur" onchange="changeField('${i.id}','currency',this.value)">
+            <option value="EUR" ${i.currency === 'EUR' ? 'selected' : ''}>€</option>
+            <option value="USD" ${i.currency === 'USD' ? 'selected' : ''}>$</option>
+          </select>
+        </div>${eqUsd}
+      </td>
+      <td class="num"><input class="row-num row-iva" type="number" min="0" max="100" step="1" value="${i.iva || 0}" onchange="changeField('${i.id}','iva',this.value)" /></td>
       <td class="num">${fmt(totalEUR(i))}</td>
       <td><span class="state-toggle ${isPaid ? 'paid' : 'pending'}" onclick="toggleState('${i.id}')">${isPaid ? '✅ Pagado' : '⏳ Pendiente'}</span></td>
       <td class="num"><button class="del-btn" title="Eliminar" onclick="removeItem('${i.id}')">🗑️</button></td>
