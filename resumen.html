@@ -196,8 +196,8 @@ function seedItems(){
 // ─── leer datos ──────────────────────────────────────────────────────────────
 let usdRate = 0.92, items = [], budget = 0;
 // Capital ya aportado por los socios (préstamos en el banco) y el que falta.
-const APORTADO = 240000;        // ya metido entre los socios
-const POR_APORTAR = 190000;     // comprometido por meter
+const APORTADO = 290000;        // ya metido por los fundadores (240k préstamos + 50k efectivo)
+const POR_APORTAR = 0;          // los fundadores no aportan más
 function loadData(){
   try {
     const raw = localStorage.getItem('gym_reforma_v2');
@@ -313,16 +313,12 @@ function render(){
   let verdictClass, verdictIcon, verdictTitle, verdictMsg;
   if (necesitaCapital) {
     verdictClass = 'bad'; verdictIcon = '🔴';
-    verdictTitle = `Hacen falta ${f(Math.abs(margen))} más de capital`;
-    verdictMsg = `El coste estimado (${f(totTotal)}) supera la inversión prevista de ${f(budget)}. Habría que ampliar capital o ajustar partidas.`;
-  } else if (margen < 30000) {
-    verdictClass = 'warn'; verdictIcon = '🟡';
-    verdictTitle = `Cubierto, pero con margen ajustado (${f(margen)})`;
-    verdictMsg = `Con la inversión prevista de ${f(budget)} se cubre el coste actual, pero el colchón es pequeño${sinPresupuestar.length?` y aún quedan ${sinPresupuestar.length} partidas por presupuestar`:''}. Conviene vigilar.`;
+    verdictTitle = `Faltan ${f(Math.abs(margen))} por captar de inversores`;
+    verdictMsg = `Los fundadores han aportado ${f(APORTADO)} y no van a aportar más. El proyecto cuesta ${f(totTotal)}, por lo que faltan ${f(Math.abs(margen))} que deben venir de socios nuevos.`;
   } else {
     verdictClass = 'ok'; verdictIcon = '🟢';
-    verdictTitle = `No se necesita capital adicional (margen ${f(margen)})`;
-    verdictMsg = `La inversión prevista de ${f(budget)} cubre el coste estimado${sinPresupuestar.length?`, aunque quedan ${sinPresupuestar.length} partidas por presupuestar`:''}.`;
+    verdictTitle = `Proyecto cubierto`;
+    verdictMsg = `Lo aportado por los fundadores (${f(APORTADO)}) cubre el coste estimado (${f(totTotal)}).`;
   }
   let pendList = '';
   if (sinPresupuestar.length) {
@@ -340,9 +336,8 @@ function render(){
       <div class="verdict-msg">${verdictMsg}</div>
       <div class="verdict-grid">
         <div class="vg"><div class="vl">Coste total estimado</div><div class="vv">${f(totTotal)}</div></div>
-        <div class="vg"><div class="vl">Capital ya aportado</div><div class="vv">${f(APORTADO)}</div></div>
-        <div class="vg"><div class="vl">Capital comprometido por meter</div><div class="vv">${f(POR_APORTAR)}</div></div>
-        <div class="vg hl"><div class="vl">${necesitaCapital?'Capital adicional necesario':'Margen disponible'}</div><div class="vv">${f(Math.abs(margen))}</div></div>
+        <div class="vg"><div class="vl">Aportado fundadores</div><div class="vv">${f(APORTADO)}</div></div>
+        <div class="vg hl"><div class="vl">${necesitaCapital?'Falta por captar (inversores)':'Margen'}</div><div class="vv">${f(Math.abs(margen))}</div></div>
       </div>
       ${pendList}
     </div>`;

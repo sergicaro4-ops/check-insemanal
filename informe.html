@@ -154,7 +154,7 @@ function seedItems(){
 }
 
 let usdRate=0.92, items=[], budget=0;
-const APORTADO=240000, POR_APORTAR=190000;
+const APORTADO=290000, POR_APORTAR=0;
 function loadData(){
   try { const raw=localStorage.getItem('gym_reforma_v2');
     if(raw){ const r=JSON.parse(raw);
@@ -184,9 +184,8 @@ function render(){
   const margen=budget-totTotal;
   const needCap=margen<0;
   let vc,vt,vm;
-  if(needCap){ vc='bad'; vt=`Se necesita ampliar capital: ${f(Math.abs(margen))}`; vm=`El coste total estimado (${f(totTotal)}) supera la inversión prevista de ${f(budget)}. Para completar la reforma se requiere aportar capital adicional o ajustar partidas.`; }
-  else if(margen<30000){ vc='warn'; vt=`Cubierto con margen ajustado: ${f(margen)}`; vm=`La inversión prevista de ${f(budget)} cubre el coste estimado, pero el margen es reducido. Se recomienda prudencia con las partidas aún no cerradas.`; }
-  else { vc='ok'; vt=`No se requiere capital adicional · margen ${f(margen)}`; vm=`La inversión prevista de ${f(budget)} cubre el coste total estimado de la reforma.`; }
+  if(needCap){ vc='bad'; vt=`Faltan ${f(Math.abs(margen))} por captar de inversores`; vm=`Los fundadores han aportado ${f(APORTADO)} y no van a aportar más. El proyecto cuesta ${f(totTotal)}, por lo que faltan ${f(Math.abs(margen))} que deben venir de socios nuevos.`; }
+  else { vc='ok'; vt=`Proyecto cubierto`; vm=`Lo aportado por los fundadores (${f(APORTADO)}) cubre el coste total estimado.`; }
 
   const estimadas=items.filter(i=>/ESTIMACI/i.test(i.nota||'')&&baseEUR(i)>0);
   const totEst=estimadas.reduce((s,i)=>s+totEUR(i),0);
@@ -240,9 +239,9 @@ function render(){
 
     <div class="kpi-row">
       <div class="kpi accent"><div class="l">Coste total (con IVA)</div><div class="v">${f(totTotal)}</div></div>
-      <div class="kpi"><div class="l">Capital aportado</div><div class="v">${f(APORTADO)}</div></div>
-      <div class="kpi"><div class="l">Comprometido por meter</div><div class="v">${f(POR_APORTAR)}</div></div>
-      <div class="kpi ${needCap?'red':'green'}"><div class="l">${needCap?'Capital adicional necesario':'Margen disponible'}</div><div class="v">${f(Math.abs(margen))}</div></div>
+      <div class="kpi"><div class="l">Aportado fundadores</div><div class="v">${f(APORTADO)}</div></div>
+      <div class="kpi"><div class="l">Pendiente de pago</div><div class="v">${f(totPend)}</div></div>
+      <div class="kpi ${needCap?'red':'green'}"><div class="l">${needCap?'Falta por captar (inversores)':'Margen'}</div><div class="v">${f(Math.abs(margen))}</div></div>
     </div>
 
     <h2 class="sec">Distribución del gasto por capítulo</h2>

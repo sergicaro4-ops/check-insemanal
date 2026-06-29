@@ -258,18 +258,20 @@ function seedMov(){
 
 // ══════════ ESTADO ══════════
 const RK='gym_reforma_v2', BK='gym_banco_v1';
-const SALDO_DEF=63245.73, APORTADO=290000, POR_APORTAR=190000;
-let R={budget:430000,usdRate:0.92,ivaDefault:21,items:[]};
+const SALDO_DEF=63245.73, APORTADO=290000, POR_APORTAR=0;
+let R={budget:290000,usdRate:0.92,ivaDefault:21,items:[]};
 let B={saldo:SALDO_DEF,mov:[]};
 let filterR='all', filterB='all';
 
 function load(){
-  try{ const raw=localStorage.getItem(RK); if(raw){ const o=JSON.parse(raw); R={budget:o.budget||430000,usdRate:o.usdRate||0.92,ivaDefault:o.ivaDefault||21,items:Array.isArray(o.items)?o.items:[]}; } }catch(e){}
+  try{ const raw=localStorage.getItem(RK); if(raw){ const o=JSON.parse(raw); R={budget:(typeof o.budget==='number'?o.budget:290000),usdRate:o.usdRate||0.92,ivaDefault:o.ivaDefault||21,items:Array.isArray(o.items)?o.items:[]}; } }catch(e){}
   if(!R.items.length) R.items=seedItems();
   R.items.forEach(i=>{ if(!i.id) i.id=uid(); });
   // Migración puntual: el 40% de Carulla pasa a llevar IVA (antes 0%).
   const cs=R.items.find(i=>i.sk==='carulla-pend-siniva');
   if(cs && cs.iva===0 && !localStorage.getItem('migCarullaIva')){ cs.iva=21; cs.concepto='Carulla Energía — pendiente 40% (con IVA)'; cs.nota='40% final con IVA'; localStorage.setItem('migCarullaIva','1'); saveR(); }
+  // Migración puntual: los fundadores no aportan más → capital disponible = 290.000 €.
+  if(R.budget===430000 && !localStorage.getItem('migNoMasCapital')){ R.budget=290000; localStorage.setItem('migNoMasCapital','1'); saveR(); }
   try{ const raw=localStorage.getItem(BK); if(raw){ const o=JSON.parse(raw); B={saldo:typeof o.saldo==='number'?o.saldo:SALDO_DEF,mov:Array.isArray(o.mov)?o.mov:[]}; } }catch(e){}
   if(!B.mov.length) B.mov=seedMov();
 }
@@ -317,14 +319,14 @@ function renderPresupuesto(){
   const used=CATEGORIES.filter(c=>byCat[c.key]); const mx=Math.max(1,...used.map(c=>byCat[c.key]));
   const bd=used.sort((a,b)=>byCat[b.key]-byCat[a.key]).map(c=>`<div class="row"><div>${c.icon} ${c.label}</div><div class="track"><div class="fill" style="width:${byCat[c.key]/mx*100}%;background:${c.color}"></div></div><div class="bamt">${f(byCat[c.key])}</div></div>`).join('');
   let alert='';
-  if(budget>0&&t.tot>budget) alert=`<div class="verdict bad" style="margin-top:8px"><p>🚨 El coste (${f(t.tot)}) supera el presupuesto (${f(budget)}) en <b>${f(t.tot-budget)}</b>.</p></div>`;
-  else if(budget>0) alert=`<div class="verdict ok" style="margin-top:8px"><p>👍 Dentro de presupuesto. Margen <b>${f(budget-t.tot)}</b> · pendiente de pagar <b>${f(t.pend)}</b>.</p></div>`;
+  if(budget>0&&t.tot>budget) alert=`<div class="verdict bad" style="margin-top:8px"><p>🚨 El coste (${f(t.tot)}) supera el capital de los fundadores (${f(budget)}) en <b>${f(t.tot-budget)}</b> — habrá que captarlo de inversores.</p></div>`;
+  else if(budget>0) alert=`<div class="verdict ok" style="margin-top:8px"><p>👍 El capital de fundadores cubre el coste. Pendiente de pagar <b>${f(t.pend)}</b>.</p></div>`;
 
   document.getElementById('t-presupuesto').innerHTML=`
     <h1>Presupuesto de la reforma</h1>
     <p class="sub">Todas las partidas con base, IVA y total. Edita importes, moneda, IVA y categoría directamente. Marca ✅ lo pagado.</p>
     <div class="grid g3">
-      <div class="card"><span class="label">💰 Presupuesto total</span><input class="num-in" type="number" step="1000" value="${budget||''}" oninput="setBudget(this.value)"></div>
+      <div class="card"><span class="label">💰 Capital fundadores</span><input class="num-in" type="number" step="1000" value="${budget||''}" oninput="setBudget(this.value)"><div class="hint">No aportan más; el resto se capta de inversores.</div></div>
       <div class="card"><span class="label">💵 Cambio USD→EUR</span><input class="num-in" type="number" step="0.001" value="${R.usdRate}" oninput="setRate(this.value)"></div>
       <div class="card"><span class="label">🧾 IVA por defecto %</span><input class="num-in" type="number" step="1" value="${R.ivaDefault}" oninput="setIva(this.value)"></div>
     </div>
@@ -407,14 +409,13 @@ function chgM(id,field,val){ const m=B.mov.find(x=>x.id===id); if(m){m[field]=va
 
 // ══════════ TAB: RESUMEN ══════════
 function renderResumen(){
-  const t=totalsR(), budget=R.budget||(APORTADO+POR_APORTAR);
-  const margen=budget-t.tot, need=margen<0;
+  const t=totalsR(), aportado=APORTADO;
+  const falta=Math.max(0,t.tot-aportado), need=falta>0;
   const est=R.items.filter(i=>/ESTIMACI/i.test(i.nota||'')&&baseEUR(i)>0);
   const totEst=est.reduce((s,i)=>s+totEUR(i),0);
   let vc,vh,vm;
-  if(need){vc='bad';vh=`Hacen falta ${f(Math.abs(margen))} más de capital`;vm=`El coste estimado (${f(t.tot)}) supera la inversión prevista de ${f(budget)}. Hay que ampliar capital o ajustar partidas.`;}
-  else if(margen<30000){vc='warn';vh=`Cubierto, margen ajustado (${f(margen)})`;vm=`Cubre el coste, pero el colchón es pequeño${est.length?` y hay ${est.length} estimaciones por cerrar`:''}.`;}
-  else {vc='ok';vh=`No se necesita capital adicional (margen ${f(margen)})`;vm=`La inversión prevista de ${f(budget)} cubre el coste estimado.`;}
+  if(need){vc='bad';vh=`Faltan ${f(falta)} por captar de inversores`;vm=`Los fundadores han aportado ${f(aportado)} y no van a aportar más. El proyecto cuesta ${f(t.tot)}, por lo que faltan ${f(falta)} que deben venir de socios nuevos.${est.length?` Incluye ${f(totEst)} en estimaciones aún sin cerrar.`:''}`;}
+  else {vc='ok';vh='Proyecto cubierto';vm=`Lo aportado por los fundadores (${f(aportado)}) cubre el coste total (${f(t.tot)}).`;}
   const byCat={}; R.items.forEach(i=>byCat[i.categoria]=(byCat[i.categoria]||0)+totEUR(i));
   const used=CATEGORIES.filter(c=>byCat[c.key]>0).sort((a,b)=>byCat[b.key]-byCat[a.key]);
   const mx=Math.max(1,...used.map(c=>byCat[c.key]));
@@ -426,12 +427,11 @@ function renderResumen(){
   document.getElementById('t-resumen').innerHTML=`
     <h1>Resumen para socios</h1>
     <p class="sub">Estado de la inversión, necesidad de capital y desglose con base/IVA/total. <button class="btn" onclick="printTab('resumen')" style="margin-left:8px">🖨️ Imprimir / PDF</button></p>
-    <div class="verdict ${vc}"><div class="vt">¿Se necesita capital adicional?</div><div class="vh">${need?'🔴':margen<30000?'🟡':'🟢'} ${vh}</div><p>${vm}</p>
-      <div class="grid g4" style="margin-top:14px">
+    <div class="verdict ${vc}"><div class="vt">¿Se necesita capital externo?</div><div class="vh">${need?'🔴':'🟢'} ${vh}</div><p>${vm}</p>
+      <div class="grid g3" style="margin-top:14px">
         <div class="kpi"><div class="l">Coste total</div><div class="v">${f(t.tot)}</div></div>
-        <div class="kpi"><div class="l">Aportado</div><div class="v">${f(APORTADO)}</div></div>
-        <div class="kpi"><div class="l">Por meter (previsto)</div><div class="v">${f(POR_APORTAR)}</div></div>
-        <div class="kpi"><div class="l">${need?'Falta':'Margen'}</div><div class="v" style="color:${need?'var(--red)':'var(--c4)'}">${f(Math.abs(margen))}</div></div>
+        <div class="kpi"><div class="l">Aportado fundadores</div><div class="v">${f(aportado)}</div></div>
+        <div class="kpi"><div class="l">Falta por captar</div><div class="v" style="color:${need?'var(--red)':'var(--c4)'}">${f(falta)}</div></div>
       </div>
     </div>
     <div class="grid g3">

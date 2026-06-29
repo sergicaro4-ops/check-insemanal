@@ -530,6 +530,13 @@ function load() {
     migrated = true;
   }
 
+  // Migración puntual: los fundadores no aportan más → capital disponible 290.000 €.
+  if (!state.migNoMasCapital) {
+    if (state.budget === 430000) state.budget = 290000;
+    state.migNoMasCapital = true;
+    migrated = true;
+  }
+
   // Migración puntual: el 40% de Carulla pasa a llevar IVA (antes 0%).
   if (!state.migCarullaIva) {
     const cs = state.items.find(i => i.sk === 'carulla-pend-siniva');
