@@ -157,10 +157,6 @@ let seedCounter = 0;
 function seedItems(){
   const mk=(sk,concepto,categoria,base,currency,iva,estado,nota)=>({id:uid(),sk,concepto,categoria,base,currency,iva,estado,nota:nota||''});
   return [
-    mk('clima-991','Climatización: 4 uds Haier 14 kW (oferta 991)','clima',17855.46,'EUR',21,'pending'),
-    mk('agua-994','Agua fría y caliente interior vestuarios (oferta 994)','fontaneria',18265.75,'EUR',21,'pending'),
-    mk('acs-992','Producción ACS: aerotermia + depósito 1000 L (oferta 992)','fontaneria',19928.77,'EUR',21,'pending'),
-    mk('rite-995','Renovación aire RITE + extracción vestuarios (oferta 995)','clima',38352.09,'EUR',21,'pending'),
     mk('maq-pagado','Maquinaria HSE (76.750 $ FOB) — pagado','maquinaria',55082.18,'EUR',21,'paid','66.649,44 € en 2 transferencias (banco)'),
     mk('maq-pend','Maquinaria HSE — IVA importación / pendiente','maquinaria',15527.82,'EUR',21,'pending','Al despacho de aduana'),
     mk('elec-gimnas-pagado','Instalación eléctrica gimnasio (Patrick) — pagado a cuenta','electrica',6923.02,'EUR',21,'paid','8.376,86 € pagados por banco'),
@@ -171,9 +167,9 @@ function seedItems(){
     mk('vidres-recep','Vidrios aplacado recepción (Franquet Barrau)','mobiliario',2889.19,'EUR',21,'pending'),
     mk('rotol-legion','Rótulo LEGION letras corpóreas + LED','rotulos',6748.00,'EUR',21,'pending'),
     mk('rotol-xixo','Lonas / decoración La Xixo','rotulos',388.10,'EUR',21,'pending','A nombre de La Xixo — confirmar'),
-    mk('carulla-pagado','Carulla Energía — pagado 25% (con IVA)','electrica',23600.51,'EUR',21,'paid','25% pagado = 28.556,62 € con IVA'),
-    mk('carulla-pend-iva','Carulla Energía — pendiente 35% (con IVA)','electrica',33040.72,'EUR',21,'pending'),
-    mk('carulla-pend-siniva','Carulla Energía — pendiente 40% (con IVA)','electrica',37760.82,'EUR',21,'pending','40% final con IVA'),
+    mk('carulla-pagado','Carulla (clima+agua+ACS+RITE) — pagado 25%','clima',23600.51,'EUR',21,'paid','Incluye climatización, agua, ACS y renovación aire RITE. 25% = 28.556,62 € pagado'),
+    mk('carulla-pend-iva','Carulla (clima+agua+ACS+RITE) — pendiente 35%','clima',33040.72,'EUR',21,'pending','Climatización, agua, ACS y RITE'),
+    mk('carulla-pend-siniva','Carulla (clima+agua+ACS+RITE) — pendiente 40%','clima',37760.82,'EUR',21,'pending','Climatización, agua, ACS y RITE'),
     mk('taquillas-bellum','Taquillas + cabinas sanitarias (Bellum Logistics)','vestuarios',15681.50,'EUR',21,'pending'),
     mk('pulir-suelo','Pulir suelo','suelo',5000,'EUR',21,'pending'),
     mk('pintura-gral','Pintura (general)','pintura',8000,'EUR',21,'pending'),
@@ -287,6 +283,12 @@ function load(){
     const nous=seedItems().filter(i=>['maq-pagado','maq-pend','elec-gimnas-pagado','elec-gimnas-pend'].includes(i.sk));
     if(!R.items.some(i=>i.sk==='maq-pagado')) R.items.push(...nous);
     localStorage.setItem('migSplitPagos','1'); saveR();
+  }
+  // Migración puntual: quitar duplicado de Carulla (las 4 ofertas eran Carulla).
+  if(!localStorage.getItem('migDupCarulla')){
+    R.items=R.items.filter(i=>!['clima-991','agua-994','acs-992','rite-995'].includes(i.sk));
+    ['carulla-pagado','carulla-pend-iva','carulla-pend-siniva'].forEach(sk=>{const it=R.items.find(i=>i.sk===sk);if(it)it.categoria='clima';});
+    localStorage.setItem('migDupCarulla','1'); saveR();
   }
   // Migración puntual: afegir despeses reals d'obra ja pagades (no pressupostades).
   if(!localStorage.getItem('migExtraObra')){
