@@ -183,6 +183,13 @@ function seedItems(){
     mk('accesibilidad','Rampa nueva o elevador para minusválidos','obra',12000,'EUR',21,'pending','ESTIMACIÓN prudente (opción elevador)'),
     mk('lm-pendiente','Luis Miguel — trabajos por concretar','obra',25000,'EUR',21,'pending','ESTIMACIÓN: techo vestuario + mano de obra + pared mostrador'),
     mk('transporte','Transporte marítimo + aduana equipos (estimado)','transporte',30000,'EUR',0,'pending','Estimación ≈ 30.000 €'),
+    mk('extra-obra','Obra y mano de obra ya ejecutada (Rubiralta y otros)','obra',37580.20,'EUR',21,'paid','Demolición, pladur, material, limpieza… ya pagado (banco)'),
+    mk('extra-otros','Residuos, alquileres, web, software, fianza local','otros',15111.74,'EUR',21,'paid','Ya pagado (banco)'),
+    mk('extra-incendios','Ignifugación estructura R-90 (CAT FOC)','incendios',5450.00,'EUR',21,'paid','Ya pagado (banco)'),
+    mk('extra-fontaneria','Agua y contador de obra (varios)','fontaneria',1917.36,'EUR',21,'paid','Ya pagado (banco)'),
+    mk('extra-transporte','Transporte de materiales (Larriba)','transporte',1185.12,'EUR',21,'paid','Ya pagado (banco)'),
+    mk('extra-electrica','Acometida eléctrica (EDistribución)','electrica',1650.60,'EUR',21,'paid','Ya pagado (banco)'),
+    mk('extra-impuestos','Impuestos y comisiones bancarias','otros',1064.08,'EUR',0,'paid','Tributos y gastos de banco'),
   ];
 }
 
@@ -280,6 +287,12 @@ function load(){
     const nous=seedItems().filter(i=>['maq-pagado','maq-pend','elec-gimnas-pagado','elec-gimnas-pend'].includes(i.sk));
     if(!R.items.some(i=>i.sk==='maq-pagado')) R.items.push(...nous);
     localStorage.setItem('migSplitPagos','1'); saveR();
+  }
+  // Migración puntual: afegir despeses reals d'obra ja pagades (no pressupostades).
+  if(!localStorage.getItem('migExtraObra')){
+    const ex=seedItems().filter(i=>i.sk.startsWith('extra-'));
+    ex.forEach(e=>{ if(!R.items.some(i=>i.sk===e.sk)) R.items.push(e); });
+    localStorage.setItem('migExtraObra','1'); saveR();
   }
   try{ const raw=localStorage.getItem(BK); if(raw){ const o=JSON.parse(raw); B={saldo:typeof o.saldo==='number'?o.saldo:SALDO_DEF,mov:Array.isArray(o.mov)?o.mov:[]}; } }catch(e){}
   if(!B.mov.length) B.mov=seedMov();
