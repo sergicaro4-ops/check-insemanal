@@ -1749,6 +1749,14 @@ function launchConfetti() {
 }
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
+// Prefill del nombre desde la URL (?nombre=...) — usado por Preparador Pro
+(function prefillFromURL() {
+  const nombre = new URLSearchParams(window.location.search).get('nombre');
+  if (nombre) {
+    const input = document.getElementById('nombreCompleto');
+    if (input) input.value = nombre;
+  }
+})();
 document.getElementById('semanaFecha').valueAsDate = new Date();
 updateWeekBadge();
 updateStressVal(document.getElementById('estresSlider'));
