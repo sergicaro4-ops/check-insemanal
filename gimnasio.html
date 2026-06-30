@@ -161,8 +161,10 @@ function seedItems(){
     mk('agua-994','Agua fría y caliente interior vestuarios (oferta 994)','fontaneria',18265.75,'EUR',21,'pending'),
     mk('acs-992','Producción ACS: aerotermia + depósito 1000 L (oferta 992)','fontaneria',19928.77,'EUR',21,'pending'),
     mk('rite-995','Renovación aire RITE + extracción vestuarios (oferta 995)','clima',38352.09,'EUR',21,'pending'),
-    mk('maq-hse','Maquinaria HSE Fitness (factura HSE20260412, FOB)','maquinaria',76750.00,'USD',21,'pending','FOB: no incluye transporte ni aduana'),
-    mk('elec-gimnas','Instalación eléctrica gimnasio (Patrick Oviedo)','electrica',34615.12,'EUR',21,'pending'),
+    mk('maq-pagado','Maquinaria HSE (76.750 $ FOB) — pagado','maquinaria',55082.18,'EUR',21,'paid','66.649,44 € en 2 transferencias (banco)'),
+    mk('maq-pend','Maquinaria HSE — IVA importación / pendiente','maquinaria',15527.82,'EUR',21,'pending','Al despacho de aduana'),
+    mk('elec-gimnas-pagado','Instalación eléctrica gimnasio (Patrick) — pagado a cuenta','electrica',6923.02,'EUR',21,'paid','8.376,86 € pagados por banco'),
+    mk('elec-gimnas-pend','Instalación eléctrica gimnasio (Patrick) — pendiente','electrica',27692.10,'EUR',21,'pending'),
     mk('elec-incendi','Detección de incendios (central + 37 detectores)','incendios',9611.46,'EUR',21,'pending'),
     mk('elec-comptadors','Suministro caja de contadores (TMF-10 + armario)','electrica',2252.90,'EUR',21,'pending'),
     mk('obramat-201','Material baños/vestuarios/suelo/iluminación (Obramat)','vestuarios',11599.04,'EUR',21,'pending','Total IVA incl. 14.026,70 €'),
@@ -272,6 +274,13 @@ function load(){
   if(cs && cs.iva===0 && !localStorage.getItem('migCarullaIva')){ cs.iva=21; cs.concepto='Carulla Energía — pendiente 40% (con IVA)'; cs.nota='40% final con IVA'; localStorage.setItem('migCarullaIva','1'); saveR(); }
   // Migración puntual: los fundadores no aportan más → capital disponible = 290.000 €.
   if(R.budget===430000 && !localStorage.getItem('migNoMasCapital')){ R.budget=290000; localStorage.setItem('migNoMasCapital','1'); saveR(); }
+  // Migración puntual: dividir Patrick eléctrica y Maquinaria en pagado/pendiente.
+  if(!localStorage.getItem('migSplitPagos')){
+    R.items=R.items.filter(i=>!['elec-gimnas','maq-hse'].includes(i.sk));
+    const nous=seedItems().filter(i=>['maq-pagado','maq-pend','elec-gimnas-pagado','elec-gimnas-pend'].includes(i.sk));
+    if(!R.items.some(i=>i.sk==='maq-pagado')) R.items.push(...nous);
+    localStorage.setItem('migSplitPagos','1'); saveR();
+  }
   try{ const raw=localStorage.getItem(BK); if(raw){ const o=JSON.parse(raw); B={saldo:typeof o.saldo==='number'?o.saldo:SALDO_DEF,mov:Array.isArray(o.mov)?o.mov:[]}; } }catch(e){}
   if(!B.mov.length) B.mov=seedMov();
 }
