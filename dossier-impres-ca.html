@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Legion Club · Memoràndum d'inversió</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--ink:#14172b;--ink2:#3a3f5c;--muted:#6a6f88;--line:#e4e7f0;--line2:#cfd4e2;--paper:#fff;--soft:#f7f8fc;--navy:#1a2b4a;--gold:#b8860b;--gold2:#d4a838;--green:#15803d;--red:#b91c1c;}
+  body{font-family:'Inter',sans-serif;background:#e9ebf2;color:var(--ink);line-height:1.55;padding:22px 12px;}
+  .toolbar{max-width:840px;margin:0 auto 16px;display:flex;justify-content:flex-end;gap:8px;}
+  .btn{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;padding:9px 16px;border-radius:8px;border:1px solid var(--line2);background:#fff;color:var(--ink2);cursor:pointer;text-decoration:none;}
+  .btn.p{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .doc{max-width:840px;margin:0 auto;background:var(--paper);box-shadow:0 12px 44px rgba(20,24,45,.14);}
+  .pg{padding:50px 58px;}
+  .pg + .pg{border-top:1px solid var(--line);}
+
+  /* COBERTA */
+  .cover{background:linear-gradient(160deg,#14172b,#1a2b4a 60%,#24365a);color:#fff;padding:70px 58px 56px;position:relative;overflow:hidden;}
+  .cover::after{content:'';position:absolute;right:-80px;top:-80px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(212,168,56,.18),transparent 70%);}
+  .cover .kick{font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold2);margin-bottom:22px;}
+  .cover h1{font-family:'Space Grotesk',sans-serif;font-size:60px;font-weight:700;letter-spacing:.03em;line-height:1;margin-bottom:8px;}
+  .cover .tag{font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:#aeb6cf;margin-bottom:40px;}
+  .cover .doctype{font-size:22px;font-weight:600;margin-bottom:6px;}
+  .cover .docsub{color:#aeb6cf;font-size:14px;}
+  .cover .meta{margin-top:46px;display:flex;gap:36px;flex-wrap:wrap;font-size:13px;color:#cdd3e6;}
+  .cover .meta b{color:#fff;display:block;font-family:'Space Grotesk',sans-serif;}
+  .cover .conf{position:absolute;bottom:22px;right:58px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8b93b0;}
+
+  .ey{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+  h2{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;margin-bottom:14px;color:var(--navy);}
+  h3{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;margin:0 0 6px;}
+  p{color:var(--ink2);font-size:14px;margin-bottom:12px;}
+  p.lead{font-size:15.5px;color:var(--ink);}
+  ul{margin:0 0 12px 18px;color:var(--ink2);font-size:14px;line-height:1.75;}
+  .sec-n{color:var(--gold);font-family:'Space Grotesk',sans-serif;}
+
+  .kstrip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:18px 0;}
+  .kstrip .k{padding:16px 14px;border-right:1px solid var(--line);}
+  .kstrip .k:last-child{border-right:none;}
+  .kstrip .kl{font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+  .kstrip .kv{font-family:'Space Grotesk',sans-serif;font-size:21px;font-weight:700;color:var(--navy);}
+  @media(max-width:680px){.kstrip{grid-template-columns:repeat(2,1fr);}}
+
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:680px){.two{grid-template-columns:1fr;}}
+  .box{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:16px 18px;}
+  .feat{display:grid;grid-template-columns:1fr 1fr;gap:8px 22px;}
+  @media(max-width:680px){.feat{grid-template-columns:1fr;}}
+  .feat div{font-size:13.5px;color:var(--ink);}
+  .feat .c{color:var(--gold);font-weight:700;}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:8px 0;}
+  th{text-align:right;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--line2);}
+  th:first-child{text-align:left;}
+  td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:right;font-family:'Space Grotesk',sans-serif;}
+  td:first-child{text-align:left;font-family:'Inter',sans-serif;color:var(--ink2);}
+  tr.tot td{font-weight:700;color:var(--ink);border-top:2px solid var(--navy);}
+  tr.tot td:first-child{color:var(--navy);}
+  .valm{display:flex;align-items:baseline;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);}
+  .valm:last-child{border-bottom:none;}
+  .valm .n{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:var(--navy);min-width:170px;}
+  .valm .d{font-size:13.5px;color:var(--ink2);}
+  .concl{margin-top:18px;background:linear-gradient(135deg,#14172b,#24365a);color:#fff;border-radius:12px;padding:24px;text-align:center;}
+  .concl .big{font-family:'Space Grotesk',sans-serif;font-size:42px;font-weight:700;color:var(--gold2);}
+  .concl .s{color:#aeb6cf;font-size:13px;}
+
+  .offer{border:2px solid var(--navy);border-radius:12px;padding:26px;}
+  .offer .h{font-family:'Space Grotesk',sans-serif;font-size:30px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+  .offer .h em{color:var(--gold);font-style:normal;}
+  .ret{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px;}
+  @media(max-width:680px){.ret{grid-template-columns:1fr;}}
+  .ret .r{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:14px;}
+  .ret .rv{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:var(--green);}
+  .ret .rl{font-size:12px;color:var(--muted);margin-top:3px;}
+
+  .risk{display:grid;grid-template-columns:200px 1fr;gap:14px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13.5px;}
+  @media(max-width:680px){.risk{grid-template-columns:1fr;gap:3px;}}
+  .risk .rk{color:var(--red);font-weight:700;font-family:'Space Grotesk',sans-serif;}
+  .risk b{color:var(--green);}
+  .uses .u{display:flex;align-items:center;gap:12px;margin-bottom:9px;}
+  .uses .bar{flex:1;height:26px;background:var(--soft);border:1px solid var(--line);border-radius:7px;overflow:hidden;}
+  .uses .fill{height:100%;background:linear-gradient(90deg,var(--navy),#3a5a8a);display:flex;align-items:center;padding-left:10px;color:#fff;font-size:12px;font-weight:600;font-family:'Space Grotesk',sans-serif;}
+  .uses .ua{font-family:'Space Grotesk',sans-serif;font-weight:700;min-width:54px;text-align:right;}
+
+  .contact{background:var(--navy);color:#fff;border-radius:12px;padding:24px 26px;}
+  .contact h3{color:#fff;}
+  .contact a,.contact span{color:#cdd3e6;}
+  .legal{font-size:11px;color:var(--muted);line-height:1.6;margin-top:18px;border-top:1px solid var(--line);padding-top:14px;}
+  .pgnum{text-align:right;font-size:10px;color:var(--muted);font-family:'Space Grotesk',sans-serif;margin-top:24px;}
+
+  @media print{
+    body{background:#fff;padding:0;}.toolbar{display:none;}.doc{box-shadow:none;max-width:none;}
+    .pg,.cover{padding:18mm 16mm;}.pg{border-top:none;page-break-before:always;}
+    h2,table,.offer,.concl,.kstrip,.risk,.contact{page-break-inside:avoid;}
+    @page{size:A4;margin:0;}
+  }
+</style>
+</head>
+<body>
+<div class="toolbar"><button class="btn p" onclick="window.print()">🖨️ Imprimir / Desar PDF</button></div>
+
+<div class="doc">
+
+  <!-- COBERTA -->
+  <div class="cover">
+    <div class="kick">Oportunitat d'inversió · 2026</div>
+    <h1>LEGION CLUB</h1>
+    <div class="tag">Heroes take the hard way</div>
+    <div class="doctype">Memoràndum d'inversió</div>
+    <div class="docsub">Entrada de socis mitjançant compra de participacions</div>
+    <div class="meta">
+      <div><b>Societat</b>Caro Legión S.L.</div>
+      <div><b>Ubicació</b>Sant Fruitós de Bages</div>
+      <div><b>Valoració</b>500.000 €</div>
+      <div><b>Tiquet</b>50.000 € · 10%</div>
+    </div>
+    <div class="conf">Document confidencial</div>
+  </div>
+
+  <!-- RESUM EXECUTIU -->
+  <div class="pg">
+    <div class="ey">01 · Resum executiu</div>
+    <h2>L'oportunitat</h2>
+    <p class="lead">Legion Club és un gimnàs premium de nova creació a Sant Fruitós de Bages, amb una inversió de primer nivell ja molt avançada. Oferim l'entrada a nous socis just abans de l'obertura, quan el risc més gran —obra, llicències i instal·lacions— ja està superat i la demanda ja està validada.</p>
+    <div class="kstrip">
+      <div class="k"><div class="kl">Socis preinscrits</div><div class="kv">220</div></div>
+      <div class="k"><div class="kl">Mercat (20 km)</div><div class="kv">130.000 hab.</div></div>
+      <div class="k"><div class="kl">EBITDA objectiu (any 3)</div><div class="kv">219.000 €</div></div>
+      <div class="k"><div class="kl">Retorn objectiu 10%</div><div class="kv">~44% / any</div></div>
+    </div>
+    <div class="two">
+      <div class="box"><h3>✓ Risc d'obra superat</h3><p style="margin:0">Més de mig milió d'euros de projecte, amb la part principal ja contractada, executada i pagada pels fundadors.</p></div>
+      <div class="box"><h3>✓ Demanda validada</h3><p style="margin:0">220 persones ja preinscrites <i>abans</i> d'obrir i sense campanya. El punt d'equilibri són 220 socis.</p></div>
+      <div class="box"><h3>✓ Immoble estable</h3><p style="margin:0">Nau propietat de la família fundadora, amb contracte d'arrendament a llarg termini i a preu de mercat.</p></div>
+      <div class="box"><h3>✓ Recorregut ampli</h3><p style="margin:0">L'objectiu de 800 socis és només el 0,6% del mercat de la zona. Marge de creixement enorme.</p></div>
+    </div>
+    <div class="pgnum">Legion Club · Memoràndum d'inversió — 1</div>
+  </div>
+
+  <!-- EL PROJECTE + INSTAL·LACIONS -->
+  <div class="pg">
+    <div class="ey">02 · El projecte</div>
+    <h2>Un equipament de gamma alta, ja instal·lat</h2>
+    <p>El capital ja invertit es tradueix en instal·lacions que la majoria de gimnasos triguen anys a costejar. És valor tangible que l'inversor troba fet des del primer dia, no una promesa.</p>
+    <div class="box">
+      <div class="feat">
+        <div><span class="c">✦</span> Climatització professional 4 × 14 kW</div>
+        <div><span class="c">✦</span> Aigua calenta per aerotèrmia d'alta eficiència</div>
+        <div><span class="c">✦</span> Maquinària professional importada (cardio + força)</div>
+        <div><span class="c">✦</span> Vestidors amb taquilles i cabines fenòliques</div>
+        <div><span class="c">✦</span> Control d'accés amb torns i lector QR (horari ampli)</div>
+        <div><span class="c">✦</span> Instal·lació elèctrica completa segons projecte</div>
+        <div><span class="c">✦</span> Renovació d'aire RITE i extracció de vestidors</div>
+        <div><span class="c">✦</span> Detecció d'incendis homologada</div>
+        <div><span class="c">✦</span> Retolació corpòria amb LED i imatge de marca</div>
+        <div><span class="c">✦</span> Acabats i mobiliari de recepció</div>
+      </div>
+    </div>
+    <p style="margin-top:14px"><b>Inversió total del projecte: ~534.000 €.</b> Els fundadors ja n'han aportat de mitjana ~290.000 € de capital propi (<i>skin in the game</i>): el projecte està respaldat pels seus propietaris.</p>
+    <div class="pgnum">Legion Club · Memoràndum d'inversió — 2</div>
+  </div>
+
+  <!-- MERCAT + EQUIP -->
+  <div class="pg">
+    <div class="ey">03 · Mercat i demanda</div>
+    <h2>Un mercat ampli i una demanda ja provada</h2>
+    <p>L'àrea d'influència de Sant Fruitós de Bages, en un radi de 20 km, supera els <b>130.000 habitants</b>. Per assolir l'objectiu de 800 socis només cal captar el <b>0,6%</b> d'aquest mercat. La demanda no és teòrica: ja hi ha <b>220 persones preinscrites</b> abans d'obrir portes.</p>
+    <div class="kstrip">
+      <div class="k"><div class="kl">Població (20 km)</div><div class="kv">130.000</div></div>
+      <div class="k"><div class="kl">Objectiu socis</div><div class="kv">800</div></div>
+      <div class="k"><div class="kl">Quota de mercat</div><div class="kv">0,6%</div></div>
+      <div class="k"><div class="kl">Ja preinscrits</div><div class="kv">220</div></div>
+    </div>
+    <div class="ey" style="margin-top:30px">04 · L'equip</div>
+    <h2>Gestió, capital i coneixement del sector</h2>
+    <p>Societat familiar de <b>5 socis</b>. Quatre són <b>dentistes</b>, que aporten solidesa financera i mentalitat de negoci. L'administrador, <b>Sergi Caro</b>, és graduat en <b>ADE</b> i culturista: uneix formació en gestió empresarial amb un coneixement profund del món del fitness. Un equip equilibrat amb interessos alineats amb el nou inversor.</p>
+    <div class="pgnum">Legion Club · Memoràndum d'inversió — 3</div>
+  </div>
+
+  <!-- MODEL + PROJECCIÓ -->
+  <div class="pg">
+    <div class="ey">05 · Model de negoci i punt d'equilibri</div>
+    <h2>Ingressos recurrents i equilibri assolible</h2>
+    <p>El model es basa en quotes mensuals recurrents. Els 220 socis fundadors entren amb quota reduïda (40 €) com a incentiu de fidelització; la resta, a quota regular (50 €).</p>
+    <div class="kstrip">
+      <div class="k"><div class="kl">Equilibri operatiu</div><div class="kv">220 socis</div></div>
+      <div class="k"><div class="kl">Equilibri + préstec</div><div class="kv">300 socis</div></div>
+      <div class="k"><div class="kl">Quota regular</div><div class="kv">50 €/mes</div></div>
+      <div class="k"><div class="kl">Quota fundador</div><div class="kv">40 €/mes</div></div>
+    </div>
+    <div class="ey" style="margin-top:26px">06 · Projecció financera</div>
+    <h2>El negoci en xifres (3 anys)</h2>
+    <table>
+      <thead><tr><th>Concepte</th><th>Any 1</th><th>Any 2</th><th>Any 3</th></tr></thead>
+      <tbody>
+        <tr><td>Socis actius (mitjana)</td><td>400</td><td>600</td><td>800</td></tr>
+        <tr><td>Ingressos per quotes</td><td>213.600 €</td><td>333.600 €</td><td>453.600 €</td></tr>
+        <tr><td>· Lloguer de la nau</td><td>−31.200 €</td><td>−31.200 €</td><td>−31.200 €</td></tr>
+        <tr><td>· Personal</td><td>−60.000 €</td><td>−78.000 €</td><td>−90.000 €</td></tr>
+        <tr><td>· Altres costos operatius</td><td>−53.400 €</td><td>−83.400 €</td><td>−113.400 €</td></tr>
+        <tr class="tot"><td>EBITDA</td><td>69.000 €</td><td>141.000 €</td><td>219.000 €</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:11.5px;color:var(--muted)">Rampa d'ocupació estimada 50% / 75% / 100% de l'objectiu. «Altres costos» (subministraments, manteniment, màrqueting) estimats en el 25% dels ingressos. Xifres il·lustratives, no garantides.</p>
+    <div class="pgnum">Legion Club · Memoràndum d'inversió — 4</div>
+  </div>
+
+  <!-- VALORACIÓ -->
+  <div class="pg">
+    <div class="ey">07 · Valoració</div>
+    <h2>Per què val 500.000 €</h2>
+    <p class="lead">La valoració de 500.000 € és <b>el que val el negoci</b>, no el que ja s'ha invertit. Es sosté per tres mètodes independents que conflueixen, i de fet resulta <b>conservadora</b>.</p>
+    <div style="margin-top:8px">
+      <div class="valm"><div class="n">~534.000 €</div><div class="d"><b>Cost de reposició.</b> El que costaria construir aquest gimnàs clau en mà des de zero. Un competidor necessitaria aquest desemborsament per replicar-lo.</div></div>
+      <div class="valm"><div class="n">657.000–1.095.000 €</div><div class="d"><b>Múltiple d'EBITDA.</b> El sector fitness es transacciona habitualment a 3–5× EBITDA, aplicat a l'objectiu de l'any 3.</div></div>
+      <div class="valm"><div class="n">~590.000 €</div><div class="d"><b>Múltiple d'ingressos.</b> ~1,3× la facturació anual objectiu, ràtio habitual per a centres consolidats.</div></div>
+    </div>
+    <div class="concl"><div class="s" style="text-transform:uppercase;letter-spacing:.1em">Valoració de referència</div><div class="big">500.000 €</div><div class="s">Valoració conservadora, recolzada pels tres mètodes</div></div>
+    <div class="pgnum">Legion Club · Memoràndum d'inversió — 5</div>
+  </div>
+
+  <!-- OFERTA + RETORN -->
+  <div class="pg">
+    <div class="ey">08 · L'oferta</div>
+    <h2>Compra de participacions</h2>
+    <div class="offer">
+      <div class="h"><em>10%</em> del capital per <em>50.000 €</em></div>
+      <p>Entrada com a soci mitjançant ampliació de capital, sobre una valoració de 500.000 €. Possibilitat d'adquirir diversos trams del 10%.</p>
+      <ul>
+        <li>Obtens el <b>10% de la propietat</b> de Caro Legión S.L. per cada tram.</li>
+        <li>Dret a <b>vot</b> i a <b>beneficis (dividends)</b> proporcionals a la teva participació.</li>
+        <li>Operació davant notari amb <b>pacte de socis</b> (clàusules de sortida i acompanyament).</li>
+      </ul>
+      <div class="ret">
+        <div class="r"><div class="rv">~21.900 €</div><div class="rl">Benefici anual atribuïble al 10% (objectiu any 3)</div></div>
+        <div class="r"><div class="rv">~44%</div><div class="rl">Rendibilitat anual sobre la inversió (a plena ocupació)</div></div>
+        <div class="r"><div class="rv">~2,3 anys</div><div class="rl">Període de recuperació (payback) orientatiu</div></div>
+      </div>
+    </div>
+    <div class="ey" style="margin-top:28px">09 · Ús dels fons</div>
+    <h2>A què es destina el capital</h2>
+    <div class="uses">
+      <div class="u"><div class="bar"><div class="fill" style="width:80%">Finalitzar reforma i instal·lacions</div></div><div class="ua">~80%</div></div>
+      <div class="u"><div class="bar"><div class="fill" style="width:12%">Obertura i màrqueting</div></div><div class="ua">~12%</div></div>
+      <div class="u"><div class="bar"><div class="fill" style="width:8%">Matalàs / circulant</div></div><div class="ua">~8%</div></div>
+    </div>
+    <div class="pgnum">Legion Club · Memoràndum d'inversió — 6</div>
+  </div>
+
+  <!-- ESTRUCTURA + RISCOS -->
+  <div class="pg">
+    <div class="ey">10 · Estructura financera</div>
+    <h2>Transparència en els números</h2>
+    <ul>
+      <li><b>Capital dels fundadors:</b> ~290.000 € ja aportats. Préstec de socis a retornar en <b>10 anys</b> (~29.000 €/any), ja contemplat en l'equilibri de 300 socis.</li>
+      <li><b>Lloguer de la nau:</b> 2.600 €/mes + IVA, contracte estable amb la propietat (família fundadora).</li>
+      <li><b>Repartiment de beneficis:</b> junta anual que decideix la distribució, proporcional a la participació de cada soci. Administrador: Sergi Caro.</li>
+    </ul>
+    <div class="ey" style="margin-top:26px">11 · Riscos i mitigants</div>
+    <h2>Honestedat amb l'inversor</h2>
+    <div class="risk"><div class="rk">Ocupació més lenta</div><div>Que captar socis costi més del previst. <b>Mitigant:</b> rampa conservadora i 220 ja preinscrits; l'equilibri és de només 220 socis.</div></div>
+    <div class="risk"><div class="rk">Sobrecost d'obra</div><div>Desviacions en les partides pendents. <b>Mitigant:</b> la major part ja està contractada i pagada; queda poc obert i s'estima a l'alça.</div></div>
+    <div class="risk"><div class="rk">Immoble no propi de la S.L.</div><div>La nau s'arrenda a la CB familiar. <b>Mitigant:</b> contracte estable a llarg termini i a preu de mercat, amb la família com a fundadora.</div></div>
+    <div class="risk"><div class="rk">Liquiditat de la participació</div><div>No cotitza; sortida no immediata. <b>Mitigant:</b> pacte de socis amb clàusules de sortida i dret d'acompanyament.</div></div>
+    <div class="pgnum">Legion Club · Memoràndum d'inversió — 7</div>
+  </div>
+
+  <!-- CONTACTE -->
+  <div class="pg">
+    <div class="ey">12 · Propers passos</div>
+    <h2>Com avançar</h2>
+    <p>Si l'oportunitat t'encaixa, el següent pas és revisar el <b>pacte de socis</b> i la documentació amb el nostre assessor i acordar el nombre de trams. Estarem encantats de mostrar-te les instal·lacions en persona.</p>
+    <div class="contact">
+      <h3>Contacte</h3>
+      <p style="margin:6px 0 0"><span>Sergi Caro · Administrador</span><br/><span>sergicaro4@gmail.com · 609 502 410</span><br/><span>Carrer Ensija 32, Sant Fruitós de Bages</span></p>
+    </div>
+    <div class="legal"><b>Avís legal.</b> Aquest document és un resum comercial amb finalitats informatives i no constitueix una oferta de valors ni assessorament d'inversió. Les projeccions són estimacions basades en supòsits i no garanteixen resultats futurs. Qualsevol inversió s'ha de formalitzar mitjançant la corresponent due diligence, pacte de socis i escriptura d'ampliació de capital davant assessor professional. Sant Fruitós de Bages, 2026.</div>
+    <div class="pgnum">Legion Club · Memoràndum d'inversió — 8</div>
+  </div>
+
+</div>
+</body>
+</html>
