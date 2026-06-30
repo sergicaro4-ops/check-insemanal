@@ -469,54 +469,54 @@ function renderResumen(){
 }
 
 // ══════════ TAB: SOCIOS ══════════
-let SO={valoracion:500000,aportacion:50000,extraFund:0};
+let SO={valoracion:500000,aportacion:50000,extraFund:190000,carullaSinIva:true};
 function renderSocios(){
   const t=totalsR();
-  const coste=t.tot, aportado=APORTADO+(SO.extraFund||0), deficit=Math.max(0,coste-aportado);
+  const saldo=B.saldo;
+  const ahorro=SO.carullaSinIva?7929.77:0;            // Carulla 40% sin IVA
+  const pend=Math.max(0,t.pend-ahorro);
+  const aportFund=SO.extraFund||0;
+  const deficit=Math.max(0, pend - saldo - aportFund); // lo que falta de fuera
   const V=SO.valoracion,P=SO.aportacion;
   const pps=V>0?P/V:0;
   const n=(P>0&&deficit>0)?Math.ceil(deficit/P):0;
   const cap=n*P, pv=V>0?cap/V:0, pf=1-pv, pcf=pf/5, may=pf>0.5;
   let cls,tit,msg;
-  if(deficit<=0){cls='ok';tit='No necesitas levantar capital';msg='Lo aportado cubre el coste total.';}
-  else if(!may){cls='bad';tit='Cubrirías, pero perdéis la mayoría';msg=`Reunir ${f(cap)} exige vender ${(pv*100).toFixed(0)}%. Los 5 fundadores bajarían a ${(pcf*100).toFixed(1)}% cada uno. Sube la valoración o combina con deuda.`;}
-  else if(pv>0.35){cls='warn';tit=`Cubierto vendiendo ${(pv*100).toFixed(0)}%`;msg=`Con ${n} socio(s) de ${f(P)} levantas ${f(cap)} manteniendo mayoría (${(pf*100).toFixed(0)}%), pero es mucha dilución.`;}
-  else {cls='ok';tit=`Cubierto vendiendo ${(pv*100).toFixed(0)}%`;msg=`Con ${n} socio(s) de ${f(P)} levantas ${f(cap)} conservando ${(pf*100).toFixed(0)}% entre fundadores.`;}
+  if(deficit<=0){cls='ok';tit='¡Cubierto! No hace falta capital externo';msg=`Con el saldo del banco (${f(saldo)}) y las aportaciones de fundadores (${f(aportFund)}) cubrís lo pendiente (${f(pend)}). No necesitáis vender participaciones.`;}
+  else if(!may){cls='bad';tit='Cubriríais, pero perdéis la mayoría';msg=`Para reunir ${f(deficit)} de fuera hay que vender ${(pv*100).toFixed(0)}%. Los 5 fundadores bajarían a ${(pcf*100).toFixed(1)}% cada uno. Sube la valoración, mete deuda o más aportación de fundadores.`;}
+  else {cls=pv>0.35?'warn':'ok';tit=`Faltan ${f(deficit)} → ${n} socio(s) externo(s)`;msg=`Tras saldo + aportaciones de fundadores, quedan ${f(deficit)} por conseguir. Con ${n} socio(s) de ${f(P)} lo cubrís, conservando ${(pf*100).toFixed(0)}% entre los fundadores (${(pcf*100).toFixed(1)}% cada uno).`;}
   let ct='';
   for(let i=1;i<=5;i++) ct+=`<div class="row"><div>Fundador ${i}</div><div class="track"><div class="fill" style="width:${pcf*100}%;background:#6366f1"></div></div><div class="bamt">${(pcf*100).toFixed(1)}%</div></div>`;
   for(let i=1;i<=n;i++) ct+=`<div class="row"><div>Socio nuevo ${i}</div><div class="track"><div class="fill" style="width:${pps*100}%;background:#8b5cf6"></div></div><div class="bamt">${(pps*100).toFixed(1)}%</div></div>`;
   const vals=[400000,500000,600000,750000,1000000];
-  const comp=vals.map(v=>{const pvv=deficit/v;const fund=(1-n*(P/v))/5;const mj=(1-n*(P/v))>0.5;return `<tr style="${v===V?'background:color-mix(in srgb,var(--c2) 10%,transparent)':''}"><td>${f(v)}</td><td class="n">${(pvv*100).toFixed(0)}%</td><td class="n">${(Math.max(0,fund)*100).toFixed(1)}%</td><td style="color:${mj?'var(--c4)':'var(--red)'};font-weight:700">${mj?'Sí':'No'}</td></tr>`;}).join('');
+  const comp=vals.map(v=>{const fund=(1-n*(P/v))/5;const mj=(1-n*(P/v))>0.5;return `<tr style="${v===V?'background:color-mix(in srgb,var(--c2) 10%,transparent)':''}"><td>${f(v)}</td><td class="n">${(deficit/v*100).toFixed(0)}%</td><td class="n">${(Math.max(0,fund)*100).toFixed(1)}%</td><td style="color:${mj?'var(--c4)':'var(--red)'};font-weight:700">${mj?'Sí':'No'}</td></tr>`;}).join('');
   document.getElementById('t-socios').innerHTML=`
-    <h1>Simulador de socios</h1>
-    <p class="sub">Cuánto capital levantas, qué % vendes y cómo os diluís para cubrir el déficit.</p>
+    <h1>Plan de financiación</h1>
+    <p class="sub">Cuánto falta tras el saldo del banco y las aportaciones de los fundadores, y cómo cubrir el resto con socios externos.</p>
     <div class="disc" style="margin-bottom:16px">⚠️ Orientación, no asesoramiento. La ampliación de capital y el leasing de la nave (operación vinculada) los formaliza un asesor.</div>
     <div class="grid g4">
-      <div class="kpi"><div class="l">Coste total</div><div class="v">${f(coste)}</div></div>
-      <div class="kpi"><div class="l">Aportado fundadores</div><div class="v">${f(APORTADO)}</div></div>
-      <div class="card" style="margin:0"><span class="label">+ Aportación extra fundadores</span><input class="num-in" type="number" step="5000" value="${SO.extraFund||0}" oninput="setSO('extraFund',this.value)"><div class="hint">Como préstamo no cambia los %; reduce lo que captas de fuera.</div></div>
-      <div class="kpi"><div class="l">Déficit a captar (fuera)</div><div class="v" style="color:var(--c3)">${f(deficit)}</div></div>
+      <div class="kpi"><div class="l">⏳ Pendiente de pagar</div><div class="v">${f(pend)}</div></div>
+      <div class="card" style="margin:0"><span class="label">🏦 Saldo en banco</span><input class="num-in" type="number" step="1000" value="${saldo}" oninput="setSaldoSoc(this.value)"></div>
+      <div class="card" style="margin:0"><span class="label">👨‍👩‍👦 Aportan fundadores</span><input class="num-in" type="number" step="5000" value="${aportFund}" oninput="setSO('extraFund',this.value)"><div class="hint">Óscar 100k + Arnau 40k + Antonio&Marta 50k</div></div>
+      <div class="kpi"><div class="l">🔴 Falta conseguir</div><div class="v" style="color:${deficit>0?'var(--red)':'var(--c4)'}">${f(deficit)}</div></div>
     </div>
-    <h3 class="bt">Simula la entrada</h3>
+    <div style="margin:6px 0 18px"><button class="btn" onclick="toggleCarulla()" style="${SO.carullaSinIva?'border-color:var(--c4);color:var(--c4)':''}">${SO.carullaSinIva?'✓ ':''}Carulla 40% sin IVA ${SO.carullaSinIva?'(−7.930 €)':'(desactivado)'}</button></div>
+    <div class="verdict ${cls}"><div class="vh">${deficit<=0?'✅':'⚠️'} ${tit}</div><p>${msg}</p></div>
+    ${deficit>0?`
+    <h3 class="bt">Cubrir el resto con socios externos</h3>
     <div class="grid g3">
       <div class="card"><span class="label">Valoración (post-money)</span><input class="num-in" type="number" step="10000" value="${V}" oninput="setSO('valoracion',this.value)"></div>
       <div class="card"><span class="label">Aportación por socio</span><input class="num-in" type="number" step="5000" value="${P}" oninput="setSO('aportacion',this.value)"><div class="hint">Cada socio compra ${(pps*100).toFixed(1)}% por ${f(P)}.</div></div>
-      <div class="kpi"><div class="l">% total vendido</div><div class="v">${(pv*100).toFixed(0)}%</div></div>
+      <div class="kpi"><div class="l">% vendido / socios</div><div class="v">${(pv*100).toFixed(0)}% · ${n}</div></div>
     </div>
-    <div class="verdict ${cls}"><div class="vh">${deficit<=0?'✅':'⚠️'} ${tit}</div><p>${msg}</p>
-      <div class="grid g4" style="margin-top:14px">
-        <div class="kpi"><div class="l">Socios necesarios</div><div class="v">${n}</div></div>
-        <div class="kpi"><div class="l">Capital levantado</div><div class="v">${f(cap)}</div></div>
-        <div class="kpi"><div class="l">% vendido</div><div class="v">${(pv*100).toFixed(0)}%</div></div>
-        <div class="kpi"><div class="l">Fundadores c/u</div><div class="v">${(pcf*100).toFixed(1)}%</div></div>
-      </div>
-    </div>
-    <h3 class="bt">Reparto (cap table)</h3>
+    <h3 class="bt">Reparto resultante (cap table)</h3>
     <div class="card bars">${ct}</div>
     <h3 class="bt">¿Y si cambias la valoración?</h3>
-    <div class="tbl-wrap"><table><thead><tr><th>Valoración</th><th class="n">% a vender</th><th class="n">Fundadores c/u</th><th>¿Mayoría?</th></tr></thead><tbody>${comp}</tbody></table></div>`;
+    <div class="tbl-wrap"><table><thead><tr><th>Valoración</th><th class="n">% a vender</th><th class="n">Fundadores c/u</th><th>¿Mayoría?</th></tr></thead><tbody>${comp}</tbody></table></div>`:''}`;
 }
 function setSO(k,v){ SO[k]=parseFloat(v)||0; renderSocios(); }
+function setSaldoSoc(v){ B.saldo=parseFloat(v)||0; saveB(); renderSocios(); }
+function toggleCarulla(){ SO.carullaSinIva=!SO.carullaSinIva; renderSocios(); }
 
 // ══════════ TAB: DOSSIER ══════════
 let DO={cuota:50,socios:800,alquiler:2600,preinscritos:220,cuotaPre:40};
