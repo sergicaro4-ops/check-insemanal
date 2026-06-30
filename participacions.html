@@ -63,6 +63,20 @@
   <h1>Com quedarien les nostres participacions</h1>
   <p class="intro">Simulació del repartiment del capital si entren nous socis comprant participacions (cada tram = 10% per 50.000 €, sobre una valoració de 500.000 €). Tria l'escenari i edita els noms si vols.</p>
 
+  <div style="font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;color:var(--navy);margin:0 0 12px">Resum econòmic del projecte</div>
+  <div class="kstrip">
+    <div class="k"><div class="kl">Cost total (aprox.)</div><div class="kv">~534.000 €</div></div>
+    <div class="k"><div class="kl">Aportat pels fundadors</div><div class="kv">~290.000 €</div></div>
+    <div class="k"><div class="kl">Falta per finançar</div><div class="kv">~244.000 €</div></div>
+    <div class="k"><div class="kl">Valoració del negoci</div><div class="kv">500.000 €</div></div>
+  </div>
+
+  <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin:20px 0 10px">Aproximació de costos per blocs <span style="color:var(--muted);font-weight:400">(IVA inclòs)</span></div>
+  <div id="costbars" style="display:flex;flex-direction:column;gap:7px;margin-bottom:8px"></div>
+  <p class="note">Costos aproximats, agrupats per àmbit. Total del projecte ≈ <b>534.000 €</b>. El detall complet partida a partida està al panell de control intern.</p>
+
+  <div style="font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;color:var(--navy);margin:28px 0 12px">Repartiment de participacions</div>
+
   <div class="controls">
     <div>
       <div class="kl" style="margin-bottom:8px">Nous socis que entren</div>
@@ -102,6 +116,30 @@ try{const s=JSON.parse(localStorage.getItem('legion_founders')||'null'); if(Arra
 
 const fmt=n=>Math.round(n).toLocaleString('ca-ES')+' €';
 const pc=n=>n.toLocaleString('ca-ES',{maximumFractionDigits:1})+'%';
+
+// Aproximació de costos per blocs (IVA inclòs)
+const COSTOS=[
+  ['Elèctrica + energia (Carulla, instal·lació, comptadors)',159000],
+  ['Maquinària professional',85000],
+  ['Climatització + renovació d’aire',68000],
+  ['Aigua + ACS (aerotèrmia)',46000],
+  ['Obra + mà d’obra (Luis Miguel, accessibilitat)',45000],
+  ['Vestidors + material (Obramat, taquilles)',33000],
+  ['Transport + duanes maquinària',30000],
+  ['Accessos (torns, porta QR)',22000],
+  ['Pintura + polir terra',22000],
+  ['Contraincendis i seguretat',12000],
+  ['Retolació + vidres recepció',12000],
+];
+function renderCostos(){
+  const mx=Math.max(...COSTOS.map(c=>c[1]));
+  document.getElementById('costbars').innerHTML=COSTOS.map(([n,v])=>`
+    <div style="display:grid;grid-template-columns:200px 1fr 92px;gap:10px;align-items:center;font-size:12.5px">
+      <div style="color:var(--ink2)">${n}</div>
+      <div style="height:13px;background:var(--soft);border:1px solid var(--line);border-radius:7px;overflow:hidden"><div style="height:100%;width:${v/mx*100}%;background:var(--navy);border-radius:7px"></div></div>
+      <div style="text-align:right;font-family:'Space Grotesk',sans-serif;font-weight:700">~${v.toLocaleString('ca-ES')} €</div>
+    </div>`).join('');
+}
 
 function render(){
   const P=parseFloat(document.getElementById('pct').value)||0;
@@ -144,6 +182,7 @@ function setName(i,v){ founders[i]=v; localStorage.setItem('legion_founders',JSO
 document.getElementById('seg').addEventListener('click',e=>{const b=e.target.closest('button');if(b){nNew=parseInt(b.dataset.n);render();}});
 document.getElementById('pct').addEventListener('input',render);
 document.getElementById('apo').addEventListener('input',render);
+renderCostos();
 render();
 </script>
 </body>
