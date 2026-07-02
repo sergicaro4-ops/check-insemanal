@@ -431,7 +431,6 @@ function seedItems() {
     mk('elec-incendi', 'Detección de incendios (central + 37 detectores)', 'incendios', 9611.46, 'EUR', 21, 'pending', 'Incluye certificación contraincendios'),
     mk('elec-comptadors', 'Suministro caja de contadores (TMF-10 + armario)', 'electrica', 2252.90, 'EUR', 21, 'pending'),
     mk('obramat-201', 'Material baños/vestuarios/suelo/iluminación (Obramat, pedido 201)', 'vestuarios', 11599.04, 'EUR', 21, 'pending', 'Total IVA incl. 14.026,70 €. Depósito obligatorio, entrega 15/07'),
-    mk('vidres-recep', 'Vidrios aplacado recepción (Franquet Barrau FBP261136)', 'mobiliario', 2889.19, 'EUR', 21, 'pending'),
     mk('rotol-legion', 'Rótulo LEGION letras corpóreas + LED (Franquet Barrau ENP261169)', 'rotulos', 6748.00, 'EUR', 21, 'pending'),
     mk('rotol-xixo', 'Lonas / decoración La Xixo (Franquet Barrau FBP261143)', 'rotulos', 388.10, 'EUR', 21, 'pending', 'Presupuesto a nombre de La Xixo — confirmar si es del gimnasio'),
     mk('carulla-pagado', 'Carulla (clima+agua+ACS+RITE) — pagado 25%', 'clima', 23600.51, 'EUR', 21, 'paid', 'Incluye climatización, agua, ACS y renovación aire RITE. 25% = 28.556,62 € pagado'),
@@ -538,6 +537,14 @@ function load() {
   if (!state.migNoMasCapital) {
     if (state.budget === 430000) state.budget = 290000;
     state.migNoMasCapital = true;
+    migrated = true;
+  }
+
+  // Migración puntual: quitar vidrios recepción (Franquet Barrau).
+  if (!state.migVidres) {
+    state.items = state.items.filter(i => i.sk !== 'vidres-recep');
+    state.seededKeys = state.seededKeys.filter(k => k !== 'vidres-recep');
+    state.migVidres = true;
     migrated = true;
   }
 
