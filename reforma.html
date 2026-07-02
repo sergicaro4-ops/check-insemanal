@@ -439,8 +439,7 @@ function seedItems() {
     mk('carulla-pend-siniva', 'Carulla (clima+agua+ACS+RITE) — pendiente 40%', 'clima', 37760.82, 'EUR', 21, 'pending', 'Climatización, agua, ACS y RITE'),
     mk('taquillas-bellum', 'Taquillas + cabinas sanitarias vestuarios (Bellum Logistics)', 'vestuarios', 15681.50, 'EUR', 21, 'pending', 'Taquillas 9.628,38 + cabinas 5.053,12 + envío 1.000 €. Pago 50% firma / 50% antes de envío'),
     mk('pulir-suelo', 'Suelo (pavimento gimnasio)', 'suelo', 17000, 'EUR', 21, 'pending', 'Presupuesto'),
-    mk('pintura-gral', 'Pintura (general)', 'pintura', 8000, 'EUR', 21, 'pending', 'Estimación'),
-    mk('pintura-fachada', 'Pintura paredes + fachada', 'pintura', 5000, 'EUR', 21, 'pending', 'Estimación'),
+    mk('pintura-gral', 'Pintura (paredes + fachada)', 'pintura', 5000, 'EUR', 21, 'pending', 'El suelo va acabado, no se pinta'),
     mk('tornos', 'Tornos de acceso', 'acceso', 9000, 'EUR', 21, 'pending', 'Presupuesto'),
     mk('puerta-qr', 'Puerta de cristal exterior con lector QR', 'acceso', 8000, 'EUR', 21, 'pending', 'ESTIMACIÓN prudente — pendiente presupuesto firme'),
     mk('accesibilidad', 'Elevador para minusválidos', 'obra', 12000, 'EUR', 21, 'pending', '≈ 12.000 € (orientativo)'),
@@ -539,6 +538,15 @@ function load() {
   if (!state.migNoMasCapital) {
     if (state.budget === 430000) state.budget = 290000;
     state.migNoMasCapital = true;
+    migrated = true;
+  }
+
+  // Migración puntual: pintura total 5.000 € (el suelo va acabado).
+  if (!state.migPintura) {
+    state.items = state.items.filter(i => i.sk !== 'pintura-fachada');
+    state.seededKeys = state.seededKeys.filter(k => k !== 'pintura-fachada');
+    const p = state.items.find(i => i.sk === 'pintura-gral'); if (p) { p.base = 5000; p.concepto = 'Pintura (paredes + fachada)'; p.nota = 'El suelo va acabado, no se pinta'; }
+    state.migPintura = true;
     migrated = true;
   }
 
