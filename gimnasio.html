@@ -484,7 +484,7 @@ function renderResumen(){
 }
 
 // ══════════ TAB: SOCIOS ══════════
-let SO={valoracion:500000,aportacion:50000,extraFund:190000,carullaSinIva:true};
+let SO={valoracion:500000,aportacion:50000,extraFund:190000,carullaSinIva:true,aplazarCarulla:true};
 function renderSocios(){
   const t=totalsR();
   const saldo=B.saldo;
@@ -492,6 +492,9 @@ function renderSocios(){
   const pend=Math.max(0,t.pend-ahorro);
   const aportFund=SO.extraFund||0;
   const deficit=Math.max(0, pend - saldo - aportFund); // lo que falta de fuera
+  const carullaTot=114226.48-ahorro;                   // total Carulla
+  const aplazado=SO.aplazarCarulla?Math.min(deficit,carullaTot*0.25):0; // 25% a 60 días
+  const faltaAhora=Math.max(0,deficit-aplazado);
   const V=SO.valoracion,P=SO.aportacion;
   const pps=V>0?P/V:0;
   const n=(P>0&&deficit>0)?Math.ceil(deficit/P):0;
@@ -513,9 +516,13 @@ function renderSocios(){
       <div class="kpi"><div class="l">⏳ Pendiente de pagar</div><div class="v">${f(pend)}</div></div>
       <div class="card" style="margin:0"><span class="label">🏦 Saldo en banco</span><input class="num-in" type="number" step="1000" value="${saldo}" oninput="setSaldoSoc(this.value)"></div>
       <div class="card" style="margin:0"><span class="label">👨‍👩‍👦 Aportan fundadores</span><input class="num-in" type="number" step="5000" value="${aportFund}" oninput="setSO('extraFund',this.value)"><div class="hint">Óscar 100k + Arnau 40k + Antonio&Marta 50k</div></div>
-      <div class="kpi"><div class="l">🔴 Falta conseguir</div><div class="v" style="color:${deficit>0?'var(--red)':'var(--c4)'}">${f(deficit)}</div></div>
+      <div class="kpi"><div class="l">🔴 Falta conseguir</div><div class="v" style="color:${deficit>0?'var(--red)':'var(--c4)'}">${f(deficit)}</div>${aplazado>0?`<div class="hint" style="color:var(--c5)">${f(faltaAhora)} ahora · ${f(aplazado)} en 60 días</div>`:''}</div>
     </div>
-    <div style="margin:6px 0 18px"><button class="btn" onclick="toggleCarulla()" style="${SO.carullaSinIva?'border-color:var(--c4);color:var(--c4)':''}">${SO.carullaSinIva?'✓ ':''}Carulla 40% sin IVA ${SO.carullaSinIva?'(−7.930 €)':'(desactivado)'}</button></div>
+    <div style="margin:6px 0 18px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" onclick="toggleCarulla()" style="${SO.carullaSinIva?'border-color:var(--c4);color:var(--c4)':''}">${SO.carullaSinIva?'✓ ':''}Carulla 40% sin IVA ${SO.carullaSinIva?'(−7.930 €)':''}</button>
+      <button class="btn" onclick="toggleAplazar()" style="${SO.aplazarCarulla?'border-color:var(--c5);color:var(--c5)':''}">${SO.aplazarCarulla?'✓ ':''}Aplazar 25% Carulla a 60 días</button>
+    </div>
+    ${aplazado>0?`<div class="verdict ok" style="margin-bottom:16px"><div class="vh">🕐 Solo ${f(faltaAhora)} de forma inmediata</div><p>Aplazando el 25% de Carulla (${f(aplazado)}) a 60 días, ahora mismo solo necesitas cubrir <b>${f(faltaAhora)}</b>. El resto (${f(aplazado)}) lo pagas en 2 meses, cuando ya entran cuotas de socios y las aportaciones.</p></div>`:''}
     <div class="verdict ${cls}"><div class="vh">${deficit<=0?'✅':'⚠️'} ${tit}</div><p>${msg}</p></div>
     ${deficit>0?`
     <h3 class="bt">Cubrir el resto con socios externos</h3>
@@ -532,6 +539,7 @@ function renderSocios(){
 function setSO(k,v){ SO[k]=parseFloat(v)||0; renderSocios(); }
 function setSaldoSoc(v){ B.saldo=parseFloat(v)||0; saveB(); renderSocios(); }
 function toggleCarulla(){ SO.carullaSinIva=!SO.carullaSinIva; renderSocios(); }
+function toggleAplazar(){ SO.aplazarCarulla=!SO.aplazarCarulla; renderSocios(); }
 
 // ══════════ TAB: DOSSIER ══════════
 let DO={cuota:50,socios:800,alquiler:2600,preinscritos:220,cuotaPre:40};
