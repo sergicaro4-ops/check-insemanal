@@ -170,12 +170,12 @@ function seedItems(){
     mk('carulla-pend-iva','Carulla (clima+agua+ACS+RITE) — pendiente 35%','clima',33040.72,'EUR',21,'pending','Climatización, agua, ACS y RITE'),
     mk('carulla-pend-siniva','Carulla (clima+agua+ACS+RITE) — pendiente 40%','clima',37760.82,'EUR',21,'pending','Climatización, agua, ACS y RITE'),
     mk('taquillas-bellum','Taquillas + cabinas sanitarias (Bellum Logistics)','vestuarios',15681.50,'EUR',21,'pending'),
-    mk('pulir-suelo','Suelo (pavimento gimnasio)','suelo',17000,'EUR',21,'pending','Presupuesto'),
-    mk('pintura-gral','Pintura (paredes + fachada)','pintura',5000,'EUR',21,'pending','El suelo va acabado, no se pinta'),
-    mk('tornos','Tornos de acceso','acceso',9000,'EUR',21,'pending','Presupuesto'),
-    mk('puerta-qr','Puerta de cristal exterior con lector QR','acceso',8000,'EUR',21,'pending','ESTIMACIÓN prudente'),
-    mk('accesibilidad','Elevador para minusválidos','obra',12000,'EUR',21,'pending','≈ 12.000 € (orientativo)'),
-    mk('lm-pendiente','Luis Miguel (techo vestuarios + paredes)','obra',14000,'EUR',21,'pending','Techo vestuarios c/ mano de obra 9.000 + pared separatoria 3.000 + pared frontal 2.000'),
+    mk('pulir-suelo','Suelo (pavimento gimnasio)','suelo',14049.59,'EUR',21,'pending','17.000 € IVA incl.'),
+    mk('pintura-gral','Pintura (paredes + fachada)','pintura',4132.23,'EUR',21,'pending','5.000 € IVA incl. (el suelo va acabado)'),
+    mk('tornos','Tornos de acceso','acceso',7438.02,'EUR',21,'pending','9.000 € IVA incl.'),
+    mk('puerta-qr','Puerta de cristal exterior con lector QR','acceso',6611.57,'EUR',21,'pending','≈ 8.000 € IVA incl. (estimación)'),
+    mk('accesibilidad','Elevador para minusválidos','obra',9917.36,'EUR',21,'pending','≈ 12.000 € IVA incl. (orientativo)'),
+    mk('lm-pendiente','Luis Miguel (techo vestuarios + paredes)','obra',11570.25,'EUR',21,'pending','14.000 € IVA incl.: techo vestuarios 9.000 + separatoria 3.000 + frontal 2.000'),
     mk('transporte','Transporte marítimo + aduana equipos (estimado)','transporte',30000,'EUR',0,'pending','Estimación ≈ 30.000 €'),
     mk('extra-obra','Obra y mano de obra ya ejecutada (Rubiralta y otros)','obra',37580.20,'EUR',21,'paid','Demolición, pladur, material, limpieza… ya pagado (banco)'),
     mk('extra-otros','Residuos, alquileres, web, software, fianza local','otros',15111.74,'EUR',21,'paid','Ya pagado (banco)'),
@@ -184,7 +184,7 @@ function seedItems(){
     mk('extra-transporte','Transporte de materiales (Larriba)','transporte',1185.12,'EUR',21,'paid','Ya pagado (banco)'),
     mk('extra-electrica','Acometida eléctrica (EDistribución)','electrica',1650.60,'EUR',21,'paid','Ya pagado (banco)'),
     mk('extra-impuestos','Impuestos y comisiones bancarias','otros',1064.08,'EUR',0,'paid','Tributos y gastos de banco'),
-    mk('imprevistos','Imprevistos y partidas por definir','otros',25000,'EUR',21,'pending','Colchón: mobiliario sala, audio, señalización, licencia apertura, seguros, red/cámaras, aprovisionamiento… Ajustar'),
+    mk('imprevistos','Imprevistos y partidas por definir','otros',20661.16,'EUR',21,'pending','25.000 € IVA incl. Colchón: mobiliario, audio, señalización, licencia, seguros… Ajustar'),
   ];
 }
 
@@ -282,6 +282,12 @@ function load(){
     const nous=seedItems().filter(i=>['maq-pagado','maq-pend','elec-gimnas-pagado','elec-gimnas-pend'].includes(i.sk));
     if(!R.items.some(i=>i.sk==='maq-pagado')) R.items.push(...nous);
     localStorage.setItem('migSplitPagos','1'); saveR();
+  }
+  // Migración puntual: precios dados a mano eran CON IVA → pasar a base = importe/1,21.
+  if(!localStorage.getItem('migIvaIncl')){
+    const b={'pulir-suelo':14049.59,'tornos':7438.02,'pintura-gral':4132.23,'accesibilidad':9917.36,'lm-pendiente':11570.25,'puerta-qr':6611.57,'imprevistos':20661.16};
+    Object.entries(b).forEach(([sk,v])=>{const it=R.items.find(i=>i.sk===sk);if(it)it.base=v;});
+    localStorage.setItem('migIvaIncl','1'); saveR();
   }
   // Migración puntual: colchón de imprevistos / partidas por definir.
   if(!localStorage.getItem('migImprev')){
