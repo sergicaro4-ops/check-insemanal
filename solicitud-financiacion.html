@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Solicitud de Financiación · Caro Legión S.L.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--ink:#141a2b;--ink2:#3a4260;--muted:#697089;--line:#e4e7f0;--line2:#cdd3e2;--paper:#fff;--soft:#f6f8fc;--navy:#12325a;--navy2:#1c4a80;--gold:#a8791f;--green:#15803d;--red:#b91c1c;}
+  body{font-family:'Inter',sans-serif;background:#e9ecf3;color:var(--ink);line-height:1.55;padding:22px 12px;}
+  .toolbar{max-width:840px;margin:0 auto 16px;display:flex;justify-content:flex-end;gap:8px;}
+  .btn{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;padding:9px 16px;border-radius:8px;border:1px solid var(--line2);background:#fff;color:var(--ink2);cursor:pointer;}
+  .btn.p{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .doc{max-width:840px;margin:0 auto;background:var(--paper);box-shadow:0 12px 44px rgba(20,24,45,.14);}
+  .pg{padding:46px 56px;}
+  .pg+.pg{border-top:1px solid var(--line);}
+
+  .head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid var(--navy);padding-bottom:18px;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
+  .brand{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;letter-spacing:.03em;color:var(--navy);}
+  .brand small{display:block;font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;font-weight:400;margin-top:3px;}
+  .head .meta{text-align:right;font-size:12px;color:var(--muted);line-height:1.7;}
+  .doctype{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);}
+
+  h1{font-family:'Space Grotesk',sans-serif;font-size:25px;font-weight:700;color:var(--navy);margin:4px 0 16px;}
+  h2{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--navy);margin:26px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line);letter-spacing:.02em;}
+  h2 .n{color:var(--gold);}
+  p{font-size:13.5px;color:var(--ink2);margin-bottom:11px;}
+  ul{margin:0 0 11px 18px;font-size:13.5px;color:var(--ink2);line-height:1.7;}
+  b{color:var(--ink);}
+
+  .datos{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 26px;background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:16px 18px;font-size:13px;}
+  .datos div span{color:var(--muted);}
+  .datos div b{color:var(--ink);}
+
+  .box-req{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:12px;padding:22px 24px;margin:8px 0 4px;}
+  .box-req .big{font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:700;line-height:1;}
+  .box-req .lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#a9c0e0;margin-bottom:6px;}
+  .req-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px;}
+  @media(max-width:640px){.req-grid{grid-template-columns:repeat(2,1fr);}.datos{grid-template-columns:1fr;}}
+  .req-grid div .rl{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#a9c0e0;margin-bottom:3px;font-family:'Space Grotesk',sans-serif;}
+  .req-grid div .rv{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0;}
+  th{text-align:right;font-family:'Space Grotesk',sans-serif;font-size:10.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);padding:9px 11px;border-bottom:2px solid var(--line2);}
+  th:first-child{text-align:left;}
+  td{padding:8px 11px;border-bottom:1px solid var(--line);text-align:right;font-family:'Space Grotesk',sans-serif;}
+  td:first-child{text-align:left;font-family:'Inter',sans-serif;color:var(--ink2);}
+  tr.tot td{font-weight:700;color:var(--navy);border-top:2px solid var(--navy);}
+  tr.hl td{background:var(--soft);}
+  .pos{color:var(--green);font-weight:700;}
+
+  .sign{margin-top:36px;display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;}
+  .sign div{flex:1;min-width:200px;border-top:1px solid var(--ink);padding-top:8px;font-size:12px;color:var(--muted);}
+  .foot{margin-top:26px;padding-top:12px;border-top:1px solid var(--line);font-size:10.5px;color:var(--muted);}
+  .fill{background:#fff6e6;padding:0 3px;border-bottom:1px dashed var(--gold);}
+
+  @media print{body{background:#fff;padding:0;}.toolbar{display:none;}.doc{box-shadow:none;max-width:none;}.pg{padding:16mm 15mm;}.pg+.pg{border-top:none;page-break-before:always;}h2,table,.box-req,.datos{page-break-inside:avoid;}@page{size:A4;margin:0;}}
+</style>
+</head>
+<body>
+<div class="toolbar"><button class="btn p" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button></div>
+
+<div class="doc">
+  <div class="pg">
+    <div class="head">
+      <div class="brand">CARO LEGIÓN, S.L.<small>Legion Club · Sant Fruitós de Bages</small></div>
+      <div class="meta"><span class="doctype">Solicitud de financiación</span><br/>Fecha: <span class="fill">___ / ___ / 2026</span><br/>Ref.: LEGION-FIN-2026</div>
+    </div>
+
+    <h1>Memoria de solicitud de financiación</h1>
+    <p>Por medio del presente documento, <b>Caro Legión, S.L.</b> solicita financiación para la finalización de la inversión y puesta en marcha de un centro deportivo (gimnasio) de nueva creación en Sant Fruitós de Bages, cuya obra e instalaciones se encuentran en fase muy avanzada.</p>
+
+    <h2><span class="n">1.</span> Datos de la sociedad</h2>
+    <div class="datos">
+      <div><span>Razón social:</span> <b>Caro Legión, S.L.</b></div>
+      <div><span>NIF:</span> <b class="fill">B-________</b></div>
+      <div><span>Domicilio:</span> <b>Carrer Ensija, 32 · 08272 Sant Fruitós de Bages (Barcelona)</b></div>
+      <div><span>Actividad:</span> <b>Explotación de centro deportivo / gimnasio</b></div>
+      <div><span>Administrador:</span> <b>Sergi Caro Folch</b></div>
+      <div><span>Contacto:</span> <b>609 502 410 · sergicaro4@gmail.com</b></div>
+      <div><span>Forma jurídica:</span> <b>Sociedad Limitada (5 socios)</b></div>
+      <div><span>Entidad principal:</span> <b>BBVA</b></div>
+    </div>
+
+    <h2><span class="n">2.</span> Objeto de la solicitud</h2>
+    <div class="box-req">
+      <div class="lbl">Importe solicitado</div>
+      <div class="big">150.000 €</div>
+      <div class="req-grid">
+        <div><div class="rl">Modalidad</div><div class="rv">Préstamo inversión</div></div>
+        <div><div class="rl">Plazo</div><div class="rv">7 años (84 meses)</div></div>
+        <div><div class="rl">Carencia</div><div class="rv">12 meses de capital</div></div>
+        <div><div class="rl">Destino</div><div class="rv">Fin. obra + circulante</div></div>
+      </div>
+    </div>
+    <p style="margin-top:14px">La financiación solicitada representa únicamente el <b>29% de la inversión total</b> del proyecto; el <b>71% restante lo aportan los socios con recursos propios</b>, lo que refleja un elevado compromiso de los promotores y un bajo nivel de apalancamiento.</p>
+
+    <h2><span class="n">3.</span> La empresa y el proyecto</h2>
+    <p>Legion Club es un gimnasio premium de nueva creación. La inversión ejecutada dota al centro de instalaciones de gama alta (climatización, aerotermia, maquinaria profesional, vestuarios, control de acceso). El proyecto cuenta con un elemento diferencial clave: <b>220 socios ya preinscritos antes de la apertura</b>, lo que valida la demanda. La nave es propiedad de la familia promotora y se explota mediante contrato de arrendamiento estable.</p>
+    <div class="foot">Legion Club · Caro Legión, S.L. · Solicitud de financiación — pág. 1</div>
+  </div>
+
+  <div class="pg">
+    <h2><span class="n">4.</span> Plan de inversión y financiación</h2>
+    <table>
+      <thead><tr><th>Concepto</th><th>Importe</th><th>%</th></tr></thead>
+      <tbody>
+        <tr><td>Inversión total del proyecto</td><td>514.716 €</td><td>100%</td></tr>
+        <tr class="hl"><td>Recursos propios ya aportados por los socios</td><td>290.000 €</td><td>56%</td></tr>
+        <tr class="hl"><td>Aportación adicional comprometida por los socios</td><td>74.716 €</td><td>15%</td></tr>
+        <tr class="tot"><td>Financiación solicitada</td><td>150.000 €</td><td>29%</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:var(--muted)">A fecha del presente documento, la inversión ejecutada y pagada asciende a 180.750 €.</p>
+
+    <h2><span class="n">5.</span> Destino de los fondos</h2>
+    <ul>
+      <li><b>Finalización de instalaciones</b> (climatización y renovación de aire, instalación eléctrica, protección contra incendios, vestuarios y accesos): ~110.000 €.</li>
+      <li><b>Cierre de la importación de maquinaria</b> (impuestos y despacho de aduana): ~20.000 €.</li>
+      <li><b>Circulante y gastos de apertura</b> (puesta en marcha, personal inicial, marketing de lanzamiento): ~20.000 €.</li>
+    </ul>
+
+    <h2><span class="n">6.</span> Proyección económica y capacidad de devolución</h2>
+    <p>Modelo basado en cuotas recurrentes. Punto de equilibrio operativo en <b>220 socios</b> (ya preinscritos) y en <b>300 socios</b> incluyendo el servicio de la deuda.</p>
+    <table>
+      <thead><tr><th>Concepto</th><th>Año 1</th><th>Año 2</th><th>Año 3</th></tr></thead>
+      <tbody>
+        <tr><td>Socios activos (media)</td><td>400</td><td>600</td><td>800</td></tr>
+        <tr><td>Ingresos</td><td>213.600 €</td><td>333.600 €</td><td>453.600 €</td></tr>
+        <tr class="tot"><td>EBITDA</td><td>69.000 €</td><td>141.000 €</td><td>219.000 €</td></tr>
+        <tr><td>Servicio de la deuda (est.)</td><td>≈ 26.300 €</td><td>≈ 26.300 €</td><td>≈ 26.300 €</td></tr>
+        <tr class="hl"><td>Ratio de cobertura (EBITDA / deuda)</td><td class="pos">2,6×</td><td class="pos">5,4×</td><td class="pos">8,3×</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:var(--muted)">Cifras estimadas. Cuota de préstamo calculada para 150.000 € a 7 años. La cobertura del servicio de la deuda es holgada desde el primer ejercicio.</p>
+    <div class="foot">Legion Club · Caro Legión, S.L. · Solicitud de financiación — pág. 2</div>
+  </div>
+
+  <div class="pg">
+    <h2><span class="n">7.</span> Garantías ofrecidas</h2>
+    <ul>
+      <li><b>Aval de Sociedad de Garantía Recíproca</b> (Avalis de Catalunya), en caso de requerirse.</li>
+      <li><b>Garantía personal solidaria</b> de los socios promotores.</li>
+      <li><b>La propia inversión</b> (maquinaria e instalaciones) como respaldo del proyecto.</li>
+      <li>Estabilidad del inmueble mediante contrato de arrendamiento a largo plazo con la propiedad.</li>
+    </ul>
+
+    <h2><span class="n">8.</span> Equipo promotor</h2>
+    <p>Sociedad familiar de 5 socios. Cuatro de ellos son <b>odontólogos</b> en ejercicio, que aportan solvencia y estabilidad financiera. El administrador, <b>Sergi Caro Folch</b>, es <b>graduado en Administración y Dirección de Empresas (ADE)</b> y profesional del sector del fitness, uniendo formación en gestión con conocimiento directo del negocio.</p>
+
+    <h2><span class="n">9.</span> Puntos fuertes del proyecto</h2>
+    <ul>
+      <li><b>Demanda validada:</b> 220 socios preinscritos antes de la apertura, sin campaña.</li>
+      <li><b>Riesgo de obra muy reducido:</b> la mayor parte de la inversión está contratada y ejecutada.</li>
+      <li><b>Bajo apalancamiento:</b> los socios aportan el 71% de la inversión con recursos propios.</li>
+      <li><b>Mercado amplio:</b> ~130.000 habitantes en un radio de 20 km; objetivo del 0,6% del mercado.</li>
+      <li><b>Equipo solvente</b> y con conocimiento del sector.</li>
+    </ul>
+
+    <div class="sign">
+      <div>El administrador<br/><br/><b style="color:var(--ink)">Sergi Caro Folch</b><br/>Caro Legión, S.L.</div>
+      <div>Fecha y firma<br/><br/><span class="fill">_______________________</span></div>
+    </div>
+
+    <div class="foot"><b>Documento informativo</b> para la solicitud de financiación. Las proyecciones son estimaciones basadas en supuestos del plan de negocio y no constituyen garantía de resultados. Sant Fruitós de Bages, 2026. · Legion Club · Caro Legión, S.L. — pág. 3</div>
+  </div>
+</div>
+</body>
+</html>
