@@ -167,8 +167,8 @@ function seedItems(){
     mk('rotol-legion','Rótulo LEGION letras corpóreas + LED','rotulos',6748.00,'EUR',21,'pending'),
     mk('rotol-xixo','Lonas / decoración La Xixo','rotulos',388.10,'EUR',21,'pending','A nombre de La Xixo — confirmar'),
     mk('carulla-pagado','Carulla (clima+agua+ACS+RITE) — pagado 25%','clima',23600.51,'EUR',21,'paid','Incluye climatización, agua, ACS y renovación aire RITE. 25% = 28.556,62 € pagado'),
-    mk('carulla-pend-iva','Carulla (clima+agua+ACS+RITE) — pendiente 35%','clima',33040.72,'EUR',21,'pending','Climatización, agua, ACS y RITE'),
-    mk('carulla-pend-siniva','Carulla (clima+agua+ACS+RITE) — pendiente 40%','clima',37760.82,'EUR',21,'pending','Climatización, agua, ACS y RITE'),
+    mk('carulla-pend-iva','Carulla (clima+agua+ACS+RITE) — pendiente 35% (sin IVA)','clima',33040.72,'EUR',0,'pending','Sin IVA. Climatización, agua, ACS y RITE'),
+    mk('carulla-pend-siniva','Carulla (clima+agua+ACS+RITE) — pendiente 40% (sin IVA)','clima',37760.82,'EUR',0,'pending','Sin IVA. Climatización, agua, ACS y RITE'),
     mk('taquillas-bellum','Taquillas + cabinas sanitarias (Bellum Logistics)','vestuarios',15681.50,'EUR',21,'pending'),
     mk('pulir-suelo','Suelo (pavimento gimnasio)','suelo',14049.59,'EUR',21,'pending','17.000 € IVA incl.'),
     mk('pintura-gral','Pintura (paredes + fachada)','pintura',4132.23,'EUR',21,'pending','5.000 € IVA incl. (el suelo va acabado)'),
@@ -184,8 +184,7 @@ function seedItems(){
     mk('extra-transporte','Transporte de materiales (Larriba)','transporte',1185.12,'EUR',21,'paid','Ya pagado (banco)'),
     mk('extra-electrica','Acometida eléctrica (EDistribución)','electrica',1650.60,'EUR',21,'paid','Ya pagado (banco)'),
     mk('extra-impuestos','Impuestos y comisiones bancarias','otros',1064.08,'EUR',0,'paid','Tributos y gastos de banco'),
-    mk('imprevistos','Imprevistos y partidas por definir','otros',20661.16,'EUR',21,'pending','25.000 € IVA incl. Colchón: mobiliario, audio, señalización, licencia, seguros… Ajustar'),
-    mk('techo-rf','Techo RF120: placa RF + lana de roca (56 m, sellado)','incendios',16528.93,'EUR',21,'pending','Estimación 20.000 € IVA incl. — sistema certificado RF120, pendiente presupuesto real'),
+    mk('techo-rf','Techo RF120: placa RF + lana de roca (56 m, sellado)','incendios',3305.79,'EUR',21,'pending','4.000 € IVA incl. — lo ejecuta el promotor (material)'),
   ];
 }
 
@@ -299,6 +298,13 @@ function load(){
   if(!localStorage.getItem('migTechoRF')){
     if(!R.items.some(i=>i.sk==='techo-rf')) R.items.push(...seedItems().filter(i=>i.sk==='techo-rf'));
     localStorage.setItem('migTechoRF','1'); saveR();
+  }
+  // Migración puntual: Carulla 100% sin IVA (pendiente), quitar colchón, techo 4.000 €.
+  if(!localStorage.getItem('migV3')){
+    ['carulla-pend-iva','carulla-pend-siniva'].forEach(sk=>{const it=R.items.find(i=>i.sk===sk);if(it)it.iva=0;});
+    R.items=R.items.filter(i=>i.sk!=='imprevistos');
+    const tr=R.items.find(i=>i.sk==='techo-rf'); if(tr){tr.base=3305.79;tr.nota='4.000 € IVA incl. — lo ejecuta el promotor (material)';}
+    localStorage.setItem('migV3','1'); saveR();
   }
   // Migración puntual: quitar vidrios recepción (Franquet Barrau).
   if(!localStorage.getItem('migVidres')){
@@ -506,11 +512,10 @@ let SO={valoracion:500000,aportacion:50000,extraFund:0,carullaSinIva:false,aplaz
 function renderSocios(){
   const t=totalsR();
   const saldo=B.saldo;
-  const ahorro=SO.carullaSinIva?7929.77:0;            // Carulla 40% sin IVA
-  const pend=Math.max(0,t.pend-ahorro);
+  const pend=t.pend;
   const aportFund=SO.extraFund||0;
   const deficit=Math.max(0, pend - saldo - aportFund); // lo que falta de fuera
-  const carullaTot=114226.48-ahorro;                   // total Carulla
+  const carullaTot=R.items.filter(i=>i.sk.indexOf('carulla')===0).reduce((s,i)=>s+totEUR(i),0); // total Carulla
   const aplazado=SO.aplazarCarulla?Math.min(deficit,carullaTot*0.25):0; // 25% a 60 días
   const faltaAhora=Math.max(0,deficit-aplazado);
   const V=SO.valoracion,P=SO.aportacion;
@@ -537,7 +542,6 @@ function renderSocios(){
       <div class="kpi"><div class="l">🔴 Falta conseguir</div><div class="v" style="color:${deficit>0?'var(--red)':'var(--c4)'}">${f(deficit)}</div>${aplazado>0?`<div class="hint" style="color:var(--c5)">${f(faltaAhora)} ahora · ${f(aplazado)} en 60 días</div>`:''}</div>
     </div>
     <div style="margin:6px 0 18px;display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn" onclick="toggleCarulla()" style="${SO.carullaSinIva?'border-color:var(--c4);color:var(--c4)':''}">${SO.carullaSinIva?'✓ ':''}Carulla 40% sin IVA ${SO.carullaSinIva?'(−7.930 €)':''}</button>
       <button class="btn" onclick="toggleAplazar()" style="${SO.aplazarCarulla?'border-color:var(--c5);color:var(--c5)':''}">${SO.aplazarCarulla?'✓ ':''}Aplazar 25% Carulla a 60 días</button>
     </div>
     ${aplazado>0?`<div class="verdict ok" style="margin-bottom:16px"><div class="vh">🕐 Solo ${f(faltaAhora)} de forma inmediata</div><p>Aplazando el 25% de Carulla (${f(aplazado)}) a 60 días, ahora mismo solo necesitas cubrir <b>${f(faltaAhora)}</b>. El resto (${f(aplazado)}) lo pagas en 2 meses, cuando ya entran cuotas de socios y las aportaciones.</p></div>`:''}

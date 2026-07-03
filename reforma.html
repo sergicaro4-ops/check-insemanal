@@ -434,8 +434,8 @@ function seedItems() {
     mk('rotol-legion', 'Rótulo LEGION letras corpóreas + LED (Franquet Barrau ENP261169)', 'rotulos', 6748.00, 'EUR', 21, 'pending'),
     mk('rotol-xixo', 'Lonas / decoración La Xixo (Franquet Barrau FBP261143)', 'rotulos', 388.10, 'EUR', 21, 'pending', 'Presupuesto a nombre de La Xixo — confirmar si es del gimnasio'),
     mk('carulla-pagado', 'Carulla (clima+agua+ACS+RITE) — pagado 25%', 'clima', 23600.51, 'EUR', 21, 'paid', 'Incluye climatización, agua, ACS y renovación aire RITE. 25% = 28.556,62 € pagado'),
-    mk('carulla-pend-iva', 'Carulla (clima+agua+ACS+RITE) — pendiente 35%', 'clima', 33040.72, 'EUR', 21, 'pending', 'Climatización, agua, ACS y RITE'),
-    mk('carulla-pend-siniva', 'Carulla (clima+agua+ACS+RITE) — pendiente 40%', 'clima', 37760.82, 'EUR', 21, 'pending', 'Climatización, agua, ACS y RITE'),
+    mk('carulla-pend-iva', 'Carulla (clima+agua+ACS+RITE) — pendiente 35% (sin IVA)', 'clima', 33040.72, 'EUR', 0, 'pending', 'Sin IVA. Climatización, agua, ACS y RITE'),
+    mk('carulla-pend-siniva', 'Carulla (clima+agua+ACS+RITE) — pendiente 40% (sin IVA)', 'clima', 37760.82, 'EUR', 0, 'pending', 'Sin IVA. Climatización, agua, ACS y RITE'),
     mk('taquillas-bellum', 'Taquillas + cabinas sanitarias vestuarios (Bellum Logistics)', 'vestuarios', 15681.50, 'EUR', 21, 'pending', 'Taquillas 9.628,38 + cabinas 5.053,12 + envío 1.000 €. Pago 50% firma / 50% antes de envío'),
     mk('pulir-suelo', 'Suelo (pavimento gimnasio)', 'suelo', 14049.59, 'EUR', 21, 'pending', 'Presupuesto'),
     mk('pintura-gral', 'Pintura (paredes + fachada)', 'pintura', 4132.23, 'EUR', 21, 'pending', 'El suelo va acabado, no se pinta'),
@@ -451,8 +451,7 @@ function seedItems() {
     mk('extra-transporte', 'Transporte de materiales (Larriba)', 'transporte', 1185.12, 'EUR', 21, 'paid', 'Ya pagado (banco)'),
     mk('extra-electrica', 'Acometida eléctrica (EDistribución)', 'electrica', 1650.60, 'EUR', 21, 'paid', 'Ya pagado (banco)'),
     mk('extra-impuestos', 'Impuestos y comisiones bancarias', 'otros', 1064.08, 'EUR', 0, 'paid', 'Tributos y gastos de banco'),
-    mk('imprevistos', 'Imprevistos y partidas por definir', 'otros', 20661.16, 'EUR', 21, 'pending', 'Colchón: mobiliario sala, audio, señalización, licencia apertura, seguros, red/cámaras, aprovisionamiento… Ajustar'),
-    mk('techo-rf', 'Techo RF120: placa RF + lana de roca (56 m, sellado)', 'incendios', 16528.93, 'EUR', 21, 'pending', 'Estimación 20.000 € IVA incl. — sistema certificado RF120, pendiente presupuesto real'),
+    mk('techo-rf', 'Techo RF120: placa RF + lana de roca (56 m, sellado)', 'incendios', 3305.79, 'EUR', 21, 'pending', '4.000 € IVA incl. — lo ejecuta el promotor (material)'),
   ];
 }
 
@@ -619,6 +618,21 @@ function load() {
     const b = { 'pulir-suelo': 14049.59, 'tornos': 7438.02, 'pintura-gral': 4132.23, 'accesibilidad': 9917.36, 'lm-pendiente': 11570.25, 'puerta-qr': 6611.57, 'imprevistos': 20661.16 };
     Object.entries(b).forEach(([sk, v]) => { const it = state.items.find(i => i.sk === sk); if (it) it.base = v; });
     state.migIvaIncl = true;
+    migrated = true;
+  }
+
+  // Migración puntual (al final): Carulla 100% sin IVA, fuera colchón de
+  // imprevistos y techo RF lo ejecuta el promotor (4.000 € material).
+  if (!state.migV3) {
+    ['carulla-pend-iva', 'carulla-pend-siniva'].forEach(sk => {
+      const it = state.items.find(i => i.sk === sk);
+      if (it) { it.iva = 0; if (it.concepto.indexOf('sin IVA') === -1) it.concepto += ' (sin IVA)'; it.nota = 'Sin IVA. Climatización, agua, ACS y RITE'; }
+    });
+    state.items = state.items.filter(i => i.sk !== 'imprevistos');
+    state.seededKeys = state.seededKeys.filter(k => k !== 'imprevistos');
+    const tr = state.items.find(i => i.sk === 'techo-rf');
+    if (tr) { tr.base = 3305.79; tr.iva = 21; tr.nota = '4.000 € IVA incl. — lo ejecuta el promotor (material)'; }
+    state.migV3 = true;
     migrated = true;
   }
 
