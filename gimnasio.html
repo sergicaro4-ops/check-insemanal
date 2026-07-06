@@ -167,7 +167,7 @@ function seedItems(){
     mk('rotol-legion','Rótulo LEGION letras corpóreas + LED','rotulos',6748.00,'EUR',21,'pending'),
     mk('rotol-xixo','Lonas / decoración La Xixo','rotulos',388.10,'EUR',21,'pending','A nombre de La Xixo — confirmar'),
     mk('carulla-pagado','Carulla (clima+agua+ACS+RITE) — pagado 25%','clima',23600.51,'EUR',21,'paid','Incluye climatización, agua, ACS y renovación aire RITE. 25% = 28.556,62 € pagado'),
-    mk('carulla-pend-iva','Carulla (clima+agua+ACS+RITE) — pendiente 35% (sin IVA)','clima',33040.72,'EUR',0,'pending','Sin IVA. Climatización, agua, ACS y RITE'),
+    mk('carulla-pend-iva','Carulla (clima+agua+ACS+RITE) — pendiente 35% (con IVA)','clima',33040.72,'EUR',21,'pending','Con IVA. Climatización, agua, ACS y RITE'),
     mk('carulla-pend-siniva','Carulla (clima+agua+ACS+RITE) — pendiente 40% (sin IVA)','clima',37760.82,'EUR',0,'pending','Sin IVA. Climatización, agua, ACS y RITE'),
     mk('taquillas-bellum','Taquillas + cabinas sanitarias (Bellum Logistics)','vestuarios',15681.50,'EUR',21,'pending'),
     mk('pulir-suelo','Suelo (pavimento gimnasio)','suelo',14049.59,'EUR',21,'pending','17.000 € IVA incl.'),
@@ -302,7 +302,7 @@ function load(){
   }
   // Migración puntual: Carulla 100% sin IVA (pendiente), quitar colchón, techo 4.000 €.
   if(!localStorage.getItem('migV3')){
-    ['carulla-pend-iva','carulla-pend-siniva'].forEach(sk=>{const it=R.items.find(i=>i.sk===sk);if(it)it.iva=0;});
+    ['carulla-pend-siniva'].forEach(sk=>{const it=R.items.find(i=>i.sk===sk);if(it)it.iva=0;});
     R.items=R.items.filter(i=>i.sk!=='imprevistos');
     const tr=R.items.find(i=>i.sk==='techo-rf'); if(tr){tr.base=3305.79;tr.nota='4.000 € IVA incl. — lo ejecuta el promotor (material)';}
     localStorage.setItem('migV3','1'); saveR();
@@ -314,6 +314,10 @@ function load(){
   if(!localStorage.getItem('migV5')){
     if(!R.items.some(i=>i.sk==='espejos')) R.items.push(...seedItems().filter(i=>i.sk==='espejos'));
     localStorage.setItem('migV5','1'); saveR();
+  }
+  if(!localStorage.getItem('migV6')){
+    const ci=R.items.find(i=>i.sk==='carulla-pend-iva'); if(ci){ci.iva=21;ci.concepto='Carulla (clima+agua+ACS+RITE) — pendiente 35% (con IVA)';ci.nota='Con IVA. Climatización, agua, ACS y RITE';}
+    localStorage.setItem('migV6','1'); saveR();
   }
   // Migración puntual: quitar vidrios recepción (Franquet Barrau).
   if(!localStorage.getItem('migVidres')){

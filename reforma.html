@@ -434,7 +434,7 @@ function seedItems() {
     mk('rotol-legion', 'Rótulo LEGION letras corpóreas + LED (Franquet Barrau ENP261169)', 'rotulos', 6748.00, 'EUR', 21, 'pending'),
     mk('rotol-xixo', 'Lonas / decoración La Xixo (Franquet Barrau FBP261143)', 'rotulos', 388.10, 'EUR', 21, 'pending', 'Presupuesto a nombre de La Xixo — confirmar si es del gimnasio'),
     mk('carulla-pagado', 'Carulla (clima+agua+ACS+RITE) — pagado 25%', 'clima', 23600.51, 'EUR', 21, 'paid', 'Incluye climatización, agua, ACS y renovación aire RITE. 25% = 28.556,62 € pagado'),
-    mk('carulla-pend-iva', 'Carulla (clima+agua+ACS+RITE) — pendiente 35% (sin IVA)', 'clima', 33040.72, 'EUR', 0, 'pending', 'Sin IVA. Climatización, agua, ACS y RITE'),
+    mk('carulla-pend-iva', 'Carulla (clima+agua+ACS+RITE) — pendiente 35% (con IVA)', 'clima', 33040.72, 'EUR', 21, 'pending', 'Con IVA. Climatización, agua, ACS y RITE'),
     mk('carulla-pend-siniva', 'Carulla (clima+agua+ACS+RITE) — pendiente 40% (sin IVA)', 'clima', 37760.82, 'EUR', 0, 'pending', 'Sin IVA. Climatización, agua, ACS y RITE'),
     mk('taquillas-bellum', 'Taquillas + cabinas sanitarias vestuarios (Bellum Logistics)', 'vestuarios', 15681.50, 'EUR', 21, 'pending', 'Taquillas 9.628,38 + cabinas 5.053,12 + envío 1.000 €. Pago 50% firma / 50% antes de envío'),
     mk('pulir-suelo', 'Suelo (pavimento gimnasio)', 'suelo', 14049.59, 'EUR', 21, 'pending', 'Presupuesto'),
@@ -625,7 +625,7 @@ function load() {
   // Migración puntual (al final): Carulla 100% sin IVA, fuera colchón de
   // imprevistos y techo RF lo ejecuta el promotor (4.000 € material).
   if (!state.migV3) {
-    ['carulla-pend-iva', 'carulla-pend-siniva'].forEach(sk => {
+    ['carulla-pend-siniva'].forEach(sk => {
       const it = state.items.find(i => i.sk === sk);
       if (it) { it.iva = 0; if (it.concepto.indexOf('sin IVA') === -1) it.concepto += ' (sin IVA)'; it.nota = 'Sin IVA. Climatización, agua, ACS y RITE'; }
     });
@@ -642,6 +642,14 @@ function load() {
     const lm = state.items.find(i => i.sk === 'lm-pendiente');
     if (lm) { lm.base = 16097.78; lm.iva = 21; lm.concepto = 'Luis Miguel (tabiques + techo vestuarios)'; lm.nota = 'Presupuesto (sin IVA +21%): refuerzos pino 440 + tabique sala poses 2.135 + entrada recepción 1.895,13 + ocultación agua/luz 3.104,11 + techo vestuarios 8.523,54'; }
     state.migV4 = true;
+    migrated = true;
+  }
+
+  // Migración puntual: Carulla 35% vuelve a llevar IVA (solo el 40% sin IVA).
+  if (!state.migV6) {
+    const ci = state.items.find(i => i.sk === 'carulla-pend-iva');
+    if (ci) { ci.iva = 21; ci.concepto = 'Carulla (clima+agua+ACS+RITE) — pendiente 35% (con IVA)'; ci.nota = 'Con IVA. Climatización, agua, ACS y RITE'; }
+    state.migV6 = true;
     migrated = true;
   }
 
