@@ -175,7 +175,7 @@ function seedItems(){
     mk('tornos','Tornos de acceso','acceso',7438.02,'EUR',21,'pending','9.000 € IVA incl.'),
     mk('puerta-qr','Puerta de cristal exterior con lector QR','acceso',6611.57,'EUR',21,'pending','≈ 8.000 € IVA incl. (estimación)'),
     mk('accesibilidad','Elevador para minusválidos','obra',9917.36,'EUR',21,'pending','≈ 12.000 € IVA incl. (orientativo)'),
-    mk('lm-pendiente','Luis Miguel (techo vestuarios + paredes)','obra',11570.25,'EUR',21,'pending','14.000 € IVA incl.: techo vestuarios 9.000 + separatoria 3.000 + frontal 2.000'),
+    mk('lm-pendiente','Luis Miguel (tabiques + techo vestuarios)','obra',16097.78,'EUR',21,'pending','Presupuesto (sin IVA +21%): refuerzos pino 440 + tabique sala poses 2.135 + entrada recepción 1.895,13 + ocultación agua/luz 3.104,11 + techo vestuarios 8.523,54'),
     mk('transporte','Transporte marítimo + aduana equipos (estimado)','transporte',30000,'EUR',0,'pending','Estimación ≈ 30.000 €'),
     mk('extra-obra','Obra y mano de obra ya ejecutada (Rubiralta y otros)','obra',37580.20,'EUR',21,'paid','Demolición, pladur, material, limpieza… ya pagado (banco)'),
     mk('extra-otros','Residuos, alquileres, web, software, fianza local','otros',15111.74,'EUR',21,'paid','Ya pagado (banco)'),
@@ -305,6 +305,10 @@ function load(){
     R.items=R.items.filter(i=>i.sk!=='imprevistos');
     const tr=R.items.find(i=>i.sk==='techo-rf'); if(tr){tr.base=3305.79;tr.nota='4.000 € IVA incl. — lo ejecuta el promotor (material)';}
     localStorage.setItem('migV3','1'); saveR();
+  }
+  if(!localStorage.getItem('migV4')){
+    const lm=R.items.find(i=>i.sk==='lm-pendiente'); if(lm){lm.base=16097.78;lm.iva=21;lm.concepto='Luis Miguel (tabiques + techo vestuarios)';lm.nota='Presupuesto (sin IVA +21%): refuerzos pino 440 + tabique sala poses 2.135 + entrada recepción 1.895,13 + ocultación agua/luz 3.104,11 + techo vestuarios 8.523,54';}
+    localStorage.setItem('migV4','1'); saveR();
   }
   // Migración puntual: quitar vidrios recepción (Franquet Barrau).
   if(!localStorage.getItem('migVidres')){

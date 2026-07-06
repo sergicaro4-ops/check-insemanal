@@ -442,7 +442,7 @@ function seedItems() {
     mk('tornos', 'Tornos de acceso', 'acceso', 7438.02, 'EUR', 21, 'pending', 'Presupuesto'),
     mk('puerta-qr', 'Puerta de cristal exterior con lector QR', 'acceso', 6611.57, 'EUR', 21, 'pending', 'ESTIMACIÓN prudente — pendiente presupuesto firme'),
     mk('accesibilidad', 'Elevador para minusválidos', 'obra', 9917.36, 'EUR', 21, 'pending', '≈ 12.000 € (orientativo)'),
-    mk('lm-pendiente', 'Luis Miguel (techo vestuarios + paredes)', 'obra', 11570.25, 'EUR', 21, 'pending', 'Techo vestuarios c/ mano de obra 9.000 + pared separatoria 3.000 + pared frontal 2.000'),
+    mk('lm-pendiente', 'Luis Miguel (tabiques + techo vestuarios)', 'obra', 16097.78, 'EUR', 21, 'pending', 'Presupuesto (sin IVA +21%): refuerzos pino 440 + tabique sala poses 2.135 + entrada recepción 1.895,13 + ocultación agua/luz 3.104,11 + techo vestuarios 8.523,54'),
     mk('transporte', 'Transporte marítimo + aduana equipos (estimado)', 'transporte', 30000, 'EUR', 0, 'pending', 'Estimación aduana + transporte ≈ 30.000 €'),
     mk('extra-obra', 'Obra y mano de obra ya ejecutada (Rubiralta y otros)', 'obra', 37580.20, 'EUR', 21, 'paid', 'Demolición, pladur, material, limpieza… ya pagado (banco)'),
     mk('extra-otros', 'Residuos, alquileres, web, software, fianza local', 'otros', 15111.74, 'EUR', 21, 'paid', 'Ya pagado (banco)'),
@@ -633,6 +633,14 @@ function load() {
     const tr = state.items.find(i => i.sk === 'techo-rf');
     if (tr) { tr.base = 3305.79; tr.iva = 21; tr.nota = '4.000 € IVA incl. — lo ejecuta el promotor (material)'; }
     state.migV3 = true;
+    migrated = true;
+  }
+
+  // Migración puntual: presupuesto real de Luis Miguel (16.097,78 € sin IVA).
+  if (!state.migV4) {
+    const lm = state.items.find(i => i.sk === 'lm-pendiente');
+    if (lm) { lm.base = 16097.78; lm.iva = 21; lm.concepto = 'Luis Miguel (tabiques + techo vestuarios)'; lm.nota = 'Presupuesto (sin IVA +21%): refuerzos pino 440 + tabique sala poses 2.135 + entrada recepción 1.895,13 + ocultación agua/luz 3.104,11 + techo vestuarios 8.523,54'; }
+    state.migV4 = true;
     migrated = true;
   }
 
