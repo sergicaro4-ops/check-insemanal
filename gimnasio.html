@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Legion Club · Control del Gimnasio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  :root {
+    --bg:#09090f; --bg2:#111118; --bg3:#16161f;
+    --border:rgba(255,255,255,0.08); --bb:rgba(255,255,255,0.16);
+    --text:#f0f0f8; --muted:#8888aa; --dim:#55556a;
+    --c1:#6366f1; --c2:#8b5cf6; --c3:#f59e0b; --c4:#10b981; --c5:#3b82f6; --c6:#ec4899; --c7:#f97316;
+    --gold:#d4a838; --green:#10b981; --amber:#f59e0b; --red:#ef4444;
+    --radius:16px; --rsm:10px;
+  }
+  body { font-family:'Inter',sans-serif; background:
+    radial-gradient(1100px 560px at 80% -10%, rgba(99,102,241,0.10), transparent),
+    radial-gradient(800px 460px at -10% 8%, rgba(16,185,129,0.07), transparent), var(--bg);
+    color:var(--text); min-height:100vh; }
+
+  /* HEADER + TABS */
+  .top { position:sticky; top:0; z-index:50; background:rgba(9,9,15,0.88); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); }
+  .top-inner { max-width:1040px; margin:0 auto; padding:14px 18px 0; }
+  .brand { display:flex; align-items:center; gap:10px; font-family:'Space Grotesk',sans-serif; font-weight:700; letter-spacing:0.14em; font-size:15px; margin-bottom:12px; }
+  .brand .dot { width:9px; height:9px; border-radius:50%; background:var(--gold); box-shadow:0 0 12px var(--gold); }
+  .tabs { display:flex; gap:4px; overflow-x:auto; }
+  .tab-btn { flex-shrink:0; font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:600; padding:11px 16px; border:none; background:none; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; }
+  .tab-btn:hover { color:var(--text); }
+  .tab-btn.active { color:var(--text); border-bottom-color:var(--gold); }
+
+  main { max-width:1040px; margin:0 auto; padding:24px 18px 80px; }
+  .tab { display:none; animation:fade .3s ease; }
+  .tab.active { display:block; }
+  @keyframes fade { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:none;} }
+
+  h1 { font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:700; margin-bottom:4px; }
+  .sub { color:var(--muted); font-size:14px; margin-bottom:22px; line-height:1.55; }
+  h3.bt { font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:700; margin:24px 0 12px; }
+
+  .card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:18px; margin-bottom:14px; }
+  .label { font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:8px; }
+  .grid { display:grid; gap:12px; }
+  .g3 { grid-template-columns:repeat(3,1fr); } .g4 { grid-template-columns:repeat(4,1fr); }
+  @media (max-width:720px){ .g3,.g4{ grid-template-columns:repeat(2,1fr); } }
+
+  .num-in { background:var(--bg3); border:1px solid var(--border); border-radius:var(--rsm); padding:11px 13px; font-family:'Space Grotesk',sans-serif; font-weight:700; color:var(--text); outline:none; width:100%; -moz-appearance:textfield; font-size:18px; }
+  .num-in:focus { border-color:var(--c4); box-shadow:0 0 0 3px color-mix(in srgb,var(--c4) 15%,transparent); }
+  .num-in::-webkit-outer-spin-button,.num-in::-webkit-inner-spin-button{-webkit-appearance:none;}
+  input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;}
+  .hint { font-size:11px; color:var(--dim); margin-top:6px; }
+
+  .kpi { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; }
+  .kpi .l { font-family:'Space Grotesk',sans-serif; font-size:10px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+  .kpi .v { font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:700; }
+
+  .btn { font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:600; padding:10px 16px; border-radius:var(--rsm); border:1px solid var(--bb); background:var(--bg3); color:var(--text); cursor:pointer; }
+  .btn.go { background:linear-gradient(135deg,var(--c4),var(--c5)); border:none; }
+  .btn.gold { background:linear-gradient(135deg,var(--gold),#f0c860); border:none; color:#1a1405; }
+  .btn:hover { filter:brightness(1.08); }
+
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th { text-align:left; font-family:'Space Grotesk',sans-serif; font-size:10px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:var(--dim); padding:10px; border-bottom:1px solid var(--bb); white-space:nowrap; }
+  th.n,td.n { text-align:right; font-family:'Space Grotesk',sans-serif; }
+  td { padding:9px 10px; border-bottom:1px solid var(--border); vertical-align:middle; }
+  .tbl-wrap { overflow-x:auto; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); }
+  table.min { min-width:680px; }
+  .rsel,.rnum { background:var(--bg3); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:12px; padding:6px 8px; outline:none; }
+  .rnum { font-family:'Space Grotesk',sans-serif; font-weight:600; text-align:right; width:96px; -moz-appearance:textfield; }
+  .rnum.iva { width:54px; }
+  .note { font-size:11px; color:var(--dim); margin-top:3px; }
+  .pill { cursor:pointer; font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:700; padding:4px 10px; border-radius:14px; border:1px solid; white-space:nowrap; }
+  .pill.paid{ color:var(--green); border-color:color-mix(in srgb,var(--green) 45%,transparent); background:color-mix(in srgb,var(--green) 12%,transparent); }
+  .pill.pend{ color:var(--c7); border-color:color-mix(in srgb,var(--c7) 45%,transparent); background:color-mix(in srgb,var(--c7) 12%,transparent); }
+  .del { background:none; border:none; color:var(--dim); cursor:pointer; font-size:15px; }
+  .del:hover { color:var(--red); }
+  .addgrid { display:grid; grid-template-columns:2fr 1.2fr .8fr .7fr .7fr auto; gap:8px; align-items:end; }
+  @media (max-width:760px){ .addgrid{ grid-template-columns:1fr 1fr; } }
+  .fld label { font-size:10px; text-transform:uppercase; letter-spacing:0.04em; color:var(--muted); font-family:'Space Grotesk',sans-serif; font-weight:600; display:block; margin-bottom:5px; }
+  .fld input,.fld select { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:var(--rsm); padding:10px; color:var(--text); font-size:13px; outline:none; }
+
+  .bars .row { display:grid; grid-template-columns:160px 1fr 110px; gap:10px; align-items:center; margin-bottom:8px; font-size:13px; }
+  @media (max-width:600px){ .bars .row{ grid-template-columns:110px 1fr 88px; } }
+  .track { height:13px; background:var(--bg3); border-radius:7px; overflow:hidden; border:1px solid var(--border); }
+  .fill { height:100%; border-radius:7px; }
+  .bamt { text-align:right; font-family:'Space Grotesk',sans-serif; font-weight:700; }
+  .bamt small { color:var(--dim); font-weight:400; }
+
+  .verdict { border-radius:var(--radius); padding:20px; margin-bottom:16px; border:1px solid; }
+  .verdict.ok{ background:color-mix(in srgb,var(--green) 12%,var(--bg2)); border-color:color-mix(in srgb,var(--green) 35%,transparent);}
+  .verdict.warn{ background:color-mix(in srgb,var(--amber) 12%,var(--bg2)); border-color:color-mix(in srgb,var(--amber) 35%,transparent);}
+  .verdict.bad{ background:color-mix(in srgb,var(--red) 12%,var(--bg2)); border-color:color-mix(in srgb,var(--red) 35%,transparent);}
+  .verdict .vt { font-family:'Space Grotesk',sans-serif; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:7px; }
+  .verdict .vh { font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:700; margin-bottom:6px; }
+  .verdict.ok .vh{color:#6ee7b7;} .verdict.warn .vh{color:#fcd34d;} .verdict.bad .vh{color:#fca5a5;}
+  .verdict p { font-size:13px; color:var(--muted); line-height:1.55; }
+
+  .tag { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600; padding:3px 9px; border-radius:14px; background:var(--bg3); border:1px solid var(--bb); color:var(--muted); }
+  .disc { font-size:11.5px; color:var(--dim); background:var(--bg2); border:1px solid var(--border); border-radius:var(--rsm); padding:12px 14px; line-height:1.5; }
+
+  @media print {
+    .top{ display:none; } .tab{ display:none !important; } .tab.printing{ display:block !important; }
+    body{ background:#fff; color:#000; } .card,.kpi,.verdict,.tbl-wrap,.disc{ background:#fff; border-color:#ccc; }
+    main{ padding:0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-inner">
+    <div class="brand"><span class="dot"></span> LEGION CLUB · Control</div>
+    <div class="tabs" id="tabs">
+      <button class="tab-btn active" data-tab="presupuesto">📋 Presupuesto</button>
+      <button class="tab-btn" data-tab="banco">🏦 Banco</button>
+      <button class="tab-btn" data-tab="resumen">📊 Resumen</button>
+      <button class="tab-btn" data-tab="socios">🤝 Socios</button>
+      <button class="tab-btn" data-tab="dossier">🚀 Dossier</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <section class="tab active" id="t-presupuesto"></section>
+  <section class="tab" id="t-banco"></section>
+  <section class="tab" id="t-resumen"></section>
+  <section class="tab" id="t-socios"></section>
+  <section class="tab" id="t-dossier"></section>
+</main>
+
+<script>
+// ══════════ DATOS COMPARTIDOS ══════════
+const CATEGORIES = [
+  {key:'obra',label:'Obra / albañilería',icon:'🧱',color:'#f97316'},
+  {key:'electrica',label:'Electricidad',icon:'💡',color:'#f59e0b'},
+  {key:'incendios',label:'Contraincendios / seguridad',icon:'🧯',color:'#ef4444'},
+  {key:'fontaneria',label:'Fontanería / agua',icon:'🚰',color:'#3b82f6'},
+  {key:'clima',label:'Climatización / aire',icon:'❄️',color:'#06b6d4'},
+  {key:'suelo',label:'Suelo / pavimento',icon:'🟫',color:'#a16207'},
+  {key:'pintura',label:'Pintura',icon:'🎨',color:'#ec4899'},
+  {key:'vestuarios',label:'Vestuarios / baños',icon:'🚿',color:'#14b8a6'},
+  {key:'maquinaria',label:'Maquinaria / pesas',icon:'🏋️',color:'#6366f1'},
+  {key:'mobiliario',label:'Mobiliario / recepción',icon:'🪑',color:'#8b5cf6'},
+  {key:'rotulos',label:'Rótulos / imagen',icon:'🪧',color:'#d946ef'},
+  {key:'acceso',label:'Control de acceso',icon:'🎫',color:'#22c55e'},
+  {key:'licencias',label:'Licencias / proyecto',icon:'📄',color:'#64748b'},
+  {key:'transporte',label:'Transporte / aduana',icon:'🚢',color:'#0ea5e9'},
+  {key:'otros',label:'Otros',icon:'📦',color:'#94a3b8'},
+];
+const CAT_MAP = Object.fromEntries(CATEGORIES.map(c=>[c.key,c]));
+const uid = () => 's'+Math.floor(performance.now()*1000)+'-'+(seedCounter++);
+let seedCounter = 0;
+
+function seedItems(){
+  const mk=(sk,concepto,categoria,base,currency,iva,estado,nota)=>({id:uid(),sk,concepto,categoria,base,currency,iva,estado,nota:nota||''});
+  return [
+    mk('maq-pagado','Maquinaria HSE (76.750 $ FOB) — pagado','maquinaria',55082.18,'EUR',21,'paid','66.649,44 € en 2 transferencias (banco)'),
+    mk('maq-pend','Maquinaria HSE — IVA importación / pendiente','maquinaria',15527.82,'EUR',21,'pending','Al despacho de aduana'),
+    mk('elec-gimnas-pagado','Instalación eléctrica gimnasio (Patrick) — pagado a cuenta','electrica',6923.02,'EUR',21,'paid','8.376,86 € pagados por banco'),
+    mk('elec-gimnas-pend','Instalación eléctrica gimnasio (Patrick) — pendiente','electrica',27692.10,'EUR',21,'pending'),
+    mk('elec-incendi','Detección de incendios (central + 37 detectores)','incendios',9611.46,'EUR',21,'pending'),
+    mk('elec-comptadors','Suministro caja de contadores (TMF-10 + armario)','electrica',2252.90,'EUR',21,'pending'),
+    mk('obramat-201','Material baños/vestuarios/suelo/iluminación (Obramat)','vestuarios',11599.04,'EUR',21,'pending','Total + 21% IVA (base) 14.026,70 €'),
+    mk('rotol-legion','Rótulo LEGION letras corpóreas + LED','rotulos',6748.00,'EUR',21,'pending'),
+    mk('rotol-xixo','Lonas / decoración La Xixo','rotulos',388.10,'EUR',21,'pending','A nombre de La Xixo — confirmar'),
+    mk('carulla-pagado','Carulla (clima+agua+ACS+RITE) — pagado 25%','clima',23600.51,'EUR',21,'paid','Incluye climatización, agua, ACS y renovación aire RITE. 25% = 28.556,62 € pagado'),
+    mk('carulla-pend-iva','Carulla (clima+agua+ACS+RITE) — pendiente 35% (con IVA)','clima',33040.72,'EUR',21,'pending','Con IVA. Climatización, agua, ACS y RITE'),
+    mk('carulla-pend-siniva','Carulla (clima+agua+ACS+RITE) — pendiente 40% (sin IVA)','clima',37760.82,'EUR',0,'pending','Sin IVA. Climatización, agua, ACS y RITE'),
+    mk('taquillas-bellum','Taquillas + cabinas sanitarias (Bellum Logistics)','vestuarios',15681.50,'EUR',21,'pending'),
+    mk('pulir-suelo','Suelo (pavimento gimnasio)','suelo',17000,'EUR',21,'pending','17.000 € + 21% IVA (base)'),
+    mk('pintura-gral','Pintura (paredes + fachada)','pintura',5000,'EUR',21,'pending','5.000 € + 21% IVA (base) (el suelo va acabado)'),
+    mk('tornos','Tornos de acceso','acceso',9000,'EUR',21,'pending','9.000 € + 21% IVA (base)'),
+    mk('puerta-qr','Puerta de cristal exterior con lector QR','acceso',8000,'EUR',21,'pending','≈ 8.000 € + 21% IVA (base) (estimación)'),
+    mk('accesibilidad','Elevador para minusválidos','obra',12000,'EUR',21,'pending','≈ 12.000 € + 21% IVA (base) (orientativo)'),
+    mk('lm-pendiente','Luis Miguel (tabiques + techo vestuarios)','obra',16097.78,'EUR',21,'pending','Presupuesto (sin IVA +21%): refuerzos pino 440 + tabique sala poses 2.135 + entrada recepción 1.895,13 + ocultación agua/luz 3.104,11 + techo vestuarios 8.523,54'),
+    mk('espejos','Espejos sala (pared entrenamiento)','obra',5500,'EUR',21,'pending','5.500 € + 21% IVA (base)'),
+    mk('transporte','Transporte marítimo + aduana equipos (estimado)','transporte',30000,'EUR',0,'pending','Estimación ≈ 30.000 €'),
+    mk('extra-obra','Obra y mano de obra ya ejecutada (Rubiralta y otros)','obra',37580.20,'EUR',21,'paid','Demolición, pladur, material, limpieza… ya pagado (banco)'),
+    mk('extra-otros','Residuos, alquileres, web, software, fianza local','otros',15111.74,'EUR',21,'paid','Ya pagado (banco)'),
+    mk('extra-incendios','Ignifugación estructura R-90 (CAT FOC)','incendios',5450.00,'EUR',21,'paid','Ya pagado (banco)'),
+    mk('extra-fontaneria','Agua y contador de obra (varios)','fontaneria',1917.36,'EUR',21,'paid','Ya pagado (banco)'),
+    mk('extra-transporte','Transporte de materiales (Larriba)','transporte',1185.12,'EUR',21,'paid','Ya pagado (banco)'),
+    mk('extra-electrica','Acometida eléctrica (EDistribución)','electrica',1650.60,'EUR',21,'paid','Ya pagado (banco)'),
+    mk('extra-impuestos','Impuestos y comisiones bancarias','otros',1064.08,'EUR',0,'paid','Tributos y gastos de banco'),
+    mk('techo-rf','Techo RF120: placa RF + lana de roca (56 m, sellado)','incendios',4000,'EUR',21,'pending','4.000 € + 21% IVA (base) — lo ejecuta el promotor (material)'),
+  ];
+}
+
+function seedMov(){
+  const raw=[
+    ['2026-06-17','COMACE IMPORT S.L.','Alquiler pulidora',-2058.21,'gasto','otros'],
+    ['2026-06-11','SIRA, S.L.U.','Factura 2026043',-365.00,'gasto','otros'],
+    ['2026-06-08','CAT FOC','Repaso ignifugación estructura R-90',-4616.15,'gasto','incendios'],
+    ['2026-06-08','Luis Miguel Rubiralta','Tabiques de pladur vestuario',-10000.00,'gasto','obra'],
+    ['2026-06-08','BBVA','Comisión uso token',-2.16,'impuesto','otros'],
+    ['2026-06-03','Polar Fluid','Aigua dipòsit',-134.00,'gasto','fontaneria'],
+    ['2026-06-03','MACOCERSA','Formigó',-571.73,'gasto','obra'],
+    ['2026-06-02','Josep Selga Brunet','Adeudo (recibo domiciliado)',-278.81,'gasto','otros'],
+    ['2026-05-29','Vilà Vila Serveis Ambientals','Residus',-85.00,'gasto','otros'],
+    ['2026-05-29','Vilà Vila Serveis Ambientals','Residus',-150.00,'gasto','otros'],
+    ['2026-05-28','SIRA SLU','Página web LegionClub.es',-935.00,'gasto','otros'],
+    ['2026-05-28','HPRATGINESTOS','Runa',-744.14,'gasto','otros'],
+    ['2026-05-28','Luis Miguel Rubiralta','Aplacado de pladur',-5324.00,'gasto','obra'],
+    ['2026-05-27','Caro Folch Sergi','Préstamo Sergi Caro',20000.00,'aportacion','otros'],
+    ['2026-05-27','Carulla Energia','Pressupost Caro Legion SL',-28556.62,'gasto','electrica'],
+    ['2026-05-27','Caro Folch Sergi','Préstamo Sergi Caro Folch',30000.00,'aportacion','otros'],
+    ['2026-05-26','Antonio Larriba Egea','Transporte de maquinaria y materiales',-1434.00,'gasto','transporte'],
+    ['2026-05-21','Adrisa Aqua S.L.','Recargar agua',-134.19,'gasto','fontaneria'],
+    ['2026-05-21','MACOCERSA S.L.','Material de obra',-922.58,'gasto','obra'],
+    ['2026-05-20','Polar Fluid SL','Subministrament aigua per obres',-134.00,'gasto','fontaneria'],
+    ['2026-05-20','Caro Folch Arnau','Préstamo Arnau Caro',30000.00,'aportacion','otros'],
+    ['2026-05-19','Daunis S.A.','Estación automática GEO 500',-3144.49,'gasto','otros'],
+    ['2026-05-18','Patrick Oviedo Núñez','Proyecto electricidad',-8376.86,'gasto','electrica'],
+    ['2026-05-14','Joysat','Lloguer plataformes',-1051.49,'gasto','otros'],
+    ['2026-05-13','CAT FOC','Repaso ignifugación R-90',-1978.35,'gasto','incendios'],
+    ['2026-05-13','Aigües de Manresa','Comptador obras',-1917.81,'gasto','fontaneria'],
+    ['2026-05-04','Josep Selga Brunet','Adeudo (recibo domiciliado)',-278.81,'gasto','otros'],
+    ['2026-04-16','HPRATGINESTOS','Entrega y recogida de residuos',-1207.23,'gasto','otros'],
+    ['2026-04-09','HSE Fitness Equipment','Maquinaria (transferencia en divisas)',-46908.60,'gasto','maquinaria'],
+    ['2026-04-02','BBVA','Comisión alta TPV',-121.00,'impuesto','otros'],
+    ['2026-04-01','Josep Selga Brunet','Adeudo (recibo domiciliado)',-278.81,'gasto','otros'],
+    ['2026-03-20','HPRATGINESTOS','Servicio residuos',-774.65,'gasto','otros'],
+    ['2026-03-20','Raul Mayor Garcia','Trabajos',-2524.79,'gasto','obra'],
+    ['2026-03-13','Luis Miguel Rubiralta','Trabajos varios',-1633.50,'gasto','obra'],
+    ['2026-03-11','Luis Miguel Rubiralta','Material obras La Especialista',-5630.32,'gasto','obra'],
+    ['2026-03-09','Hacienda','Pago de impuestos/tributos',-293.56,'impuesto','otros'],
+    ['2026-03-09','Hacienda','Pago de impuestos/tributos',-293.56,'impuesto','otros'],
+    ['2026-03-06','Luis Miguel Rubiralta','Trabajos',-686.68,'gasto','obra'],
+    ['2026-03-02','Jose M. Cambre Soler','Horas reparación y consumibles',-3267.00,'gasto','obra'],
+    ['2026-03-02','Remi Rent S.L.','Adeudo alquiler material',-239.58,'gasto','otros'],
+    ['2026-02-23','Luis Miguel Rubiralta','Limpieza general',-1663.75,'gasto','obra'],
+    ['2026-02-17','EDistribución Redes Digitales','Conexión / acometida',-1997.23,'gasto','electrica'],
+    ['2026-02-17','Marta Folch Gorina','Préstamo',10000.00,'aportacion','otros'],
+    ['2026-02-16','Luis Miguel Rubiralta','IVA',-456.75,'gasto','obra'],
+    ['2026-02-16','Luis Miguel Rubiralta','Trabajos',-2175.00,'gasto','obra'],
+    ['2026-02-16','Marta Folch Gorina','Préstamo',15000.00,'aportacion','otros'],
+    ['2026-02-16','Marta Folch Gorina','Préstamo',15000.00,'aportacion','otros'],
+    ['2026-02-12','Hacienda','Pago de impuestos/tributos',-353.80,'impuesto','otros'],
+    ['2026-02-10','HSE Fitness Equipment','Maquinaria (transferencia en divisas)',-19740.84,'gasto','maquinaria'],
+    ['2026-02-09','Luis Miguel Rubiralta','Tareas varias',-1796.85,'gasto','obra'],
+    ['2026-02-09','Serveis intel·ligència robòtica','Software Keygo',-3015.00,'gasto','otros'],
+    ['2026-02-03','Avinguda Tudela Lloguers C.B.','Fiança Incasol (alquiler local)',-5200.00,'gasto','otros'],
+    ['2026-02-02','Josep Selga Brunet','Adeudo (recibo domiciliado)',-29.04,'gasto','otros'],
+    ['2026-01-29','Luis Miguel Rubiralta','Retirada de planché',-1815.00,'gasto','obra'],
+    ['2026-01-27','Luis Miguel Rubiralta','Sacar techos, tabiques e instalaciones',-1243.28,'gasto','obra'],
+    ['2026-01-27','Marta Folch Gorina','Préstamo',10000.00,'aportacion','otros'],
+    ['2026-01-27','Marta Folch Gorina','Préstamo',15000.00,'aportacion','otros'],
+    ['2026-01-23','Caro Folch Sergi','Préstamo Sergi Caro',10000.00,'aportacion','otros'],
+    ['2026-01-22','Marta Folch Gorina','Préstamo',15000.00,'aportacion','otros'],
+    ['2026-01-22','Caro Folch Sergi','Préstamo',30000.00,'aportacion','otros'],
+    ['2026-01-22','Caro Folch Oscar','Préstamo',10000.00,'aportacion','otros'],
+    ['2026-01-21','Vilà Vila Serveis Ambientals','Contenedor de runa limpia',-186.15,'gasto','otros'],
+    ['2026-01-20','Luis Miguel Rubiralta','Desmontaje de techo e instalaciones',-2196.15,'gasto','obra'],
+    ['2026-01-20','Caro Folch Oscar','Préstamo',30000.00,'aportacion','otros'],
+    ['2026-01-12','Vilà Vila Serveis Ambientals','Portada/retirada/gestión runa',-322.01,'gasto','otros'],
+    ['2026-01-12','Luis Miguel Rubiralta','Quitar tabiquería',-1506.45,'gasto','obra'],
+  ];
+  return raw.map((r,i)=>({id:'m'+i,f:r[0],ben:r[1],con:r[2],imp:r[3],t:r[4],c:r[5]}));
+}
+
+// ══════════ ESTADO ══════════
+const RK='gym_reforma_v2', BK='gym_banco_v1';
+const SALDO_DEF=63245.73, APORTADO=290000, POR_APORTAR=0;
+let R={budget:290000,usdRate:0.92,ivaDefault:21,items:[]};
+let B={saldo:SALDO_DEF,mov:[]};
+let filterR='all', filterB='all';
+
+function load(){
+  try{ const raw=localStorage.getItem(RK); if(raw){ const o=JSON.parse(raw); R={budget:(typeof o.budget==='number'?o.budget:290000),usdRate:o.usdRate||0.92,ivaDefault:o.ivaDefault||21,items:Array.isArray(o.items)?o.items:[]}; } }catch(e){}
+  if(!R.items.length) R.items=seedItems();
+  R.items.forEach(i=>{ if(!i.id) i.id=uid(); });
+  // Migración puntual: el 40% de Carulla pasa a llevar IVA (antes 0%).
+  const cs=R.items.find(i=>i.sk==='carulla-pend-siniva');
+  if(cs && cs.iva===0 && !localStorage.getItem('migCarullaIva')){ cs.iva=21; cs.concepto='Carulla Energía — pendiente 40% (con IVA)'; cs.nota='40% final con IVA'; localStorage.setItem('migCarullaIva','1'); saveR(); }
+  // Migración puntual: los fundadores no aportan más → capital disponible = 290.000 €.
+  if(R.budget===430000 && !localStorage.getItem('migNoMasCapital')){ R.budget=290000; localStorage.setItem('migNoMasCapital','1'); saveR(); }
+  // Migración puntual: dividir Patrick eléctrica y Maquinaria en pagado/pendiente.
+  if(!localStorage.getItem('migSplitPagos')){
+    R.items=R.items.filter(i=>!['elec-gimnas','maq-hse'].includes(i.sk));
+    const nous=seedItems().filter(i=>['maq-pagado','maq-pend','elec-gimnas-pagado','elec-gimnas-pend'].includes(i.sk));
+    if(!R.items.some(i=>i.sk==='maq-pagado')) R.items.push(...nous);
+    localStorage.setItem('migSplitPagos','1'); saveR();
+  }
+  // Migración puntual: precios dados a mano eran CON IVA → pasar a base = importe/1,21.
+  if(!localStorage.getItem('migIvaIncl')){
+    const b={'pulir-suelo':14049.59,'tornos':7438.02,'pintura-gral':4132.23,'accesibilidad':9917.36,'lm-pendiente':11570.25,'puerta-qr':6611.57,'imprevistos':20661.16};
+    Object.entries(b).forEach(([sk,v])=>{const it=R.items.find(i=>i.sk===sk);if(it)it.base=v;});
+    localStorage.setItem('migIvaIncl','1'); saveR();
+  }
+  // Migración puntual: colchón de imprevistos / partidas por definir.
+  if(!localStorage.getItem('migImprev')){
+    if(!R.items.some(i=>i.sk==='imprevistos')) R.items.push(...seedItems().filter(i=>i.sk==='imprevistos'));
+    localStorage.setItem('migImprev','1'); saveR();
+  }
+  // Migración puntual: techo RF120.
+  if(!localStorage.getItem('migTechoRF')){
+    if(!R.items.some(i=>i.sk==='techo-rf')) R.items.push(...seedItems().filter(i=>i.sk==='techo-rf'));
+    localStorage.setItem('migTechoRF','1'); saveR();
+  }
+  // Migración puntual: Carulla 100% sin IVA (pendiente), quitar colchón, techo 4.000 €.
+  if(!localStorage.getItem('migV3')){
+    ['carulla-pend-siniva'].forEach(sk=>{const it=R.items.find(i=>i.sk===sk);if(it)it.iva=0;});
+    R.items=R.items.filter(i=>i.sk!=='imprevistos');
+    const tr=R.items.find(i=>i.sk==='techo-rf'); if(tr){tr.base=3305.79;tr.nota='4.000 € + 21% IVA (base) — lo ejecuta el promotor (material)';}
+    localStorage.setItem('migV3','1'); saveR();
+  }
+  if(!localStorage.getItem('migV4')){
+    const lm=R.items.find(i=>i.sk==='lm-pendiente'); if(lm){lm.base=16097.78;lm.iva=21;lm.concepto='Luis Miguel (tabiques + techo vestuarios)';lm.nota='Presupuesto (sin IVA +21%): refuerzos pino 440 + tabique sala poses 2.135 + entrada recepción 1.895,13 + ocultación agua/luz 3.104,11 + techo vestuarios 8.523,54';}
+    localStorage.setItem('migV4','1'); saveR();
+  }
+  if(!localStorage.getItem('migV5')){
+    if(!R.items.some(i=>i.sk==='espejos')) R.items.push(...seedItems().filter(i=>i.sk==='espejos'));
+    localStorage.setItem('migV5','1'); saveR();
+  }
+  if(!localStorage.getItem('migV6')){
+    const ci=R.items.find(i=>i.sk==='carulla-pend-iva'); if(ci){ci.iva=21;ci.concepto='Carulla (clima+agua+ACS+RITE) — pendiente 35% (con IVA)';ci.nota='Con IVA. Climatización, agua, ACS y RITE';}
+    localStorage.setItem('migV6','1'); saveR();
+  }
+  // Migración puntual: precios dados a mano son BASE → sumar 21% IVA por encima.
+  if(!localStorage.getItem('migV7')){
+    const nb={'pulir-suelo':17000,'pintura-gral':5000,'tornos':9000,'puerta-qr':8000,'accesibilidad':12000,'espejos':5500,'techo-rf':4000};
+    Object.entries(nb).forEach(([sk,v])=>{const it=R.items.find(i=>i.sk===sk);if(it)it.base=v;});
+    localStorage.setItem('migV7','1'); saveR();
+  }
+  // Migración puntual: quitar vidrios recepción (Franquet Barrau).
+  if(!localStorage.getItem('migVidres')){
+    R.items=R.items.filter(i=>i.sk!=='vidres-recep');
+    localStorage.setItem('migVidres','1'); saveR();
+  }
+  // Migración puntual: pintura total 5.000 € (el suelo va acabado).
+  if(!localStorage.getItem('migPintura')){
+    R.items=R.items.filter(i=>i.sk!=='pintura-fachada');
+    const p=R.items.find(i=>i.sk==='pintura-gral'); if(p){p.base=5000;p.concepto='Pintura (paredes + fachada)';p.nota='El suelo va acabado, no se pinta';}
+    localStorage.setItem('migPintura','1'); saveR();
+  }
+  // Migración puntual: presupuestos concretos (suelo, torno, Luis Miguel, elevador).
+  if(!localStorage.getItem('migPresu2')){
+    const upd={'pulir-suelo':{base:17000,concepto:'Suelo (pavimento gimnasio)',nota:'Presupuesto'},'tornos':{base:9000,nota:'Presupuesto'},'accesibilidad':{base:12000,concepto:'Elevador para minusválidos',nota:'≈ 12.000 € (orientativo)'},'lm-pendiente':{base:14000,concepto:'Luis Miguel (techo vestuarios + paredes)',nota:'Techo vestuarios c/ mano de obra 9.000 + pared separatoria 3.000 + pared frontal 2.000'}};
+    Object.entries(upd).forEach(([sk,v])=>{const it=R.items.find(i=>i.sk===sk);if(it)Object.assign(it,v);});
+    localStorage.setItem('migPresu2','1'); saveR();
+  }
+  // Migración puntual: quitar duplicado de Carulla (las 4 ofertas eran Carulla).
+  if(!localStorage.getItem('migDupCarulla')){
+    R.items=R.items.filter(i=>!['clima-991','agua-994','acs-992','rite-995'].includes(i.sk));
+    ['carulla-pagado','carulla-pend-iva','carulla-pend-siniva'].forEach(sk=>{const it=R.items.find(i=>i.sk===sk);if(it)it.categoria='clima';});
+    localStorage.setItem('migDupCarulla','1'); saveR();
+  }
+  // Migración puntual: afegir despeses reals d'obra ja pagades (no pressupostades).
+  if(!localStorage.getItem('migExtraObra')){
+    const ex=seedItems().filter(i=>i.sk.startsWith('extra-'));
+    ex.forEach(e=>{ if(!R.items.some(i=>i.sk===e.sk)) R.items.push(e); });
+    localStorage.setItem('migExtraObra','1'); saveR();
+  }
+  try{ const raw=localStorage.getItem(BK); if(raw){ const o=JSON.parse(raw); B={saldo:typeof o.saldo==='number'?o.saldo:SALDO_DEF,mov:Array.isArray(o.mov)?o.mov:[]}; } }catch(e){}
+  if(!B.mov.length) B.mov=seedMov();
+}
+function saveR(){ localStorage.setItem(RK,JSON.stringify({budget:R.budget,usdRate:R.usdRate,ivaDefault:R.ivaDefault,items:R.items})); }
+function saveB(){ localStorage.setItem(BK,JSON.stringify(B)); }
+
+// ══════════ HELPERS ══════════
+const f=n=>(n<0?'-':'')+Math.abs(Math.round(n)).toLocaleString('es-ES')+' €';
+const fs=n=>(n>0?'+':n<0?'-':'')+Math.abs(Math.round(n)).toLocaleString('es-ES')+' €';
+const fcur=(n,c)=>Math.round(n).toLocaleString('es-ES')+(c==='USD'?' $':' €');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const baseEUR=i=>i.currency==='USD'?(i.base||0)*R.usdRate:(i.base||0);
+const ivaEUR=i=>baseEUR(i)*(i.iva||0)/100;
+const totEUR=i=>baseEUR(i)*(1+(i.iva||0)/100);
+function totalsR(){ let base=0,iva=0,tot=0,paid=0,pend=0; R.items.forEach(i=>{base+=baseEUR(i);iva+=ivaEUR(i);const t=totEUR(i);tot+=t;if(i.estado==='paid')paid+=t;else pend+=t;}); return {base,iva,tot,paid,pend}; }
+
+// ══════════ TABS ══════════
+function showTab(name){
+  document.querySelectorAll('.tab').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));
+  document.getElementById('t-'+name).classList.add('active');
+  ({presupuesto:renderPresupuesto,banco:renderBanco,resumen:renderResumen,socios:renderSocios,dossier:renderDossier}[name])();
+}
+document.getElementById('tabs').addEventListener('click',e=>{ const b=e.target.closest('.tab-btn'); if(b) showTab(b.dataset.tab); });
+
+// ══════════ TAB: PRESUPUESTO ══════════
+function renderPresupuesto(){
+  const t=totalsR(), budget=R.budget||0;
+  const catOpts=c=>CATEGORIES.map(o=>`<option value="${o.key}" ${o.key===c?'selected':''}>${o.icon} ${o.label}</option>`).join('');
+  let items=R.items; if(filterR!=='all') items=items.filter(i=>i.estado===filterR);
+  const rows=items.map(i=>{
+    const eq=i.currency==='USD'?`<div class="note">≈ ${f(baseEUR(i))}</div>`:'';
+    const nt=i.nota?`<div class="note">${esc(i.nota)}</div>`:'';
+    return `<tr>
+      <td>${esc(i.concepto)}${nt}</td>
+      <td><select class="rsel" onchange="chg('${i.id}','categoria',this.value)">${catOpts(i.categoria)}</select></td>
+      <td class="n"><input class="rnum" type="number" min="0" step="0.01" value="${i.base}" onchange="chg('${i.id}','base',this.value)"><select class="rsel" onchange="chg('${i.id}','currency',this.value)"><option value="EUR" ${i.currency==='EUR'?'selected':''}>€</option><option value="USD" ${i.currency==='USD'?'selected':''}>$</option></select>${eq}</td>
+      <td class="n"><input class="rnum iva" type="number" min="0" max="100" value="${i.iva||0}" onchange="chg('${i.id}','iva',this.value)"></td>
+      <td class="n">${f(totEUR(i))}</td>
+      <td><span class="pill ${i.estado==='paid'?'paid':'pend'}" onclick="tog('${i.id}')">${i.estado==='paid'?'✅':'⏳'}</span></td>
+      <td class="n"><button class="del" onclick="rm('${i.id}')">🗑️</button></td>
+    </tr>`;
+  }).join('');
+  const byCat={}; R.items.forEach(i=>byCat[i.categoria]=(byCat[i.categoria]||0)+totEUR(i));
+  const used=CATEGORIES.filter(c=>byCat[c.key]); const mx=Math.max(1,...used.map(c=>byCat[c.key]));
+  const bd=used.sort((a,b)=>byCat[b.key]-byCat[a.key]).map(c=>`<div class="row"><div>${c.icon} ${c.label}</div><div class="track"><div class="fill" style="width:${byCat[c.key]/mx*100}%;background:${c.color}"></div></div><div class="bamt">${f(byCat[c.key])}</div></div>`).join('');
+  let alert='';
+  if(budget>0&&t.tot>budget) alert=`<div class="verdict bad" style="margin-top:8px"><p>🚨 El coste (${f(t.tot)}) supera el capital de los fundadores (${f(budget)}) en <b>${f(t.tot-budget)}</b> — habrá que captarlo de inversores.</p></div>`;
+  else if(budget>0) alert=`<div class="verdict ok" style="margin-top:8px"><p>👍 El capital de fundadores cubre el coste. Pendiente de pagar <b>${f(t.pend)}</b>.</p></div>`;
+
+  document.getElementById('t-presupuesto').innerHTML=`
+    <h1>Presupuesto de la reforma</h1>
+    <p class="sub">Todas las partidas con base, IVA y total. Edita importes, moneda, IVA y categoría directamente. Marca ✅ lo pagado.</p>
+    <div class="grid g3">
+      <div class="card"><span class="label">💰 Capital fundadores</span><input class="num-in" type="number" step="1000" value="${budget||''}" oninput="setBudget(this.value)"><div class="hint">No aportan más; el resto se capta de inversores.</div></div>
+      <div class="card"><span class="label">💵 Cambio USD→EUR</span><input class="num-in" type="number" step="0.001" value="${R.usdRate}" oninput="setRate(this.value)"></div>
+      <div class="card"><span class="label">🧾 IVA por defecto %</span><input class="num-in" type="number" step="1" value="${R.ivaDefault}" oninput="setIva(this.value)"></div>
+    </div>
+    <div class="grid g4">
+      <div class="kpi"><div class="l">Coste total (+ 21% IVA (base))</div><div class="v">${f(t.tot)}</div></div>
+      <div class="kpi"><div class="l">Base sin IVA</div><div class="v" style="color:var(--c2)">${f(t.base)}</div></div>
+      <div class="kpi"><div class="l">✅ Pagado</div><div class="v" style="color:var(--c4)">${f(t.paid)}</div></div>
+      <div class="kpi"><div class="l">⏳ Pendiente</div><div class="v" style="color:var(--c7)">${f(t.pend)}</div></div>
+    </div>
+    ${alert}
+    <h3 class="bt">➕ Añadir partida</h3>
+    <div class="card"><div class="addgrid">
+      <div class="fld"><label>Concepto</label><input id="aC" placeholder="ej. Espejos sala"></div>
+      <div class="fld"><label>Categoría</label><select id="aCat">${catOpts('obra')}</select></div>
+      <div class="fld"><label>Base</label><input id="aB" type="number" min="0" step="0.01" placeholder="0"></div>
+      <div class="fld"><label>Moneda</label><select id="aM"><option value="EUR">€</option><option value="USD">$</option></select></div>
+      <div class="fld"><label>IVA %</label><input id="aI" type="number" value="${R.ivaDefault}"></div>
+      <button class="btn go" onclick="add()">Añadir</button>
+    </div></div>
+    <h3 class="bt">📊 Gasto por categoría</h3>
+    <div class="card bars">${bd||'<span class="note">Sin partidas.</span>'}</div>
+    <h3 class="bt">🧾 Detalle de partidas</h3>
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      ${['all','pending','paid'].map(ff=>`<span class="tag" style="cursor:pointer;${filterR===ff?'border-color:var(--c4);color:var(--c4)':''}" onclick="setFR('${ff}')">${ff==='all'?'Todas':ff==='pending'?'⏳ Pendientes':'✅ Pagadas'}</span>`).join('')}
+    </div>
+    <div class="tbl-wrap"><table class="min"><thead><tr><th>Concepto</th><th>Categoría</th><th class="n">Base</th><th class="n">IVA%</th><th class="n">Total</th><th>Estado</th><th></th></tr></thead><tbody>${rows||'<tr><td colspan="7" style="text-align:center;color:var(--dim);padding:30px">Sin partidas</td></tr>'}</tbody></table></div>`;
+}
+function setBudget(v){ R.budget=parseFloat(v)||0; saveR(); }
+function setRate(v){ const n=parseFloat(v); R.usdRate=(isNaN(n)||n<=0)?R.usdRate:n; saveR(); renderPresupuesto(); }
+function setIva(v){ R.ivaDefault=parseFloat(v)||0; saveR(); }
+function setFR(ff){ filterR=ff; renderPresupuesto(); }
+function chg(id,field,val){ const i=R.items.find(x=>x.id===id); if(!i)return; if(field==='base'||field==='iva'){const n=parseFloat(val);i[field]=isNaN(n)?0:n;}else i[field]=val; saveR(); renderPresupuesto(); }
+function tog(id){ const i=R.items.find(x=>x.id===id); if(i){i.estado=i.estado==='paid'?'pending':'paid';saveR();renderPresupuesto();} }
+function rm(id){ R.items=R.items.filter(x=>x.id!==id); saveR(); renderPresupuesto(); }
+function add(){ const c=document.getElementById('aC').value.trim(); const b=parseFloat(document.getElementById('aB').value); if(!c||isNaN(b)){alert('Pon concepto e importe');return;} let iva=parseFloat(document.getElementById('aI').value); if(isNaN(iva))iva=R.ivaDefault; R.items.unshift({id:uid(),sk:'',concepto:c,categoria:document.getElementById('aCat').value,base:b,currency:document.getElementById('aM').value,iva,estado:'pending',nota:''}); saveR(); renderPresupuesto(); }
+
+// ══════════ TAB: BANCO ══════════
+function sumsB(){ let inn=0,out=0,tax=0; B.mov.forEach(m=>{ if(m.t==='aportacion')inn+=m.imp; else if(m.t==='impuesto')tax+=m.imp; else out+=m.imp; }); return {inn,out,tax}; }
+function renderBanco(){
+  const s=sumsB();
+  const byCat={}; B.mov.filter(m=>m.t==='gasto').forEach(m=>byCat[m.c]=(byCat[m.c]||0)+Math.abs(m.imp));
+  const used=CATEGORIES.filter(c=>byCat[c.key]); const mx=Math.max(1,...used.map(c=>byCat[c.key]));
+  const bd=used.sort((a,b)=>byCat[b.key]-byCat[a.key]).map(c=>`<div class="row"><div>${c.icon} ${c.label}</div><div class="track"><div class="fill" style="width:${byCat[c.key]/mx*100}%;background:${c.color}"></div></div><div class="bamt">${f(byCat[c.key])}</div></div>`).join('');
+  const t=totalsR();
+  const falta=Math.max(0,t.pend-B.saldo);
+  let mv=B.mov.slice(); if(filterB!=='all') mv=mv.filter(m=>m.t===filterB);
+  const catOpts=c=>CATEGORIES.map(o=>`<option value="${o.key}" ${o.key===c?'selected':''}>${o.icon} ${o.label}</option>`).join('');
+  const rows=mv.map(m=>{
+    const d=m.f.split('-').reverse().join('/');
+    return `<tr><td class="note" style="white-space:nowrap">${d}</td><td><b>${esc(m.ben)}</b><div class="note">${esc(m.con)}</div></td>
+      <td><select class="rsel" onchange="chgM('${m.id}','t',this.value)"><option value="aportacion" ${m.t==='aportacion'?'selected':''}>⬇️ Aport.</option><option value="gasto" ${m.t==='gasto'?'selected':''}>🔨 Gasto</option><option value="impuesto" ${m.t==='impuesto'?'selected':''}>🏛️ Imp.</option></select></td>
+      <td>${m.t==='aportacion'?'<span class="note">—</span>':`<select class="rsel" onchange="chgM('${m.id}','c',this.value)">${catOpts(m.c)}</select>`}</td>
+      <td class="n" style="color:${m.imp>0?'var(--c4)':'var(--text)'};font-weight:700">${fs(m.imp)}</td></tr>`;
+  }).join('');
+  document.getElementById('t-banco').innerHTML=`
+    <h1>Movimientos del banco</h1>
+    <p class="sub">Histórico real de la cuenta (BBVA). Separa el dinero aportado del gastado. Recategoriza cualquier movimiento.</p>
+    <div class="grid g4">
+      <div class="kpi"><div class="l">⬇️ Aportado</div><div class="v" style="color:var(--c4)">${f(s.inn)}</div></div>
+      <div class="kpi"><div class="l">🔨 Gastado en obra</div><div class="v" style="color:var(--c7)">${f(Math.abs(s.out))}</div></div>
+      <div class="kpi"><div class="l">🏛️ Impuestos/comis.</div><div class="v" style="color:var(--c6)">${f(Math.abs(s.tax))}</div></div>
+      <div class="kpi"><div class="l">🏦 Saldo en banco</div><div class="v" style="color:var(--c5)">${f(B.saldo)}</div></div>
+    </div>
+    <div class="verdict ${falta>0?'warn':'ok'}"><div class="vt">¿Cuánto falta por meter?</div>
+      <div class="vh">${falta>0?f(falta)+' aprox.':'Cubierto ✓'}</div>
+      <p>Pendiente de pagar del presupuesto: <b>${f(t.pend)}</b> · Saldo disponible: <b>${f(B.saldo)}</b>. ${falta>0?`Necesitas meter ~${f(falta)} más (marca como pagadas las partidas ya abonadas para afinar).`:'El saldo cubre lo pendiente.'}</p>
+      <div style="margin-top:12px"><span class="label" style="display:inline">Saldo actual:</span> <input class="rnum" style="width:140px;font-size:15px" type="number" step="0.01" value="${B.saldo}" oninput="setSaldo(this.value)"> € <span class="note">(último extracto 19/06/2026)</span></div>
+    </div>
+    <h3 class="bt">📊 Gasto real por categoría</h3>
+    <div class="card bars">${bd||'<span class="note">Sin gastos.</span>'}</div>
+    <h3 class="bt">🧾 Movimientos</h3>
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      ${[['all','Todos'],['aportacion','⬇️ Aportaciones'],['gasto','🔨 Gastos'],['impuesto','🏛️ Impuestos']].map(([ff,lb])=>`<span class="tag" style="cursor:pointer;${filterB===ff?'border-color:var(--c5);color:var(--c5)':''}" onclick="setFB('${ff}')">${lb}</span>`).join('')}
+    </div>
+    <div class="tbl-wrap"><table class="min"><thead><tr><th>Fecha</th><th>Beneficiario / concepto</th><th>Tipo</th><th>Categoría</th><th class="n">Importe</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function setSaldo(v){ B.saldo=parseFloat(v)||0; saveB(); }
+function setFB(ff){ filterB=ff; renderBanco(); }
+function chgM(id,field,val){ const m=B.mov.find(x=>x.id===id); if(m){m[field]=val;saveB();renderBanco();} }
+
+// ══════════ TAB: RESUMEN ══════════
+function renderResumen(){
+  const t=totalsR(), aportado=APORTADO;
+  const falta=Math.max(0,t.tot-aportado), need=falta>0;
+  const est=R.items.filter(i=>/ESTIMACI/i.test(i.nota||'')&&baseEUR(i)>0);
+  const totEst=est.reduce((s,i)=>s+totEUR(i),0);
+  let vc,vh,vm;
+  if(need){vc='bad';vh=`Faltan ${f(falta)} por captar de inversores`;vm=`Los fundadores han aportado ${f(aportado)} y no van a aportar más. El proyecto cuesta ${f(t.tot)}, por lo que faltan ${f(falta)} que deben venir de socios nuevos.${est.length?` Incluye ${f(totEst)} en estimaciones aún sin cerrar.`:''}`;}
+  else {vc='ok';vh='Proyecto cubierto';vm=`Lo aportado por los fundadores (${f(aportado)}) cubre el coste total (${f(t.tot)}).`;}
+  const byCat={}; R.items.forEach(i=>byCat[i.categoria]=(byCat[i.categoria]||0)+totEUR(i));
+  const used=CATEGORIES.filter(c=>byCat[c.key]>0).sort((a,b)=>byCat[b.key]-byCat[a.key]);
+  const mx=Math.max(1,...used.map(c=>byCat[c.key]));
+  const bars=used.map(c=>`<div class="row"><div>${c.icon} ${c.label}</div><div class="track"><div class="fill" style="width:${byCat[c.key]/mx*100}%;background:${c.color}"></div></div><div class="bamt">${f(byCat[c.key])} <small>${Math.round(byCat[c.key]/t.tot*100)}%</small></div></div>`).join('');
+  const special=R.items.filter(i=>(i.iva||0)!==21&&baseEUR(i)>0);
+  let notes='';
+  if(special.length) notes+=`<li><b>IVA distinto del 21%:</b> ${special.map(i=>`${esc(i.concepto)} (${(i.iva||0)===0?'sin IVA':String(i.iva).replace('.',',')+'%'})`).join('; ')}.</li>`;
+  if(est.length) notes+=`<li><b>Estimaciones</b> (sin presupuesto firme) por ${f(totEst)}: ${est.map(i=>esc(i.concepto)).join('; ')}.</li>`;
+  document.getElementById('t-resumen').innerHTML=`
+    <h1>Resumen para socios</h1>
+    <p class="sub">Estado de la inversión, necesidad de capital y desglose con base/IVA/total. <button class="btn" onclick="printTab('resumen')" style="margin-left:8px">🖨️ Imprimir / PDF</button></p>
+    <div class="verdict ${vc}"><div class="vt">¿Se necesita capital externo?</div><div class="vh">${need?'🔴':'🟢'} ${vh}</div><p>${vm}</p>
+      <div class="grid g3" style="margin-top:14px">
+        <div class="kpi"><div class="l">Coste total</div><div class="v">${f(t.tot)}</div></div>
+        <div class="kpi"><div class="l">Aportado fundadores</div><div class="v">${f(aportado)}</div></div>
+        <div class="kpi"><div class="l">Falta por captar</div><div class="v" style="color:${need?'var(--red)':'var(--c4)'}">${f(falta)}</div></div>
+      </div>
+    </div>
+    <div class="grid g3">
+      <div class="kpi"><div class="l">Base sin IVA</div><div class="v" style="color:var(--c2)">${f(t.base)}</div></div>
+      <div class="kpi"><div class="l">IVA</div><div class="v" style="color:var(--c3)">${f(t.iva)}</div></div>
+      <div class="kpi"><div class="l">Total con IVA</div><div class="v" style="color:var(--c4)">${f(t.tot)}</div></div>
+    </div>
+    <h3 class="bt">📊 Distribución por categoría</h3>
+    <div class="card bars">${bars}</div>
+    ${notes?`<h3 class="bt">🧾 Notas</h3><div class="card"><ul style="padding-left:18px;color:var(--muted);font-size:13px;line-height:1.7">${notes}</ul></div>`:''}`;
+}
+
+// ══════════ TAB: SOCIOS ══════════
+let SO={valoracion:500000,aportacion:50000,extraFund:0,carullaSinIva:false,aplazarCarulla:false};
+function renderSocios(){
+  const t=totalsR();
+  const saldo=B.saldo;
+  const pend=t.pend;
+  const aportFund=SO.extraFund||0;
+  const deficit=Math.max(0, pend - saldo - aportFund); // lo que falta de fuera
+  const carullaTot=R.items.filter(i=>i.sk.indexOf('carulla')===0).reduce((s,i)=>s+totEUR(i),0); // total Carulla
+  const aplazado=SO.aplazarCarulla?Math.min(deficit,carullaTot*0.25):0; // 25% a 60 días
+  const faltaAhora=Math.max(0,deficit-aplazado);
+  const V=SO.valoracion,P=SO.aportacion;
+  const pps=V>0?P/V:0;
+  const n=(P>0&&deficit>0)?Math.ceil(deficit/P):0;
+  const cap=n*P, pv=V>0?cap/V:0, pf=1-pv, pcf=pf/5, may=pf>0.5;
+  let cls,tit,msg;
+  if(deficit<=0){cls='ok';tit='¡Cubierto! No hace falta capital externo';msg=`Con el saldo del banco (${f(saldo)}) y las aportaciones de fundadores (${f(aportFund)}) cubrís lo pendiente (${f(pend)}). No necesitáis vender participaciones.`;}
+  else if(!may){cls='bad';tit='Cubriríais, pero perdéis la mayoría';msg=`Para reunir ${f(deficit)} de fuera hay que vender ${(pv*100).toFixed(0)}%. Los 5 fundadores bajarían a ${(pcf*100).toFixed(1)}% cada uno. Sube la valoración, mete deuda o más aportación de fundadores.`;}
+  else {cls=pv>0.35?'warn':'ok';tit=`Faltan ${f(deficit)} → ${n} socio(s) externo(s)`;msg=`Tras saldo + aportaciones de fundadores, quedan ${f(deficit)} por conseguir. Con ${n} socio(s) de ${f(P)} lo cubrís, conservando ${(pf*100).toFixed(0)}% entre los fundadores (${(pcf*100).toFixed(1)}% cada uno).`;}
+  let ct='';
+  for(let i=1;i<=5;i++) ct+=`<div class="row"><div>Fundador ${i}</div><div class="track"><div class="fill" style="width:${pcf*100}%;background:#6366f1"></div></div><div class="bamt">${(pcf*100).toFixed(1)}%</div></div>`;
+  for(let i=1;i<=n;i++) ct+=`<div class="row"><div>Socio nuevo ${i}</div><div class="track"><div class="fill" style="width:${pps*100}%;background:#8b5cf6"></div></div><div class="bamt">${(pps*100).toFixed(1)}%</div></div>`;
+  const vals=[400000,500000,600000,750000,1000000];
+  const comp=vals.map(v=>{const fund=(1-n*(P/v))/5;const mj=(1-n*(P/v))>0.5;return `<tr style="${v===V?'background:color-mix(in srgb,var(--c2) 10%,transparent)':''}"><td>${f(v)}</td><td class="n">${(deficit/v*100).toFixed(0)}%</td><td class="n">${(Math.max(0,fund)*100).toFixed(1)}%</td><td style="color:${mj?'var(--c4)':'var(--red)'};font-weight:700">${mj?'Sí':'No'}</td></tr>`;}).join('');
+  document.getElementById('t-socios').innerHTML=`
+    <h1>Plan de financiación</h1>
+    <p class="sub">Cuánto falta tras el saldo del banco y las aportaciones de los fundadores, y cómo cubrir el resto con socios externos.</p>
+    <div class="disc" style="margin-bottom:16px">⚠️ Orientación, no asesoramiento. La ampliación de capital y el leasing de la nave (operación vinculada) los formaliza un asesor.</div>
+    <div class="grid g4">
+      <div class="kpi"><div class="l">⏳ Pendiente de pagar</div><div class="v">${f(pend)}</div></div>
+      <div class="card" style="margin:0"><span class="label">🏦 Saldo en banco</span><input class="num-in" type="number" step="1000" value="${saldo}" oninput="setSaldoSoc(this.value)"></div>
+      <div class="card" style="margin:0"><span class="label">👨‍👩‍👦 Aportan fundadores</span><input class="num-in" type="number" step="5000" value="${aportFund}" oninput="setSO('extraFund',this.value)"><div class="hint">Óscar 100k + Arnau 40k + Antonio&Marta 50k</div></div>
+      <div class="kpi"><div class="l">🔴 Falta conseguir</div><div class="v" style="color:${deficit>0?'var(--red)':'var(--c4)'}">${f(deficit)}</div>${aplazado>0?`<div class="hint" style="color:var(--c5)">${f(faltaAhora)} ahora · ${f(aplazado)} en 60 días</div>`:''}</div>
+    </div>
+    <div style="margin:6px 0 18px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" onclick="toggleAplazar()" style="${SO.aplazarCarulla?'border-color:var(--c5);color:var(--c5)':''}">${SO.aplazarCarulla?'✓ ':''}Aplazar 25% Carulla a 60 días</button>
+    </div>
+    ${aplazado>0?`<div class="verdict ok" style="margin-bottom:16px"><div class="vh">🕐 Solo ${f(faltaAhora)} de forma inmediata</div><p>Aplazando el 25% de Carulla (${f(aplazado)}) a 60 días, ahora mismo solo necesitas cubrir <b>${f(faltaAhora)}</b>. El resto (${f(aplazado)}) lo pagas en 2 meses, cuando ya entran cuotas de socios y las aportaciones.</p></div>`:''}
+    <div class="verdict ${cls}"><div class="vh">${deficit<=0?'✅':'⚠️'} ${tit}</div><p>${msg}</p></div>
+    ${deficit>0?`
+    <h3 class="bt">Cubrir el resto con socios externos</h3>
+    <div class="grid g3">
+      <div class="card"><span class="label">Valoración (post-money)</span><input class="num-in" type="number" step="10000" value="${V}" oninput="setSO('valoracion',this.value)"></div>
+      <div class="card"><span class="label">Aportación por socio</span><input class="num-in" type="number" step="5000" value="${P}" oninput="setSO('aportacion',this.value)"><div class="hint">Cada socio compra ${(pps*100).toFixed(1)}% por ${f(P)}.</div></div>
+      <div class="kpi"><div class="l">% vendido / socios</div><div class="v">${(pv*100).toFixed(0)}% · ${n}</div></div>
+    </div>
+    <h3 class="bt">Reparto resultante (cap table)</h3>
+    <div class="card bars">${ct}</div>
+    <h3 class="bt">¿Y si cambias la valoración?</h3>
+    <div class="tbl-wrap"><table><thead><tr><th>Valoración</th><th class="n">% a vender</th><th class="n">Fundadores c/u</th><th>¿Mayoría?</th></tr></thead><tbody>${comp}</tbody></table></div>`:''}`;
+}
+function setSO(k,v){ SO[k]=parseFloat(v)||0; renderSocios(); }
+function setSaldoSoc(v){ B.saldo=parseFloat(v)||0; saveB(); renderSocios(); }
+function toggleCarulla(){ SO.carullaSinIva=!SO.carullaSinIva; renderSocios(); }
+function toggleAplazar(){ SO.aplazarCarulla=!SO.aplazarCarulla; renderSocios(); }
+
+// ══════════ TAB: DOSSIER ══════════
+let DO={cuota:50,socios:800,alquiler:2600,preinscritos:220,cuotaPre:40};
+function renderDossier(){
+  const t=totalsR(), coste=t.tot;
+  const {cuota,socios,alquiler,preinscritos,cuotaPre}=DO;
+  const ramp=[0.5,0.75,1], pers=[60000,78000,90000];
+  const rows=ramp.map((r,idx)=>{const s=Math.round(socios*r);const pre=Math.min(s,preinscritos),reg=Math.max(0,s-preinscritos);const ing=pre*cuotaPre*12+reg*cuota*12;const otros=ing*0.25;const eb=ing-(alquiler*12+pers[idx]+otros);return {s,ing,eb};});
+  const eb3=rows[2].eb, ing3=rows[2].ing;
+  const ben=eb3*0.1, yld=ben/50000, pay=ben>0?50000/ben:0;
+  document.getElementById('t-dossier').innerHTML=`
+    <h1>🚀 Compra de participaciones</h1>
+    <p class="sub">Oportunidad de entrar como socio de Legion Club adquiriendo participaciones. <button class="btn gold" onclick="printTab('dossier')" style="margin-left:8px">🖨️ Descargar PDF</button></p>
+    <div class="verdict" style="border-color:color-mix(in srgb,var(--gold) 40%,transparent);background:linear-gradient(135deg,color-mix(in srgb,var(--gold) 12%,var(--bg2)),var(--bg2))">
+      <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><div style="font-family:'Space Grotesk';font-size:42px;font-weight:700;color:var(--gold)">${preinscritos}</div><div><div class="vh" style="color:var(--gold);margin:0">Socios ya preinscritos antes de abrir</div><p>Demanda validada sin haber abierto ni hecho campaña. No es previsión: es interés real.</p></div></div>
+    </div>
+    <div class="grid g4">
+      <div class="kpi"><div class="l">Valoración</div><div class="v" style="color:var(--gold)">500.000 €</div></div>
+      <div class="kpi"><div class="l">Ticket · 10%</div><div class="v" style="color:var(--gold)">50.000 €</div></div>
+      <div class="kpi"><div class="l">EBITDA objetivo año 3</div><div class="v">${f(eb3)}</div></div>
+      <div class="kpi"><div class="l">Aportado fundadores</div><div class="v">${f(APORTADO)}</div></div>
+    </div>
+    <h3 class="bt">Tesis de valoración (500.000 € es lo que vale, no lo invertido)</h3>
+    <div class="card">
+      <div class="bars">
+        <div class="row"><div>Coste de reposición</div><div class="track"><div class="fill" style="width:${Math.min(100,coste/1140000*100)}%;background:var(--gold)"></div></div><div class="bamt">${f(coste)}</div></div>
+        <div class="row"><div>EBITDA × 3–5</div><div class="track"><div class="fill" style="width:100%;background:var(--gold)"></div></div><div class="bamt">${f(eb3*3)}–${f(eb3*5)}</div></div>
+        <div class="row"><div>Ingresos × 1,3</div><div class="track"><div class="fill" style="width:${Math.min(100,ing3*1.3/1140000*100)}%;background:var(--gold)"></div></div><div class="bamt">${f(ing3*1.3)}</div></div>
+      </div>
+      <p class="note" style="margin-top:8px">Los tres métodos respaldan una valoración de 500.000 € (conservadora).</p>
+    </div>
+    <h3 class="bt">Proyección financiera</h3>
+    <div class="grid g3" style="margin-bottom:8px">
+      <div class="card"><span class="label">Socios objetivo</span><input class="num-in" type="number" step="50" value="${socios}" oninput="setDO('socios',this.value)"></div>
+      <div class="card"><span class="label">Cuota regular €</span><input class="num-in" type="number" value="${cuota}" oninput="setDO('cuota',this.value)"></div>
+      <div class="card"><span class="label">Preinscritos / cuota €</span><div style="display:flex;gap:8px"><input class="num-in" type="number" value="${preinscritos}" oninput="setDO('preinscritos',this.value)"><input class="num-in" type="number" value="${cuotaPre}" oninput="setDO('cuotaPre',this.value)"></div></div>
+    </div>
+    <div class="tbl-wrap"><table><thead><tr><th>Concepto</th><th class="n">Año 1</th><th class="n">Año 2</th><th class="n">Año 3</th></tr></thead><tbody>
+      <tr><td>Socios activos</td>${rows.map(r=>`<td class="n">${r.s}</td>`).join('')}</tr>
+      <tr><td>Ingresos</td>${rows.map(r=>`<td class="n">${f(r.ing)}</td>`).join('')}</tr>
+      <tr><td style="color:var(--gold)"><b>EBITDA</b></td>${rows.map(r=>`<td class="n"><b>${f(r.eb)}</b></td>`).join('')}</tr>
+    </tbody></table></div>
+    <p class="note" style="margin-top:8px">220 preinscritos a cuota reducida; resto a regular. Rampa 50/75/100%. Otros costes 25% de ingresos. Cifras ilustrativas.</p>
+    <h3 class="bt">Retorno del inversor (10%)</h3>
+    <div class="grid g3">
+      <div class="kpi"><div class="l">Beneficio anual (año 3)</div><div class="v" style="color:var(--c4)">${f(ben)}</div></div>
+      <div class="kpi"><div class="l">Rentabilidad objetivo</div><div class="v" style="color:var(--c4)">${(yld*100).toFixed(0)}%</div></div>
+      <div class="kpi"><div class="l">Payback</div><div class="v" style="color:var(--c4)">${pay>0?pay.toFixed(1)+' años':'—'}</div></div>
+    </div>
+    <h3 class="bt">👥 Equipo y solidez</h3>
+    <div class="card"><p style="font-size:14px;color:var(--muted);line-height:1.7">Sociedad familiar de <b style="color:var(--text)">5 socios</b>: cuatro son <b style="color:var(--text)">dentistas</b> —respaldo financiero sólido y estable— y el administrador, <b style="color:var(--text)">Sergi Caro</b>, es graduado en <b style="color:var(--text)">ADE</b> y culturista: formación en gestión empresarial y conocimiento profundo del sector fitness.</p></div>
+
+    <h3 class="bt">📍 Mercado y punto de equilibrio</h3>
+    <div class="card">
+      <div class="grid g3" style="margin-bottom:12px">
+        <div class="kpi"><div class="l">Mercado (radio 20 km)</div><div class="v">130.000 hab.</div></div>
+        <div class="kpi"><div class="l">Equilibrio operativo</div><div class="v">220 socios</div></div>
+        <div class="kpi"><div class="l">Equilibrio + préstamo</div><div class="v">300 socios</div></div>
+      </div>
+      <ul style="padding-left:18px;color:var(--muted);font-size:13px;line-height:1.8">
+        <li>Con los <b style="color:var(--text)">220 preinscritos</b> ya se cubren los gastos operativos desde la apertura.</li>
+        <li>Con <b style="color:var(--text)">300 socios</b> se cubre además la devolución del préstamo de socios.</li>
+        <li>El objetivo de 800 socios es solo el <b style="color:var(--text)">0,6%</b> del mercado de la zona: amplio recorrido.</li>
+      </ul>
+    </div>
+
+    <h3 class="bt">💶 Estructura financiera y reparto</h3>
+    <div class="card"><ul style="padding-left:18px;color:var(--muted);font-size:13px;line-height:1.8">
+      <li>Préstamo de socios fundadores: <b style="color:var(--text)">290.000 € a devolver en 10 años</b> (~29.000 €/año), ya contemplado en el equilibrio de 300 socios.</li>
+      <li>Alquiler de la nave: <b style="color:var(--text)">2.600 €/mes + IVA</b>, contrato estable con la propiedad (familia fundadora).</li>
+      <li>Reparto de beneficios: <b style="color:var(--text)">junta anual</b> que decide la distribución, proporcional a la participación de cada socio. Administrador: Sergi Caro.</li>
+    </ul></div>
+
+    <h3 class="bt">🤝 Cómo comprar participaciones</h3>
+    <div class="card">
+      <div class="grid g3" style="margin-bottom:12px">
+        <div class="kpi"><div class="l">Ticket de entrada</div><div class="v" style="color:var(--gold)">50.000 €</div></div>
+        <div class="kpi"><div class="l">Participación</div><div class="v">10%</div></div>
+        <div class="kpi"><div class="l">Valoración</div><div class="v">500.000 €</div></div>
+      </div>
+      <ul style="padding-left:18px;color:var(--muted);font-size:13px;line-height:1.8">
+        <li>Entras como socio mediante <b style="color:var(--text)">ampliación de capital</b> (participaciones nuevas de Caro Legión S.L.).</li>
+        <li>Obtienes el <b style="color:var(--text)">10% de la propiedad</b>, con derecho a voto y a participar en los beneficios (dividendos) de forma proporcional.</li>
+        <li>Posibilidad de adquirir <b style="color:var(--text)">varios tramos del 10%</b>.</li>
+        <li>Operación formalizada ante notario con <b style="color:var(--text)">pacto de socios</b> (cláusulas de salida y derecho de acompañamiento).</li>
+      </ul>
+    </div>
+    <div class="disc" style="margin-top:18px"><b>Aviso legal.</b> Documento comercial informativo, no es oferta de valores ni asesoramiento. Las proyecciones son estimaciones, no garantías. Toda inversión requiere due diligence y pacto de socios ante asesor.</div>`;
+}
+function setDO(k,v){ DO[k]=parseFloat(v)||0; renderDossier(); }
+
+function printTab(name){
+  document.querySelectorAll('.tab').forEach(s=>s.classList.remove('printing'));
+  document.getElementById('t-'+name).classList.add('printing');
+  window.print();
+  setTimeout(()=>document.getElementById('t-'+name).classList.remove('printing'),500);
+}
+
+// ══════════ BOOT ══════════
+load();
+renderPresupuesto();
+</script>
+</body>
+</html>

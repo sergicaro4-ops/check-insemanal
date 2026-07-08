@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Legion Club · Repartiment de participacions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--ink:#14172b;--ink2:#3a3f5c;--muted:#6a6f88;--line:#e4e7f0;--line2:#cfd4e2;--paper:#fff;--soft:#f7f8fc;--navy:#1a2b4a;--gold:#b8860b;--green:#15803d;--fund:#1a2b4a;--new:#b8860b;}
+  body{font-family:'Inter',sans-serif;background:#e9ebf2;color:var(--ink);line-height:1.55;padding:24px 12px;}
+  .toolbar{max-width:860px;margin:0 auto 16px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center;}
+  .tt{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:.1em;color:#fff;font-size:13px;}
+  .btn{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;padding:9px 16px;border-radius:8px;border:1px solid var(--line2);background:#fff;color:var(--ink2);cursor:pointer;text-decoration:none;}
+  .btn.p{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .page{max-width:860px;margin:0 auto;background:var(--paper);box-shadow:0 12px 44px rgba(20,24,45,.14);border-radius:6px;padding:46px 52px;}
+  .head{border-bottom:2px solid var(--ink);padding-bottom:16px;margin-bottom:22px;}
+  .brand{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;letter-spacing:.04em;}
+  .brand small{display:block;font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:3px;font-weight:400;}
+  h1{font-family:'Space Grotesk',sans-serif;font-size:26px;margin:6px 0 6px;color:var(--navy);}
+  .intro{font-size:14px;color:var(--ink2);margin-bottom:22px;}
+
+  .controls{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:22px;}
+  .seg{display:flex;border:1px solid var(--line2);border-radius:9px;overflow:hidden;}
+  .seg button{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;padding:10px 20px;border:none;background:#fff;color:var(--ink2);cursor:pointer;}
+  .seg button.on{background:var(--navy);color:#fff;}
+  .fld label{display:block;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+  .fld input{background:#fff;border:1px solid var(--line2);border-radius:8px;color:var(--ink);font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;padding:9px 10px;width:110px;outline:none;}
+  .fld input:focus{border-color:var(--gold);}
+
+  .kstrip{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:22px;}
+  .kstrip .k{padding:15px;border-right:1px solid var(--line);}
+  .kstrip .k:last-child{border-right:none;}
+  .kl{font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+  .kv{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:var(--navy);}
+  @media(max-width:680px){.kstrip{grid-template-columns:repeat(2,1fr);}.controls{gap:12px;}}
+
+  .stack{display:flex;height:34px;border-radius:8px;overflow:hidden;border:1px solid var(--line);margin-bottom:20px;}
+  .stack .seg-b{height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:600;font-family:'Space Grotesk',sans-serif;overflow:hidden;white-space:nowrap;}
+
+  table{width:100%;border-collapse:collapse;font-size:14px;}
+  th{text-align:right;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);padding:11px 12px;border-bottom:2px solid var(--line2);}
+  th:first-child{text-align:left;}
+  td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:right;font-family:'Space Grotesk',sans-serif;}
+  td:first-child{text-align:left;font-family:'Inter',sans-serif;}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px;vertical-align:middle;}
+  .nameinput{border:none;background:transparent;font-family:'Inter',sans-serif;font-size:14px;color:var(--ink);width:70%;outline:none;border-bottom:1px dashed transparent;}
+  .nameinput:focus{border-bottom-color:var(--line2);}
+  tr.tot td{font-weight:700;border-top:2px solid var(--navy);color:var(--navy);}
+  tr.newrow td:first-child{color:var(--gold);}
+  .note{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.6;}
+  .foot{margin-top:24px;padding-top:14px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);}
+  @media print{.toolbar{display:none;}.page{box-shadow:none;border-radius:0;max-width:none;padding:0;}body{background:#fff;}.controls{background:#fff;}@page{size:A4;margin:14mm;}}
+</style>
+</head>
+<body>
+<div class="toolbar"><div class="tt">LEGION CLUB</div><button class="btn p" onclick="window.print()">🖨️ Imprimir / PDF</button></div>
+
+<div class="page">
+  <div class="head"><div class="brand">LEGION CLUB <small>Caro Legión S.L. · document intern per als socis</small></div></div>
+  <h1>Com quedarien les nostres participacions</h1>
+  <p class="intro">Simulació del repartiment del capital si entren nous socis comprant participacions (cada tram = 10% per 50.000 €, sobre una valoració de 500.000 €). Tria l'escenari i edita els noms si vols.</p>
+
+  <div style="font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;color:var(--navy);margin:0 0 12px">Resum econòmic del projecte</div>
+  <div class="kstrip">
+    <div class="k"><div class="kl">Cost total (aprox.)</div><div class="kv">~534.000 €</div></div>
+    <div class="k"><div class="kl">Aportat pels fundadors</div><div class="kv">~290.000 €</div></div>
+    <div class="k"><div class="kl">Falta per finançar</div><div class="kv">~244.000 €</div></div>
+    <div class="k"><div class="kl">Valoració del negoci</div><div class="kv">500.000 €</div></div>
+  </div>
+
+  <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin:20px 0 10px">Aproximació de costos per blocs <span style="color:var(--muted);font-weight:400">(IVA inclòs)</span></div>
+  <div id="costbars" style="display:flex;flex-direction:column;gap:7px;margin-bottom:8px"></div>
+  <p class="note">Costos aproximats, agrupats per àmbit. Total del projecte ≈ <b>534.000 €</b>. El detall complet partida a partida està al panell de control intern.</p>
+
+  <div style="font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;color:var(--navy);margin:28px 0 12px">Repartiment de participacions</div>
+
+  <div class="controls">
+    <div>
+      <div class="kl" style="margin-bottom:8px">Nous socis que entren</div>
+      <div class="seg" id="seg">
+        <button data-n="0">Cap</button>
+        <button data-n="3" class="on">3 socis</button>
+        <button data-n="4">4 socis</button>
+      </div>
+    </div>
+    <div class="fld"><label>% per soci nou</label><input id="pct" type="number" step="1" value="10"></div>
+    <div class="fld"><label>Aportació per soci</label><input id="apo" type="number" step="5000" value="50000"></div>
+  </div>
+
+  <div class="kstrip">
+    <div class="k"><div class="kl">% venut total</div><div class="kv" id="kVenut">—</div></div>
+    <div class="k"><div class="kl">Fundadors (en conjunt)</div><div class="kv" id="kFund">—</div></div>
+    <div class="k"><div class="kl">Capital captat</div><div class="kv" id="kCap">—</div></div>
+    <div class="k"><div class="kl">Cobreix del dèficit (~244.000 €)</div><div class="kv" id="kDef">—</div></div>
+  </div>
+
+  <div class="stack" id="stack"></div>
+
+  <table>
+    <thead><tr><th>Soci</th><th>Ara</th><th>Després</th></tr></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+  <p class="note" id="note"></p>
+  <div class="foot">Document intern de treball · les participacions s'ajusten mitjançant ampliació de capital, formalitzada davant notari amb pacte de socis. Xifres orientatives.</div>
+</div>
+
+<script>
+const DEFICIT=244000;
+let nNew=3;
+const founders=['Sergi Caro (administrador)','Soci 2','Soci 3','Soci 4','Soci 5'];
+try{const s=JSON.parse(localStorage.getItem('legion_founders')||'null'); if(Array.isArray(s)&&s.length===5) for(let i=0;i<5;i++) founders[i]=s[i];}catch(e){}
+
+const fmt=n=>Math.round(n).toLocaleString('ca-ES')+' €';
+const pc=n=>n.toLocaleString('ca-ES',{maximumFractionDigits:1})+'%';
+
+// Aproximació de costos per blocs (IVA inclòs)
+const COSTOS=[
+  ['Elèctrica + energia (Carulla, instal·lació, comptadors)',159000],
+  ['Maquinària professional',85000],
+  ['Climatització + renovació d’aire',68000],
+  ['Aigua + ACS (aerotèrmia)',46000],
+  ['Obra + mà d’obra (Luis Miguel, accessibilitat)',45000],
+  ['Vestidors + material (Obramat, taquilles)',33000],
+  ['Transport + duanes maquinària',30000],
+  ['Accessos (torns, porta QR)',22000],
+  ['Pintura + polir terra',22000],
+  ['Contraincendis i seguretat',12000],
+  ['Retolació + vidres recepció',12000],
+];
+function renderCostos(){
+  const mx=Math.max(...COSTOS.map(c=>c[1]));
+  document.getElementById('costbars').innerHTML=COSTOS.map(([n,v])=>`
+    <div style="display:grid;grid-template-columns:200px 1fr 92px;gap:10px;align-items:center;font-size:12.5px">
+      <div style="color:var(--ink2)">${n}</div>
+      <div style="height:13px;background:var(--soft);border:1px solid var(--line);border-radius:7px;overflow:hidden"><div style="height:100%;width:${v/mx*100}%;background:var(--navy);border-radius:7px"></div></div>
+      <div style="text-align:right;font-family:'Space Grotesk',sans-serif;font-weight:700">~${v.toLocaleString('ca-ES')} €</div>
+    </div>`).join('');
+}
+
+function render(){
+  const P=parseFloat(document.getElementById('pct').value)||0;
+  const A=parseFloat(document.getElementById('apo').value)||0;
+  const soldPct=nNew*P;
+  const foundTotal=Math.max(0,100-soldPct);
+  const each=foundTotal/5;
+  const capital=nNew*A;
+
+  document.getElementById('kVenut').textContent=pc(soldPct);
+  document.getElementById('kFund').textContent=pc(foundTotal);
+  document.getElementById('kCap').textContent=fmt(capital);
+  document.getElementById('kDef').textContent=DEFICIT>0?pc(Math.min(100,capital/DEFICIT*100)):'—';
+
+  // stack bar
+  let stack='';
+  for(let i=0;i<5;i++) stack+=`<div class="seg-b" style="width:${each}%;background:hsl(218,46%,${24+i*6}%)" title="${founders[i]}">${each>=8?pc(each):''}</div>`;
+  for(let i=0;i<nNew;i++) stack+=`<div class="seg-b" style="width:${P}%;background:hsl(40,${70-i*6}%,${45+i*4}%)" title="Soci nou ${i+1}">${P>=8?pc(P):''}</div>`;
+  document.getElementById('stack').innerHTML=stack;
+
+  // table
+  let rows='';
+  for(let i=0;i<5;i++){
+    rows+=`<tr><td><span class="dot" style="background:hsl(218,46%,${24+i*6}%)"></span><input class="nameinput" value="${founders[i].replace(/"/g,'&quot;')}" data-i="${i}" oninput="setName(${i},this.value)"></td><td>20%</td><td><b>${pc(each)}</b></td></tr>`;
+  }
+  for(let i=0;i<nNew;i++){
+    rows+=`<tr class="newrow"><td><span class="dot" style="background:hsl(40,${70-i*6}%,${45+i*4}%)"></span>Soci nou ${i+1} (${fmt(A)})</td><td>—</td><td><b>${pc(P)}</b></td></tr>`;
+  }
+  rows+=`<tr class="tot"><td>TOTAL</td><td>100%</td><td>${pc(foundTotal+soldPct)}</td></tr>`;
+  document.getElementById('tbody').innerHTML=rows;
+
+  const major=foundTotal>50;
+  document.getElementById('note').innerHTML = nNew===0
+    ? 'Sense socis nous: seguiu sent 5 fundadors al 20% cadascun.'
+    : `Amb <b>${nNew} socis nous</b> veneu el <b>${pc(soldPct)}</b> de l'empresa i capteu <b>${fmt(capital)}</b>. Cada fundador passa del 20% al <b>${pc(each)}</b>. Entre els 5 conserveu el <b>${pc(foundTotal)}</b> — ${major?'<b style="color:var(--green)">manteniu la majoria</b> (>50%).':'<b style="color:#b91c1c">perdeu la majoria</b> (≤50%).'}`;
+
+  document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('on',parseInt(b.dataset.n)===nNew));
+}
+function setName(i,v){ founders[i]=v; localStorage.setItem('legion_founders',JSON.stringify(founders)); }
+document.getElementById('seg').addEventListener('click',e=>{const b=e.target.closest('button');if(b){nNew=parseInt(b.dataset.n);render();}});
+document.getElementById('pct').addEventListener('input',render);
+document.getElementById('apo').addEventListener('input',render);
+renderCostos();
+render();
+</script>
+</body>
+</html>

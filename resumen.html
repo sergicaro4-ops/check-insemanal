@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Resumen Visual · Reforma Gimnasio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:#09090f; --bg2:#111118; --bg3:#16161f;
+    --border:rgba(255,255,255,0.07); --border-bright:rgba(255,255,255,0.15);
+    --text:#f0f0f8; --text-muted:#8888aa; --text-dim:#55556a;
+    --green:#10b981; --amber:#f59e0b; --radius:16px; --radius-sm:10px;
+  }
+  body {
+    font-family:'Inter',sans-serif;
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(139,92,246,0.10), transparent),
+      radial-gradient(900px 500px at -10% 10%, rgba(16,185,129,0.07), transparent),
+      var(--bg);
+    color:var(--text); min-height:100vh; padding:0 16px 80px;
+  }
+  .header { max-width:1040px; margin:0 auto; padding:28px 0 8px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+  .brand { font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px; letter-spacing:0.12em; text-transform:uppercase; display:flex; align-items:center; gap:10px; }
+  .brand-dot { width:8px; height:8px; border-radius:50%; background:#8b5cf6; box-shadow:0 0 12px #8b5cf6; }
+  .header-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .ghost-btn { font-family:'Space Grotesk',sans-serif; font-size:12px; font-weight:600; letter-spacing:0.04em; padding:8px 14px; border-radius:20px; background:rgba(255,255,255,0.05); border:1px solid var(--border-bright); color:var(--text-muted); cursor:pointer; transition:all 0.2s; text-decoration:none; display:inline-block; }
+  .ghost-btn:hover { color:var(--text); border-color:var(--text-muted); }
+  .wrap { max-width:1040px; margin:0 auto; }
+  .title { font-family:'Space Grotesk',sans-serif; font-size:34px; font-weight:700; line-height:1.1; margin:18px 0 6px; background:linear-gradient(135deg,#fff 30%,#888aaa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .subtitle { color:var(--text-muted); font-size:15px; line-height:1.6; margin-bottom:26px; max-width:640px; }
+
+  /* VERDICT (para socios) */
+  .verdict { border-radius:var(--radius); padding:24px; margin-bottom:22px; border:1px solid; }
+  .verdict.ok   { background:linear-gradient(135deg, rgba(16,185,129,0.16), rgba(16,185,129,0.04)); border-color:rgba(16,185,129,0.4); }
+  .verdict.warn { background:linear-gradient(135deg, rgba(245,158,11,0.16), rgba(245,158,11,0.04)); border-color:rgba(245,158,11,0.4); }
+  .verdict.bad  { background:linear-gradient(135deg, rgba(239,68,68,0.16), rgba(239,68,68,0.05)); border-color:rgba(239,68,68,0.45); }
+  .verdict-tag { font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px; }
+  .verdict-title { font-family:'Space Grotesk',sans-serif; font-size:26px; font-weight:700; line-height:1.15; margin-bottom:8px; }
+  .verdict-msg { font-size:14px; color:var(--text-muted); line-height:1.6; max-width:720px; }
+  .verdict-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:18px; }
+  @media (max-width:680px){ .verdict-grid{ grid-template-columns:repeat(2,1fr); } }
+  .vg { background:rgba(0,0,0,0.25); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; }
+  .vg.hl { border-color:var(--border-bright); background:rgba(255,255,255,0.04); }
+  .vl { font-family:'Space Grotesk',sans-serif; font-size:10px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; }
+  .vv { font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:700; }
+  .verdict-pend { margin-top:16px; font-size:12.5px; color:var(--text-muted); line-height:1.5; background:rgba(0,0,0,0.2); border-radius:var(--radius-sm); padding:12px 14px; }
+
+  /* TOTALS */
+  .totals { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:24px; }
+  @media (max-width:680px){ .totals{ grid-template-columns:1fr; } }
+  .tcard { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:22px; position:relative; overflow:hidden; }
+  .tcard .l { font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:600; letter-spacing:0.07em; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px; }
+  .tcard .v { font-family:'Space Grotesk',sans-serif; font-size:30px; font-weight:700; line-height:1; }
+  .tcard.base .v { color:#8b5cf6; }
+  .tcard.iva .v { color:var(--amber); }
+  .tcard.total { background:linear-gradient(135deg, color-mix(in srgb,var(--green) 16%,var(--bg2)), var(--bg2)); border-color:color-mix(in srgb,var(--green) 30%,transparent); }
+  .tcard.total .v { color:var(--green); font-size:34px; }
+  .tcard .sub { font-size:12px; color:var(--text-dim); margin-top:8px; }
+
+  /* CHART + LEGEND */
+  .chart-row { display:grid; grid-template-columns:280px 1fr; gap:20px; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:28px; align-items:center; }
+  @media (max-width:680px){ .chart-row{ grid-template-columns:1fr; } }
+  .donut-wrap { display:flex; flex-direction:column; align-items:center; gap:8px; }
+  .donut { position:relative; width:220px; height:220px; }
+  .donut .center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+  .donut .center .big { font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:700; }
+  .donut .center .small { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; margin-top:2px; }
+  .legend { display:flex; flex-direction:column; gap:8px; }
+  .leg-item { display:flex; align-items:center; gap:10px; font-size:13px; }
+  .leg-dot { width:12px; height:12px; border-radius:4px; flex-shrink:0; }
+  .leg-name { flex:1; color:var(--text); }
+  .leg-val { font-family:'Space Grotesk',sans-serif; font-weight:700; }
+  .leg-pct { color:var(--text-dim); font-size:12px; min-width:42px; text-align:right; }
+
+  /* CATEGORY SECTIONS */
+  .cat-block { margin-bottom:22px; }
+  .cat-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; padding:0 4px; }
+  .cat-title { font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:700; display:flex; align-items:center; gap:9px; }
+  .cat-bar-track { width:120px; height:6px; border-radius:3px; background:var(--bg3); overflow:hidden; }
+  .cat-bar-fill { height:100%; border-radius:3px; }
+  .cat-total { font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px; }
+
+  .item-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px 16px; margin-bottom:8px; display:grid; grid-template-columns:1fr auto auto auto; gap:14px; align-items:center; }
+  @media (max-width:680px){ .item-card{ grid-template-columns:1fr; gap:8px; } }
+  .item-name { font-weight:600; font-size:14px; }
+  .item-note { font-size:11.5px; color:var(--text-dim); margin-top:3px; }
+  .item-fig { text-align:right; }
+  @media (max-width:680px){ .item-fig{ text-align:left; display:flex; justify-content:space-between; } }
+  .item-fig .fl { font-size:10px; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-dim); font-family:'Space Grotesk',sans-serif; }
+  .item-fig .fv { font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:14px; }
+  .item-fig.base .fv { color:#a78bfa; }
+  .item-fig.iva .fv { color:var(--amber); }
+  .item-fig.tot .fv { color:var(--green); }
+  .badge-iva { display:inline-block; font-size:10px; font-weight:700; font-family:'Space Grotesk',sans-serif; padding:2px 7px; border-radius:10px; margin-left:6px; vertical-align:middle; }
+  .b-normal { background:rgba(245,158,11,0.14); color:var(--amber); border:1px solid rgba(245,158,11,0.35); }
+  .b-special { background:rgba(139,92,246,0.16); color:#a78bfa; border:1px solid rgba(139,92,246,0.4); }
+  .b-zero { background:rgba(136,136,170,0.12); color:var(--text-muted); border:1px solid var(--border-bright); }
+  .state-pill { font-size:10px; font-weight:700; font-family:'Space Grotesk',sans-serif; padding:3px 9px; border-radius:12px; }
+  .sp-paid { color:var(--green); background:color-mix(in srgb,var(--green) 14%,transparent); border:1px solid color-mix(in srgb,var(--green) 40%,transparent); }
+  .sp-pend { color:#f97316; background:color-mix(in srgb,#f97316 14%,transparent); border:1px solid color-mix(in srgb,#f97316 40%,transparent); }
+
+  .note-box { background:color-mix(in srgb,#8b5cf6 8%,var(--bg2)); border:1px solid color-mix(in srgb,#8b5cf6 28%,transparent); border-radius:var(--radius); padding:18px 20px; margin:8px 0 28px; }
+  .note-box h4 { font-family:'Space Grotesk',sans-serif; font-size:14px; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .note-box ul { margin:0; padding-left:20px; color:var(--text-muted); font-size:13px; line-height:1.7; }
+  h3.block-title { font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:700; margin:30px 0 14px; }
+  .empty { text-align:center; padding:60px 20px; color:var(--text-dim); }
+  .footer-note { text-align:center; color:var(--text-dim); font-size:12px; margin-top:32px; line-height:1.6; }
+
+  @media print {
+    body { background:#fff; color:#000; }
+    .header-actions, .ghost-btn { display:none; }
+    .tcard, .chart-row, .item-card, .note-box { border-color:#ccc; background:#fff; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="brand"><span class="brand-dot"></span> Resumen Visual</div>
+  <div class="header-actions">
+    <a class="ghost-btn" href="reforma.html">📋 Presupuesto</a>
+    <a class="ghost-btn" href="banco.html">🏦 Banco</a>
+    <a class="ghost-btn" href="informe.html">📄 Informe socios (A4)</a>
+    <a class="ghost-btn" href="socios.html">🤝 Simular socios</a>
+    <a class="ghost-btn" href="pitch.html">🚀 Dossier inversores</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <h1 class="title">Resumen de la inversión</h1>
+  <p class="subtitle">Informe para los socios capitalistas: estado de la inversión de la reforma, si hace falta ampliar capital y el desglose de todas las partidas (base, IVA y total).</p>
+
+  <div id="content"></div>
+
+  <p class="footer-note">
+    Datos en vivo desde tu presupuesto (mismo navegador). Para editar importes ve a <a href="reforma.html" style="color:var(--text-muted)">📋 Presupuesto</a>.
+  </p>
+</div>
+
+<script>
+// ─── CATEGORIES + colores ────────────────────────────────────────────────────
+const CATEGORIES = [
+  { key:'obra', label:'Obra / albañilería', icon:'🧱', color:'#f97316' },
+  { key:'electrica', label:'Electricidad', icon:'💡', color:'#f59e0b' },
+  { key:'incendios', label:'Contraincendios / seguridad', icon:'🧯', color:'#ef4444' },
+  { key:'fontaneria', label:'Fontanería / agua', icon:'🚰', color:'#3b82f6' },
+  { key:'clima', label:'Climatización / aire', icon:'❄️', color:'#06b6d4' },
+  { key:'suelo', label:'Suelo / pavimento', icon:'🟫', color:'#a16207' },
+  { key:'pintura', label:'Pintura', icon:'🎨', color:'#ec4899' },
+  { key:'vestuarios', label:'Vestuarios / baños', icon:'🚿', color:'#14b8a6' },
+  { key:'maquinaria', label:'Maquinaria / pesas', icon:'🏋️', color:'#6366f1' },
+  { key:'mobiliario', label:'Mobiliario / recepción', icon:'🪑', color:'#8b5cf6' },
+  { key:'rotulos', label:'Rótulos / imagen', icon:'🪧', color:'#d946ef' },
+  { key:'acceso', label:'Control de acceso', icon:'🎫', color:'#22c55e' },
+  { key:'licencias', label:'Licencias / proyecto', icon:'📄', color:'#64748b' },
+  { key:'transporte', label:'Transporte / aduana', icon:'🚢', color:'#0ea5e9' },
+  { key:'otros', label:'Otros', icon:'📦', color:'#94a3b8' },
+];
+const CAT_MAP = Object.fromEntries(CATEGORIES.map(c=>[c.key,c]));
+
+// ─── seed (espejo de reforma.html, por si se abre esta página primero) ───────
+function seedItems(){
+  const mk=(sk,concepto,categoria,base,currency,iva,estado,nota)=>({sk,concepto,categoria,base,currency,iva,estado,nota:nota||''});
+  return [
+    mk('maq-pagado','Maquinaria HSE (76.750 $ FOB) — pagado','maquinaria',55082.18,'EUR',21,'paid','66.649,44 € en 2 transferencias'),
+    mk('maq-pend','Maquinaria HSE — IVA importación / pendiente','maquinaria',15527.82,'EUR',21,'pending','Al despacho de aduana'),
+    mk('elec-gimnas-pagado','Instalación eléctrica gimnasio (Patrick) — pagado a cuenta','electrica',6923.02,'EUR',21,'paid','8.376,86 € pagados por banco'),
+    mk('elec-gimnas-pend','Instalación eléctrica gimnasio (Patrick) — pendiente','electrica',27692.10,'EUR',21,'pending'),
+    mk('elec-incendi','Detección de incendios (central + 37 detectores)','incendios',9611.46,'EUR',21,'pending'),
+    mk('elec-comptadors','Suministro caja de contadores (TMF-10 + armario)','electrica',2252.90,'EUR',21,'pending'),
+    mk('obramat-201','Material baños/vestuarios/suelo/iluminación (Obramat, pedido 201)','vestuarios',11599.04,'EUR',21,'pending','Total + 21% IVA (base) 14.026,70 €'),
+    mk('rotol-legion','Rótulo LEGION letras corpóreas + LED (Franquet Barrau ENP261169)','rotulos',6748.00,'EUR',21,'pending'),
+    mk('rotol-xixo','Lonas / decoración La Xixo (Franquet Barrau FBP261143)','rotulos',388.10,'EUR',21,'pending','A nombre de La Xixo — confirmar'),
+    mk('carulla-pagado','Carulla (clima+agua+ACS+RITE) — pagado 25%','clima',23600.51,'EUR',21,'paid','Incluye climatización, agua, ACS y RITE. 25% = 28.556,62 € pagado'),
+    mk('carulla-pend-iva','Carulla (clima+agua+ACS+RITE) — pendiente 35% (con IVA)','clima',33040.72,'EUR',21,'pending','Con IVA. Climatización, agua, ACS y RITE'),
+    mk('carulla-pend-siniva','Carulla (clima+agua+ACS+RITE) — pendiente 40%','clima',37760.82,'EUR',0,'pending','Climatización, agua, ACS y RITE'),
+    mk('taquillas-bellum','Taquillas + cabinas sanitarias vestuarios (Bellum Logistics)','vestuarios',15681.50,'EUR',21,'pending','Pago 50% firma / 50% antes de envío'),
+    mk('pulir-suelo','Suelo (pavimento gimnasio)','suelo',17000,'EUR',21,'pending','Presupuesto'),
+    mk('pintura-gral','Pintura (paredes + fachada)','pintura',5000,'EUR',21,'pending','El suelo va acabado, no se pinta'),
+    mk('tornos','Tornos de acceso','acceso',9000,'EUR',21,'pending','Presupuesto'),
+    mk('puerta-qr','Puerta de cristal exterior con lector QR','acceso',8000,'EUR',21,'pending','ESTIMACIÓN prudente — pendiente presupuesto firme'),
+    mk('accesibilidad','Elevador para minusválidos','obra',12000,'EUR',21,'pending','≈ 12.000 € (orientativo)'),
+    mk('lm-pendiente','Luis Miguel (tabiques + techo vestuarios)','obra',16097.78,'EUR',21,'pending','Presupuesto (sin IVA +21%): refuerzos pino 440 + tabique sala poses 2.135 + entrada recepción 1.895,13 + ocultación agua/luz 3.104,11 + techo vestuarios 8.523,54'),
+    mk('espejos','Espejos sala (pared entrenamiento)','obra',5500,'EUR',21,'pending','5.500 € + 21% IVA (base)'),
+    mk('transporte','Transporte marítimo + aduana equipos (estimado)','transporte',30000,'EUR',0,'pending','Estimación ≈ 30.000 €'),
+    mk('extra-obra','Obra y mano de obra ya ejecutada (Rubiralta y otros)','obra',37580.20,'EUR',21,'paid','Ya pagado (banco)'),
+    mk('extra-otros','Residuos, alquileres, web, software, fianza local','otros',15111.74,'EUR',21,'paid','Ya pagado (banco)'),
+    mk('extra-incendios','Ignifugación estructura R-90 (CAT FOC)','incendios',5450.00,'EUR',21,'paid','Ya pagado (banco)'),
+    mk('extra-fontaneria','Agua y contador de obra (varios)','fontaneria',1917.36,'EUR',21,'paid','Ya pagado (banco)'),
+    mk('extra-transporte','Transporte de materiales (Larriba)','transporte',1185.12,'EUR',21,'paid','Ya pagado (banco)'),
+    mk('extra-electrica','Acometida eléctrica (EDistribución)','electrica',1650.60,'EUR',21,'paid','Ya pagado (banco)'),
+    mk('extra-impuestos','Impuestos y comisiones bancarias','otros',1064.08,'EUR',0,'paid','Tributos y gastos de banco'),
+    mk('techo-rf','Techo RF120: placa RF + lana de roca (56 m, sellado)','incendios',4000,'EUR',21,'pending','4.000 € + 21% IVA (base) — lo ejecuta el promotor (material)'),
+  ];
+}
+
+// ─── leer datos ──────────────────────────────────────────────────────────────
+let usdRate = 0.92, items = [], budget = 0;
+// Capital ya aportado por los socios (préstamos en el banco) y el que falta.
+const APORTADO = 290000;        // ya metido por los fundadores (240k préstamos + 50k efectivo)
+const POR_APORTAR = 0;          // los fundadores no aportan más
+function loadData(){
+  try {
+    const raw = localStorage.getItem('gym_reforma_v2');
+    if (raw){
+      const r = JSON.parse(raw);
+      if (typeof r.usdRate==='number' && r.usdRate) usdRate = r.usdRate;
+      if (typeof r.budget==='number') budget = r.budget;
+      items = Array.isArray(r.items) ? r.items : [];
+    }
+  } catch(e){}
+  if (!items.length) items = seedItems();
+  if (!budget) budget = APORTADO + POR_APORTAR; // 430.000 € previstos
+}
+
+const f = n => Math.round(n).toLocaleString('es-ES') + ' €';
+const baseEUR = i => (i.currency==='USD' ? (i.base||0)*usdRate : (i.base||0));
+const ivaEUR  = i => baseEUR(i) * (i.iva||0)/100;
+const totEUR  = i => baseEUR(i) * (1 + (i.iva||0)/100);
+
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// ─── donut SVG ───────────────────────────────────────────────────────────────
+function donut(segments, totalVal){
+  const R=85, C=2*Math.PI*R, cx=110, cy=110, sw=26;
+  let off=0;
+  const arcs = segments.map(s=>{
+    const len = totalVal>0 ? (s.val/totalVal)*C : 0;
+    const dash = `${len} ${C-len}`;
+    const el = `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${s.color}" stroke-width="${sw}" stroke-dasharray="${dash}" stroke-dashoffset="${-off}" transform="rotate(-90 ${cx} ${cy})"/>`;
+    off += len;
+    return el;
+  }).join('');
+  return `<div class="donut"><svg viewBox="0 0 220 220" width="220" height="220">
+    <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#16161f" stroke-width="${sw}"/>
+    ${arcs}
+  </svg><div class="center"><div class="big">${f(totalVal)}</div><div class="small">Total con IVA</div></div></div>`;
+}
+
+// ─── render ──────────────────────────────────────────────────────────────────
+function render(){
+  const cont = document.getElementById('content');
+  if (!items.length){ cont.innerHTML='<div class="empty">No hay partidas. Abre el presupuesto primero.</div>'; return; }
+
+  let totBase=0, totIva=0, totTotal=0, totPaid=0, totPend=0;
+  items.forEach(i=>{
+    totBase+=baseEUR(i); totIva+=ivaEUR(i); totTotal+=totEUR(i);
+    if (i.estado==='paid') totPaid+=totEUR(i); else totPend+=totEUR(i);
+  });
+
+  // por categoría
+  const byCat = {};
+  items.forEach(i=>{ byCat[i.categoria]=(byCat[i.categoria]||0)+totEUR(i); });
+  const usedCats = CATEGORIES.filter(c=>byCat[c.key]>0).sort((a,b)=>byCat[b.key]-byCat[a.key]);
+  const maxCat = Math.max(1, ...usedCats.map(c=>byCat[c.key]));
+
+  const segments = usedCats.map(c=>({val:byCat[c.key], color:c.color}));
+  const legend = usedCats.map(c=>`
+    <div class="leg-item">
+      <span class="leg-dot" style="background:${c.color}"></span>
+      <span class="leg-name">${c.icon} ${c.label}</span>
+      <span class="leg-val">${f(byCat[c.key])}</span>
+      <span class="leg-pct">${Math.round(byCat[c.key]/totTotal*100)}%</span>
+    </div>`).join('');
+
+  // bloques por categoría
+  const blocks = usedCats.map(c=>{
+    const its = items.filter(i=>i.categoria===c.key).sort((a,b)=>totEUR(b)-totEUR(a));
+    const rows = its.map(i=>{
+      const ivaP = i.iva||0;
+      let badge;
+      if (ivaP===0) badge=`<span class="badge-iva b-zero">sin IVA</span>`;
+      else if (ivaP===21) badge=`<span class="badge-iva b-normal">IVA 21%</span>`;
+      else badge=`<span class="badge-iva b-special">IVA ${String(ivaP).replace('.',',')}%</span>`;
+      const note = i.nota ? `<div class="item-note">${esc(i.nota)}</div>` : '';
+      const usd = i.currency==='USD' ? `<div class="item-note">${(i.base||0).toLocaleString('es-ES')} $ · cambio ${usdRate}</div>` : '';
+      const state = i.estado==='paid' ? `<span class="state-pill sp-paid">✅ Pagado</span>` : `<span class="state-pill sp-pend">⏳ Pendiente</span>`;
+      return `<div class="item-card">
+        <div><div class="item-name">${esc(i.concepto)} ${badge}</div>${note}${usd}<div style="margin-top:6px">${state}</div></div>
+        <div class="item-fig base"><div class="fl">Base</div><div class="fv">${f(baseEUR(i))}</div></div>
+        <div class="item-fig iva"><div class="fl">IVA</div><div class="fv">${f(ivaEUR(i))}</div></div>
+        <div class="item-fig tot"><div class="fl">Total</div><div class="fv">${f(totEUR(i))}</div></div>
+      </div>`;
+    }).join('');
+    return `<div class="cat-block">
+      <div class="cat-head">
+        <div class="cat-title">${c.icon} ${c.label}</div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="cat-bar-track"><div class="cat-bar-fill" style="width:${byCat[c.key]/maxCat*100}%;background:${c.color}"></div></div>
+          <div class="cat-total" style="color:${c.color}">${f(byCat[c.key])}</div>
+        </div>
+      </div>
+      ${rows}
+    </div>`;
+  }).join('');
+
+  // partidas con IVA especial / sin IVA
+  const special = items.filter(i=>(i.iva||0)!==21 && baseEUR(i)>0);
+  const specialBox = special.length ? `
+    <div class="note-box">
+      <h4>🧾 Partidas con IVA distinto del 21%</h4>
+      <ul>${special.map(i=>{
+        const ivaP=i.iva||0;
+        const txt = ivaP===0 ? 'sin IVA (estimación all-in)' : `IVA efectivo ${String(ivaP).replace('.',',')}%`;
+        return `<li><b>${esc(i.concepto)}</b> — ${txt}. Base ${f(baseEUR(i))} · IVA ${f(ivaEUR(i))} · Total ${f(totEUR(i))}${i.nota?` <span style="color:var(--text-dim)">(${esc(i.nota)})</span>`:''}</li>`;
+      }).join('')}</ul>
+    </div>` : '';
+
+  // ── veredicto para socios capitalistas ──
+  const sinPresupuestar = items.filter(i => baseEUR(i) === 0);
+  const estimadas = items.filter(i => /ESTIMACI/i.test(i.nota || '') && baseEUR(i) > 0);
+  const margen = budget - totTotal;            // margen sobre la inversión prevista
+  const necesitaCapital = margen < 0;
+  let verdictClass, verdictIcon, verdictTitle, verdictMsg;
+  if (necesitaCapital) {
+    verdictClass = 'bad'; verdictIcon = '🔴';
+    verdictTitle = `Faltan ${f(Math.abs(margen))} por captar de inversores`;
+    verdictMsg = `Los fundadores han aportado ${f(APORTADO)} y no van a aportar más. El proyecto cuesta ${f(totTotal)}, por lo que faltan ${f(Math.abs(margen))} que deben venir de socios nuevos.`;
+  } else {
+    verdictClass = 'ok'; verdictIcon = '🟢';
+    verdictTitle = `Proyecto cubierto`;
+    verdictMsg = `Lo aportado por los fundadores (${f(APORTADO)}) cubre el coste estimado (${f(totTotal)}).`;
+  }
+  let pendList = '';
+  if (sinPresupuestar.length) {
+    pendList += `<div class="verdict-pend">⏳ Sin importe todavía: ${sinPresupuestar.map(i=>esc(i.concepto)).join(' · ')}</div>`;
+  }
+  if (estimadas.length) {
+    const totEst = estimadas.reduce((s,i)=>s+totEUR(i),0);
+    pendList += `<div class="verdict-pend">📐 Incluye ${f(totEst)} en estimaciones prudentes (pendientes de presupuesto firme): ${estimadas.map(i=>esc(i.concepto)).join(' · ')}</div>`;
+  }
+
+  const verdict = `
+    <div class="verdict ${verdictClass}">
+      <div class="verdict-tag">Informe para socios · ¿Necesitamos capital?</div>
+      <div class="verdict-title">${verdictIcon} ${verdictTitle}</div>
+      <div class="verdict-msg">${verdictMsg}</div>
+      <div class="verdict-grid">
+        <div class="vg"><div class="vl">Coste total estimado</div><div class="vv">${f(totTotal)}</div></div>
+        <div class="vg"><div class="vl">Aportado fundadores</div><div class="vv">${f(APORTADO)}</div></div>
+        <div class="vg hl"><div class="vl">${necesitaCapital?'Falta por captar (inversores)':'Margen'}</div><div class="vv">${f(Math.abs(margen))}</div></div>
+      </div>
+      ${pendList}
+    </div>`;
+
+  cont.innerHTML = verdict + `
+    <div class="totals">
+      <div class="tcard base"><div class="l">Base imponible (sin IVA)</div><div class="v">${f(totBase)}</div><div class="sub">Suma de todas las bases</div></div>
+      <div class="tcard iva"><div class="l">IVA</div><div class="v">${f(totIva)}</div><div class="sub">Recuperable por la S.L.</div></div>
+      <div class="tcard total"><div class="l">Total con IVA</div><div class="v">${f(totTotal)}</div><div class="sub">✅ Pagado ${f(totPaid)} · ⏳ Pendiente ${f(totPend)}</div></div>
+    </div>
+
+    <div class="chart-row">
+      <div class="donut-wrap">${donut(segments, totTotal)}</div>
+      <div class="legend">${legend}</div>
+    </div>
+
+    ${specialBox}
+
+    <h3 class="block-title">📂 Desglose por partidas</h3>
+    ${blocks}
+  `;
+}
+
+loadData();
+render();
+</script>
+</body>
+</html>

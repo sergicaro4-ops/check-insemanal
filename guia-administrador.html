@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Guía del Administrador · Caro Legión S.L.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink:#16182b; --ink2:#3b3f5c; --muted:#6b7088; --line:#e6e8f0; --line2:#d2d6e4;
+    --paper:#ffffff; --soft:#f6f7fb; --accent:#4f46e5; --accent-soft:#eef0fe;
+    --green:#15803d; --green-bg:#e9f7ef; --amber:#b45309; --amber-bg:#fdf3e3; --red:#b91c1c; --red-bg:#fce9e9;
+  }
+  body { font-family:'Inter',sans-serif; background:#eceef4; color:var(--ink); line-height:1.6; padding:24px 12px; }
+  .toolbar { max-width:820px; margin:0 auto 16px; display:flex; justify-content:space-between; gap:8px; }
+  .btn { font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:600; padding:9px 16px; border-radius:8px; border:1px solid var(--line2); background:#fff; color:var(--ink2); cursor:pointer; text-decoration:none; display:inline-block; }
+  .btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .btn:hover { border-color:var(--accent); }
+  .page { max-width:820px; margin:0 auto; background:var(--paper); border-radius:6px; box-shadow:0 10px 40px rgba(20,24,45,0.12); padding:48px 52px; }
+
+  .doc-head { border-bottom:2px solid var(--ink); padding-bottom:16px; margin-bottom:8px; }
+  .kicker { font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); }
+  h1 { font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:700; margin:6px 0 4px; }
+  .sub { font-size:13px; color:var(--muted); }
+
+  .warn-box { background:var(--amber-bg); border:1px solid #f1ddb8; border-radius:10px; padding:14px 18px; margin:22px 0; font-size:12.5px; color:#7c4a0a; line-height:1.55; }
+  .warn-box b { color:#5f3906; }
+
+  h2 { font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:700; margin:30px 0 6px; display:flex; align-items:center; gap:10px; }
+  h2 .n { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:8px; background:var(--accent); color:#fff; font-size:14px; }
+  h3 { font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:700; margin:18px 0 6px; color:var(--ink2); }
+  p { font-size:13.5px; color:var(--ink2); margin-bottom:10px; }
+  ul, ol { font-size:13.5px; color:var(--ink2); padding-left:22px; margin-bottom:12px; }
+  li { margin-bottom:6px; }
+  .lead { border-left:3px solid var(--accent); padding-left:14px; color:var(--ink); }
+
+  .steps { counter-reset:step; list-style:none; padding:0; }
+  .steps > li { position:relative; padding:14px 16px 14px 52px; border:1px solid var(--line); border-radius:10px; margin-bottom:10px; background:var(--soft); }
+  .steps > li::before { counter-increment:step; content:counter(step); position:absolute; left:14px; top:14px; width:26px; height:26px; border-radius:50%; background:var(--accent); color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; }
+  .steps > li b { font-family:'Space Grotesk',sans-serif; }
+
+  table { width:100%; border-collapse:collapse; font-size:12.5px; margin:8px 0 14px; }
+  thead th { text-align:left; font-family:'Space Grotesk',sans-serif; font-size:10px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--muted); padding:8px 10px; border-bottom:2px solid var(--line2); }
+  th.num, td.num { text-align:right; font-family:'Space Grotesk',sans-serif; }
+  td { padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+  tfoot td { font-family:'Space Grotesk',sans-serif; font-weight:700; border-top:2px solid var(--ink); }
+
+  .callout { background:var(--accent-soft); border:1px solid #d9dcfb; border-radius:10px; padding:16px 18px; margin:14px 0; font-size:13px; color:var(--ink2); }
+  .callout b { color:var(--accent); }
+  .ok-box { background:var(--green-bg); border:1px solid #bfe3cd; border-radius:10px; padding:14px 18px; margin:14px 0; font-size:12.5px; color:#14532d; }
+
+  .check { list-style:none; padding:0; }
+  .check li { position:relative; padding-left:26px; margin-bottom:7px; font-size:13px; }
+  .check li::before { content:'☐'; position:absolute; left:0; top:-1px; font-size:15px; color:var(--accent); }
+
+  .doc-foot { margin-top:34px; padding-top:14px; border-top:1px solid var(--line); font-size:10.5px; color:var(--muted); }
+
+  @media print {
+    body { background:#fff; padding:0; }
+    .toolbar { display:none; }
+    .page { box-shadow:none; border-radius:0; max-width:none; padding:0; }
+    h2, .steps > li, table, .callout, .warn-box, .ok-box { page-break-inside:avoid; }
+    @page { size:A4; margin:16mm 15mm; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <a class="btn" href="escenario-socios.html">← Documento de inversores</a>
+  <button class="btn primary" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+</div>
+
+<div class="page">
+  <div class="doc-head">
+    <div class="kicker">Documento interno · Solo para el administrador</div>
+    <h1>Guía: cómo meter el dinero de los socios y gestionar la sociedad</h1>
+    <div class="sub">Caro Legión, S.L. · CIF B-22593131 · Administrador: Sergi Caro Folch</div>
+  </div>
+
+  <div class="warn-box">
+    <b>Aviso importante.</b> Esta guía es una orientación práctica para que entiendas el proceso y llegues
+    preparado. <b>No sustituye a tu gestor/asesor ni al notario.</b> La ampliación de capital, la prima, los
+    números exactos de participaciones y la fiscalidad los cierra un profesional. Úsala para saber qué pedir,
+    qué firmar y en qué orden.
+  </div>
+
+  <h2><span class="n">1</span> La idea en una frase</h2>
+  <p class="lead">
+    Los socios nuevos <b>no te compran participaciones a ti</b>: la sociedad <b>crea participaciones nuevas</b>
+    y ellos las pagan. Ese dinero (200.000 €) <b>entra en la cuenta de la empresa</b> y es el que usáis para
+    pagar la reforma. Eso se llama <b>ampliación de capital con prima de asunción</b>.
+  </p>
+
+  <h2><span class="n">2</span> Por qué hace falta "prima de asunción"</h2>
+  <p>
+    Vuestro capital social es de <b>5.000 €</b> (5.000 participaciones de 1 € cada una). Pero la empresa la
+    estáis valorando en <b>500.000 €</b>. Si un socio pagara solo el valor nominal, con 50.000 € se llevaría
+    50.000 participaciones y os dejaría en minoría absoluta. Eso no puede ser.
+  </p>
+  <p>
+    La solución legal es la <b>prima</b>: cada participación nueva se emite a un precio muy superior a su valor
+    nominal (1 €). El socio paga 1 € de "capital" por participación y el resto como <b>prima</b>, que va a las
+    reservas de la sociedad. Así entra todo el dinero pero se emiten pocas participaciones.
+  </p>
+
+  <h3>Ejemplo ilustrativo (los enteros exactos los cuadra el gestor)</h3>
+  <table>
+    <thead><tr><th>Concepto</th><th class="num">Valor</th></tr></thead>
+    <tbody>
+      <tr><td>Participaciones nuevas por socio (≈ 10%)</td><td class="num">≈ 833</td></tr>
+      <tr><td>Valor nominal (a capital)</td><td class="num">≈ 833 €</td></tr>
+      <tr><td>Prima de asunción (a reservas)</td><td class="num">≈ 49.167 €</td></tr>
+      <tr><td>Aportación total por socio</td><td class="num">50.000 €</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td>4 socios → capital sube a ≈ 8.333 € · prima total ≈ 196.667 €</td><td class="num">200.000 €</td></tr>
+    </tfoot>
+  </table>
+  <div class="callout">
+    <b>Lo que importa:</b> los 200.000 € entran enteros en la caja de la empresa (capital + prima). Los socios
+    nuevos se quedan con el 40% (10% cada uno) y vosotros 5 con el 60% (12% cada uno).
+  </div>
+
+  <h2><span class="n">3</span> Paso a paso del aumento de capital</h2>
+  <ol class="steps">
+    <li><b>Habla antes con tu gestor/asesor.</b> Le pasas: valoración (500.000 €), nº de socios nuevos y lo que
+        aporta cada uno (50.000 €). Él calcula participaciones y prima exactas y prepara los textos.</li>
+    <li><b>Convoca la Junta General.</b> Si estáis los 5 fundadores de acuerdo, hacéis <b>Junta Universal</b>
+        (sin convocatoria formal): todos presentes y aceptáis por unanimidad celebrarla.</li>
+    <li><b>Acuerdo de ampliación de capital con prima.</b> Se vota. Según el art. 14 de vuestros estatutos hace
+        falta <b>más del 50% del capital</b>; como sois el 100%, sobra. Se aprueba emitir X participaciones
+        nuevas con su prima.</li>
+    <li><b>Renuncia al derecho de preferencia.</b> Por ley, las nuevas participaciones os corresponden primero a
+        los socios actuales. Para que entren terceros, los 5 <b>renunciáis a ese derecho preferente</b> (o se
+        suprime en junta, que exige 2/3 — lo tenéis).</li>
+    <li><b>Desembolso.</b> Cada socio nuevo <b>ingresa sus 50.000 €</b> en la cuenta de Caro Legión, S.L. El
+        banco emite un <b>certificado de ingreso</b> que necesita el notario.</li>
+    <li><b>Escritura pública ante notario.</b> Se eleva a público el acuerdo de la junta con los certificados
+        bancarios.</li>
+    <li><b>Registro Mercantil.</b> Se inscribe la ampliación. A partir de ahí es oficial y el capital figura
+        actualizado.</li>
+    <li><b>Modelo 600 (ITP/AJD).</b> La ampliación de capital está <b>exenta</b>, pero normalmente hay que
+        presentar el modelo igualmente. Lo hace el gestor.</li>
+    <li><b>Actualiza el Libro Registro de Socios.</b> Anotas los nuevos socios y sus participaciones (es tu
+        obligación como administrador, art. 6).</li>
+  </ol>
+  <div class="ok-box">
+    <b>Resultado:</b> la empresa tiene 200.000 € más en caja para pagar obra, hay 4 socios nuevos con el 40% y
+    tú sigues siendo administrador con la mayoría (60%) en manos de la familia.
+  </div>
+
+  <h2><span class="n">4</span> Cómo gestionas todo como administrador</h2>
+  <h3>Obligaciones periódicas</h3>
+  <ul>
+    <li><b>Libro Registro de Socios</b> y <b>Libro de Actas</b> al día (quién es socio y qué se acuerda).</li>
+    <li><b>Junta General ordinaria</b> una vez al año, dentro de los 6 meses tras cerrar el ejercicio (31/12):
+        aprobar cuentas y decidir el reparto del resultado.</li>
+    <li><b>Formular las cuentas anuales</b> en los 3 meses siguientes al cierre y <b>depositarlas</b> en el
+        Registro Mercantil.</li>
+    <li>Impuesto de Sociedades y demás obligaciones fiscales (con tu gestor).</li>
+  </ul>
+  <h3>Tu retribución como administrador</h3>
+  <p>
+    Los estatutos (art. 20) dicen que <b>el cargo es retribuido</b>: una <b>cantidad fija mensual</b> que fija la
+    Junta cada año. No es participación en beneficios. Conviene aprobarla en junta para que quede documentada y
+    sea deducible. Es compatible con un sueldo por funciones ejecutivas si además trabajas en el día a día.
+  </p>
+  <h3>Reparto de beneficios</h3>
+  <p>
+    Se decide en la junta anual y se reparte <b>en proporción a las participaciones</b>. Por eso el porcentaje
+    importa: con el 12% te toca el 12% del dividendo que se reparta; cada socio nuevo, su 10%. Podéis también
+    decidir <b>no repartir</b> y reinvertir, sobre todo los primeros años.</p>
+
+  <h2><span class="n">5</span> Protégete: pacto de socios</h2>
+  <p>
+    Muy recomendable firmar un <b>pacto de socios</b> junto a la entrada de los nuevos. No es obligatorio pero
+    evita problemas. Suele regular:
+  </p>
+  <ul>
+    <li><b>Política de dividendos</b> (cuándo y cuánto se reparte).</li>
+    <li><b>Mayorías reforzadas</b> para decisiones grandes (vender la empresa, endeudarse, cambiar el negocio).</li>
+    <li><b>Arrastre y acompañamiento</b> (drag-along / tag-along) si algún día se vende.</li>
+    <li><b>Derecho de preferencia y limitaciones</b> a que un socio venda su parte a un extraño.</li>
+    <li><b>No competencia</b> y permanencia mínima.</li>
+    <li>Qué pasa si un socio quiere salir o fallece.</li>
+  </ul>
+
+  <h2><span class="n">6</span> Ojo con esto</h2>
+  <ul>
+    <li><b>La nave</b> es de la comunidad de bienes familiar y está en leasing: alquilarla a la sociedad es una
+        <b>operación vinculada</b>. Hay que documentarla a precio de mercado (los 2.600 €/mes + IVA) para
+        Hacienda.</li>
+    <li><b>Coherencia de números:</b> los socios harán due diligence. Ten listo el panel de control y el desglose
+        de partidas; que lo que les enseñes cuadre con el banco.</li>
+    <li><b>No firmes nada</b> de la ampliación sin que lo haya revisado el asesor y sin el certificado bancario
+        del desembolso.</li>
+    <li><b>Valoración:</b> 500.000 € es la que defiendes; justifícala con el potencial (130.000 habitantes en
+        20 km, equilibrio en 220-300 socios) y con la inversión ya hecha (~240.000 € + nave).</li>
+  </ul>
+
+  <h2><span class="n">7</span> Checklist para arrancar</h2>
+  <ul class="check">
+    <li>Reunir a los 5 fundadores y confirmar: valoración 500.000 €, 4 socios × 50.000 € = 40%.</li>
+    <li>Cerrar con los inversores el importe y el % (carta de intenciones si quieres).</li>
+    <li>Pasar todo al gestor/asesor y pedirle: cálculo de participaciones + prima y borrador del acta.</li>
+    <li>Preparar borrador de pacto de socios.</li>
+    <li>Convocar Junta (o Junta Universal) y aprobar la ampliación + renuncia al derecho de preferencia.</li>
+    <li>Que cada socio ingrese sus 50.000 € y pedir el certificado al banco.</li>
+    <li>Firmar escritura ante notario e inscribir en el Registro Mercantil.</li>
+    <li>Actualizar Libro Registro de Socios y Libro de Actas.</li>
+    <li>Aprobar en junta tu retribución como administrador.</li>
+  </ul>
+
+  <div class="doc-foot">
+    Caro Legión, S.L. · CIF B-22593131 · Documento interno de orientación (no es asesoramiento jurídico ni fiscal). Julio 2026.
+  </div>
+</div>
+
+</body>
+</html>

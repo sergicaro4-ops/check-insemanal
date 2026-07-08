@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Simulador de Socios · Legion Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  :root {
+    --bg:#09090f; --bg2:#111118; --bg3:#16161f;
+    --border:rgba(255,255,255,0.07); --border-bright:rgba(255,255,255,0.15);
+    --text:#f0f0f8; --text-muted:#8888aa; --text-dim:#55556a;
+    --c1:#6366f1; --c2:#8b5cf6; --green:#10b981; --amber:#f59e0b; --red:#ef4444;
+    --radius:16px; --radius-sm:10px;
+  }
+  body { font-family:'Inter',sans-serif; background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(99,102,241,0.10), transparent),
+      radial-gradient(900px 500px at -10% 10%, rgba(139,92,246,0.07), transparent),
+      var(--bg); color:var(--text); min-height:100vh; padding:0 16px 80px; }
+  .header { max-width:980px; margin:0 auto; padding:28px 0 8px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+  .brand { font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px; letter-spacing:0.12em; text-transform:uppercase; display:flex; align-items:center; gap:10px; }
+  .brand-dot { width:8px; height:8px; border-radius:50%; background:var(--c2); box-shadow:0 0 12px var(--c2); }
+  .header-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .ghost-btn { font-family:'Space Grotesk',sans-serif; font-size:12px; font-weight:600; letter-spacing:0.04em; padding:8px 14px; border-radius:20px; background:rgba(255,255,255,0.05); border:1px solid var(--border-bright); color:var(--text-muted); cursor:pointer; transition:all 0.2s; text-decoration:none; display:inline-block; }
+  .ghost-btn:hover { color:var(--text); border-color:var(--text-muted); }
+  .wrap { max-width:980px; margin:0 auto; }
+  .title { font-family:'Space Grotesk',sans-serif; font-size:32px; font-weight:700; line-height:1.1; margin:18px 0 6px; background:linear-gradient(135deg,#fff 30%,#888aaa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .subtitle { color:var(--text-muted); font-size:14px; line-height:1.6; margin-bottom:26px; max-width:640px; }
+  .disclaimer { font-size:12px; color:var(--text-dim); background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:24px; line-height:1.5; }
+
+  h2.sec { font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:700; margin:28px 0 14px; display:flex; align-items:center; gap:9px; }
+  .card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:18px; }
+
+  .inputs { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+  @media (max-width:600px){ .inputs{ grid-template-columns:1fr; } }
+  .field label { display:block; font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px; }
+  .in-wrap { display:flex; align-items:center; gap:8px; }
+  .in { flex:1; background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:700; color:var(--text); outline:none; -moz-appearance:textfield; transition:border-color 0.2s, box-shadow 0.2s; width:100%; }
+  .in::-webkit-outer-spin-button,.in::-webkit-inner-spin-button{-webkit-appearance:none;}
+  .in:focus { border-color:var(--c2); box-shadow:0 0 0 3px color-mix(in srgb,var(--c2) 15%,transparent); }
+  .unit { font-family:'Space Grotesk',sans-serif; font-weight:700; color:var(--text-dim); font-size:16px; }
+  .hint { font-size:11px; color:var(--text-dim); margin-top:6px; }
+
+  .kpis { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  @media (max-width:680px){ .kpis{ grid-template-columns:1fr; } }
+  .kpi { background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px; }
+  .kpi .l { font-family:'Space Grotesk',sans-serif; font-size:10px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px; }
+  .kpi .v { font-family:'Space Grotesk',sans-serif; font-size:23px; font-weight:700; }
+  .kpi.gap .v { color:var(--amber); }
+
+  .result { border-radius:var(--radius); padding:22px; margin-bottom:18px; border:1px solid; }
+  .result.ok { background:color-mix(in srgb,var(--green) 12%,var(--bg2)); border-color:color-mix(in srgb,var(--green) 35%,transparent); }
+  .result.warn { background:color-mix(in srgb,var(--amber) 12%,var(--bg2)); border-color:color-mix(in srgb,var(--amber) 35%,transparent); }
+  .result.bad { background:color-mix(in srgb,var(--red) 12%,var(--bg2)); border-color:color-mix(in srgb,var(--red) 35%,transparent); }
+  .result h3 { font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:700; margin-bottom:6px; }
+  .result.ok h3 { color:#6ee7b7; } .result.warn h3 { color:#fcd34d; } .result.bad h3 { color:#fca5a5; }
+  .result p { font-size:13px; color:var(--text-muted); line-height:1.6; }
+  .res-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:16px; }
+  @media (max-width:680px){ .res-grid{ grid-template-columns:repeat(2,1fr); } }
+  .rg { background:rgba(0,0,0,0.25); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; }
+  .rg .l { font-size:10px; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-muted); font-family:'Space Grotesk',sans-serif; font-weight:600; margin-bottom:6px; }
+  .rg .v { font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:700; }
+
+  /* cap table */
+  .captable { display:flex; flex-direction:column; gap:8px; }
+  .ct-row { display:grid; grid-template-columns:200px 1fr 70px; gap:12px; align-items:center; font-size:13px; }
+  @media (max-width:600px){ .ct-row{ grid-template-columns:130px 1fr 56px; } }
+  .ct-name { color:var(--text); font-weight:500; }
+  .ct-track { height:16px; background:var(--bg3); border-radius:8px; overflow:hidden; border:1px solid var(--border); }
+  .ct-fill { height:100%; border-radius:8px; }
+  .ct-pct { text-align:right; font-family:'Space Grotesk',sans-serif; font-weight:700; }
+
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  thead th { text-align:left; font-family:'Space Grotesk',sans-serif; font-size:10px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-dim); padding:10px 12px; border-bottom:1px solid var(--border); }
+  th.num, td.num { text-align:right; font-family:'Space Grotesk',sans-serif; }
+  td { padding:10px 12px; border-bottom:1px solid var(--border); }
+  tr.hl td { background:color-mix(in srgb,var(--c2) 10%,transparent); }
+  .yes { color:var(--green); font-weight:700; } .no { color:var(--red); font-weight:700; }
+
+  .footer-note { text-align:center; color:var(--text-dim); font-size:12px; margin-top:28px; line-height:1.6; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="brand"><span class="brand-dot"></span> Simulador de Socios</div>
+  <div class="header-actions">
+    <a class="ghost-btn" href="resumen.html">📊 Resumen</a>
+    <a class="ghost-btn" href="reforma.html">📋 Presupuesto</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <h1 class="title">Entrada de nuevos socios</h1>
+  <p class="subtitle">Simula cuánto capital levantas metiendo socios, qué porcentaje vendes y cómo os diluís los fundadores, para cubrir el déficit de la reforma.</p>
+  <div class="disclaimer">⚠️ Herramienta de orientación, no asesoramiento fiscal/mercantil. La ampliación de capital, la prima de emisión y el leasing de la nave (operación vinculada con la CB familiar) debe formalizarlos un gestor/asesor.</div>
+
+  <!-- SITUACIÓN -->
+  <h2 class="sec">1️⃣ La situación de partida</h2>
+  <div class="card">
+    <div class="inputs">
+      <div class="field">
+        <label>Coste total de la reforma</label>
+        <div class="in-wrap"><input class="in" type="number" id="coste" step="1000" /><span class="unit">€</span></div>
+        <div class="hint">Tomado de tu presupuesto (editable).</div>
+      </div>
+      <div class="field">
+        <label>Ya aportado por los socios actuales</label>
+        <div class="in-wrap"><input class="in" type="number" id="aportado" step="1000" /><span class="unit">€</span></div>
+        <div class="hint">240.000 € en préstamos + 50.000 € en efectivo.</div>
+      </div>
+    </div>
+    <div class="kpis" style="margin-top:18px">
+      <div class="kpi"><div class="l">Coste total</div><div class="v" id="kCoste">—</div></div>
+      <div class="kpi"><div class="l">Ya aportado</div><div class="v" id="kAport">—</div></div>
+      <div class="kpi gap"><div class="l">Déficit a financiar</div><div class="v" id="kGap">—</div></div>
+    </div>
+  </div>
+
+  <!-- SIMULADOR -->
+  <h2 class="sec">2️⃣ Simula la entrada de socios</h2>
+  <div class="card">
+    <div class="inputs">
+      <div class="field">
+        <label>Valoración de la empresa (post-money)</label>
+        <div class="in-wrap"><input class="in" type="number" id="valoracion" step="10000" /><span class="unit">€</span></div>
+        <div class="hint">Cuánto vale el 100% del negocio tras la entrada.</div>
+      </div>
+      <div class="field">
+        <label>Aportación por socio nuevo</label>
+        <div class="in-wrap"><input class="in" type="number" id="aportacion" step="5000" /><span class="unit">€</span></div>
+        <div class="hint" id="pctPorSocioHint">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div id="resultBox"></div>
+
+  <!-- CAP TABLE -->
+  <h2 class="sec">3️⃣ Reparto resultante (cap table)</h2>
+  <div class="card"><div class="captable" id="captable"></div></div>
+
+  <!-- COMPARATIVA -->
+  <h2 class="sec">4️⃣ ¿Y si cambias la valoración?</h2>
+  <div class="card">
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px">Cuánto tendrías que vender para cubrir el déficit según la valoración. A mayor valoración, vendes menos % (entras menos diluido), pero el socio paga más caro su parte.</p>
+    <table>
+      <thead><tr><th>Valoración</th><th class="num">% a vender</th><th class="num">Socios de <span id="apEtq">50k</span></th><th class="num">% por socio</th><th class="num">Fundadores (cada uno)</th><th>¿Mayoría?</th></tr></thead>
+      <tbody id="compBody"></tbody>
+    </table>
+  </div>
+
+  <p class="footer-note">Los números de coste se leen de tu presupuesto. Ajusta valoración y aportación para ver escenarios al instante.</p>
+</div>
+
+<script>
+const NUM_FUNDADORES = 5;
+
+// ── leer coste total del presupuesto (reforma.html) ──
+function loadCoste(){
+  try {
+    const raw = localStorage.getItem('gym_reforma_v2');
+    if (raw){
+      const r = JSON.parse(raw);
+      const rate = (typeof r.usdRate==='number'&&r.usdRate)?r.usdRate:0.92;
+      let total=0;
+      (r.items||[]).forEach(i=>{
+        const be = i.currency==='USD' ? (i.base||0)*rate : (i.base||0);
+        total += be*(1+(i.iva||0)/100);
+      });
+      if (total>0) return Math.round(total);
+    }
+  } catch(e){}
+  return 525672; // valor por defecto (peor escenario calculado)
+}
+
+const state = {
+  coste: loadCoste(),
+  aportado: 290000,
+  valoracion: 500000,
+  aportacion: 50000,
+};
+
+const f = n => Math.round(n).toLocaleString('es-ES')+' €';
+const pct = n => (n*100).toLocaleString('es-ES',{maximumFractionDigits:1})+'%';
+
+function setInputs(){
+  coste.value=state.coste; aportado.value=state.aportado;
+  valoracion.value=state.valoracion; aportacion.value=state.aportacion;
+}
+
+function render(){
+  const deficit = Math.max(0, state.coste - state.aportado);
+  document.getElementById('kCoste').textContent = f(state.coste);
+  document.getElementById('kAport').textContent = f(state.aportado);
+  document.getElementById('kGap').textContent = f(deficit);
+
+  const V = state.valoracion, P = state.aportacion;
+  const pctPorSocio = V>0 ? P/V : 0;
+  document.getElementById('pctPorSocioHint').textContent = V>0 ? `Cada socio compra ${pct(pctPorSocio)} por ${f(P)}.` : '—';
+
+  // nº de socios para cubrir el déficit
+  const nSocios = (P>0 && deficit>0) ? Math.ceil(deficit/P) : 0;
+  const capital = nSocios*P;
+  const pctVendido = V>0 ? capital/V : 0;
+  const pctFundadores = 1 - pctVendido;
+  const pctCadaFundador = pctFundadores/NUM_FUNDADORES;
+  const mayoria = pctFundadores > 0.5;
+  const cubre = capital >= deficit;
+
+  // resultado
+  let cls, titulo, msg;
+  if (deficit<=0){ cls='ok'; titulo='No necesitas levantar capital'; msg='Lo aportado ya cubre el coste total. No hace falta meter socios.'; }
+  else if (!mayoria){ cls='bad'; titulo=`Cubrirías el déficit, pero perdéis la mayoría`; msg=`Para reunir ${f(capital)} hay que vender ${pct(pctVendido)} de la empresa. Los 5 fundadores bajaríais a ${pct(pctCadaFundador)} cada uno (en conjunto ${pct(pctFundadores)}, por debajo del 50%). Sube la valoración o combina con deuda/recorte de costes.`; }
+  else if (pctVendido>0.35){ cls='warn'; titulo=`Cubierto vendiendo ${pct(pctVendido)} de la empresa`; msg=`Con ${nSocios} socio(s) de ${f(P)} levantas ${f(capital)} y cubres el déficit, manteniendo la mayoría (${pct(pctFundadores)}). Pero es bastante dilución; valora subir la valoración.`; }
+  else { cls='ok'; titulo=`Cubierto vendiendo ${pct(pctVendido)} de la empresa`; msg=`Con ${nSocios} socio(s) de ${f(P)} levantas ${f(capital)} y cubres el déficit (${f(deficit)}), conservando ${pct(pctFundadores)} entre los fundadores.`; }
+
+  document.getElementById('resultBox').innerHTML = `
+    <div class="result ${cls}">
+      <h3>${cubre||deficit<=0 ? '✅' : '⚠️'} ${titulo}</h3>
+      <p>${msg}</p>
+      <div class="res-grid">
+        <div class="rg"><div class="l">Socios nuevos necesarios</div><div class="v">${nSocios}</div></div>
+        <div class="rg"><div class="l">Capital levantado</div><div class="v">${f(capital)}</div></div>
+        <div class="rg"><div class="l">% total vendido</div><div class="v">${pct(pctVendido)}</div></div>
+        <div class="rg"><div class="l">Fundadores (cada uno)</div><div class="v">${pct(pctCadaFundador)}</div></div>
+      </div>
+    </div>`;
+
+  // cap table
+  const colsF = '#6366f1', colsN = '#8b5cf6';
+  let ct = '';
+  for (let i=1;i<=NUM_FUNDADORES;i++){
+    ct += `<div class="ct-row"><div class="ct-name">Socio fundador ${i}</div><div class="ct-track"><div class="ct-fill" style="width:${pctCadaFundador*100}%;background:${colsF}"></div></div><div class="ct-pct">${pct(pctCadaFundador)}</div></div>`;
+  }
+  for (let i=1;i<=nSocios;i++){
+    ct += `<div class="ct-row"><div class="ct-name">Socio nuevo ${i}</div><div class="ct-track"><div class="ct-fill" style="width:${pctPorSocio*100}%;background:${colsN}"></div></div><div class="ct-pct">${pct(pctPorSocio)}</div></div>`;
+  }
+  document.getElementById('captable').innerHTML = ct;
+
+  // comparativa por valoración
+  document.getElementById('apEtq').textContent = (P/1000)+'k';
+  const vals = [400000,500000,600000,750000,1000000];
+  if (!vals.includes(V)) { vals.push(V); vals.sort((a,b)=>a-b); }
+  document.getElementById('compBody').innerHTML = vals.map(v=>{
+    const pv = deficit/v;                 // % a vender para cubrir el déficit
+    const n = P>0 ? Math.ceil(deficit/P) : 0;
+    const pps = P/v;
+    const fund = (1 - n*pps)/NUM_FUNDADORES;
+    const maj = (1 - n*pps) > 0.5;
+    return `<tr class="${v===V?'hl':''}">
+      <td>${f(v)}</td>
+      <td class="num">${pct(pv)}</td>
+      <td class="num">${n}</td>
+      <td class="num">${pct(pps)}</td>
+      <td class="num">${pct(Math.max(0,fund))}</td>
+      <td class="${maj?'yes':'no'}">${maj?'Sí ✓':'No ✗'}</td>
+    </tr>`;
+  }).join('');
+}
+
+['coste','aportado','valoracion','aportacion'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', e=>{
+    const v=parseFloat(e.target.value); state[id]=isNaN(v)?0:v; render();
+  });
+});
+
+setInputs();
+render();
+</script>
+</body>
+</html>

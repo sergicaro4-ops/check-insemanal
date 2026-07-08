@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ronda de Inversión · Legion Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink:#16182b; --ink2:#3b3f5c; --muted:#6b7088; --line:#e6e8f0; --line2:#d2d6e4;
+    --paper:#ffffff; --soft:#f6f7fb; --accent:#4f46e5; --accent-soft:#eef0fe;
+    --green:#15803d; --green-bg:#e9f7ef; --amber:#b45309; --amber-bg:#fdf3e3;
+    --purple:#7c3aed; --purple-bg:#f2ecfe; --red:#b91c1c;
+  }
+  body { font-family:'Inter',sans-serif; background:#eceef4; color:var(--ink); line-height:1.55; padding:24px 12px; }
+  .toolbar { max-width:820px; margin:0 auto 16px; display:flex; justify-content:flex-end; gap:8px; }
+  .btn { font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:600; padding:9px 16px; border-radius:8px; border:1px solid var(--line2); background:#fff; color:var(--ink2); cursor:pointer; text-decoration:none; display:inline-block; }
+  .btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .btn:hover { border-color:var(--accent); }
+  .page { max-width:820px; margin:0 auto; background:var(--paper); border-radius:6px; box-shadow:0 10px 40px rgba(20,24,45,0.12); padding:48px 52px; }
+
+  .doc-head { display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid var(--ink); padding-bottom:18px; margin-bottom:26px; }
+  .brand-name { font-family:'Space Grotesk',sans-serif; font-size:26px; font-weight:700; letter-spacing:0.04em; }
+  .brand-sub { font-size:12px; color:var(--muted); letter-spacing:0.16em; text-transform:uppercase; margin-top:3px; }
+  .doc-meta { text-align:right; font-size:12px; color:var(--muted); line-height:1.7; }
+  .doc-meta b { color:var(--ink2); }
+
+  h1.doc-title { font-family:'Space Grotesk',sans-serif; font-size:27px; font-weight:700; margin-bottom:8px; }
+  .doc-intro { font-size:13.5px; color:var(--ink2); margin-bottom:28px; max-width:640px; }
+
+  h2.sec { font-family:'Space Grotesk',sans-serif; font-size:15px; font-weight:700; letter-spacing:0.02em; margin:32px 0 14px; padding-bottom:8px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px; }
+
+  .hero { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden; margin-bottom:8px; }
+  .hero .cell { background:var(--paper); padding:18px 20px; }
+  .hero .l { font-family:'Space Grotesk',sans-serif; font-size:10px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+  .hero .v { font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:700; }
+  .hero .cell.accent .v { color:var(--accent); }
+  .hero .s { font-size:11px; color:var(--muted); margin-top:4px; }
+
+  .callout { background:var(--accent-soft); border:1px solid #d9dcfb; border-radius:10px; padding:20px 22px; margin-bottom:6px; }
+  .callout .big { font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:700; color:var(--accent); margin-bottom:4px; }
+  .callout p { font-size:13px; color:var(--ink2); }
+
+  table { width:100%; border-collapse:collapse; font-size:13px; margin-top:4px; }
+  thead th { text-align:left; font-family:'Space Grotesk',sans-serif; font-size:10px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--muted); padding:9px 10px; border-bottom:2px solid var(--line2); }
+  th.num, td.num { text-align:right; font-family:'Space Grotesk',sans-serif; }
+  td { padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:middle; }
+  tfoot td { padding:12px 10px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:13.5px; border-top:2px solid var(--ink); }
+
+  .capbar-row { display:grid; grid-template-columns:150px 1fr 54px; gap:12px; align-items:center; margin-bottom:9px; font-size:13px; }
+  .capbar-name { color:var(--ink2); font-weight:500; }
+  .capbar-track { height:16px; background:var(--soft); border-radius:8px; overflow:hidden; border:1px solid var(--line); }
+  .capbar-fill { height:100%; border-radius:8px; }
+  .capbar-pct { text-align:right; font-family:'Space Grotesk',sans-serif; font-weight:700; }
+
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  @media (max-width:680px){ .two{ grid-template-columns:1fr; } .hero{ grid-template-columns:1fr; } }
+  .mini-list { font-size:12.5px; color:var(--ink2); line-height:1.75; padding-left:18px; }
+  .mini-list li { margin-bottom:3px; }
+
+  .usebar { display:flex; height:26px; border-radius:8px; overflow:hidden; border:1px solid var(--line); margin-bottom:12px; }
+  .usebar span { height:100%; }
+  .use-leg { display:flex; flex-wrap:wrap; gap:8px 18px; font-size:12px; color:var(--ink2); }
+  .use-leg .it { display:flex; align-items:center; gap:7px; }
+  .use-leg .d { width:11px; height:11px; border-radius:3px; }
+
+  .disc { font-size:10.5px; color:var(--muted); background:var(--soft); border:1px solid var(--line); border-radius:8px; padding:12px 14px; margin-top:14px; line-height:1.6; }
+  .doc-foot { margin-top:30px; padding-top:14px; border-top:1px solid var(--line); font-size:10.5px; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+
+  @media print {
+    body { background:#fff; padding:0; }
+    .toolbar { display:none; }
+    .page { box-shadow:none; border-radius:0; max-width:none; padding:0; }
+    h2.sec, .hero, table, .callout, .capbar-row { page-break-inside:avoid; }
+    @page { size:A4; margin:16mm 15mm; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button class="btn primary" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+</div>
+
+<div class="page">
+  <div class="doc-head">
+    <div>
+      <div class="brand-name">LEGION CLUB</div>
+      <div class="brand-sub">Caro Legión S.L.</div>
+    </div>
+    <div class="doc-meta">
+      <div><b>Ronda de inversión</b></div>
+      <div>Caro Legión, S.L. · CIF B-22593131</div>
+      <div>Domicilio social: Manresa (Barcelona)</div>
+      <div>Gimnasio: C/ Ensija 32, Sant Fruitós de Bages</div>
+      <div>Julio 2026 · Confidencial</div>
+    </div>
+  </div>
+
+  <h1 class="doc-title">Entrada de socios — 50.000 € por el 10%</h1>
+  <p class="doc-intro">
+    Legion Club es un gimnasio de nueva creación en Sant Fruitós de Bages (Barcelona), actualmente en
+    fase de reforma y equipamiento. Los socios fundadores han aportado ya cerca de 240.000 € y ahora se
+    abre una ronda para completar la inversión con hasta 4 socios nuevos, cada uno con un 10% de la sociedad.
+  </p>
+
+  <h2 class="sec">La operación</h2>
+  <div class="hero">
+    <div class="cell accent">
+      <div class="l">Valoración</div>
+      <div class="v">500.000 €</div>
+      <div class="s">50.000 € = 10% de la sociedad</div>
+    </div>
+    <div class="cell accent">
+      <div class="l">Ronda objetivo</div>
+      <div class="v">200.000 €</div>
+      <div class="s">4 socios × 50.000 €</div>
+    </div>
+    <div class="cell accent">
+      <div class="l">% ofrecido</div>
+      <div class="v">40 %</div>
+      <div class="s">10% por socio · fundadores 60%</div>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="big">Cada socio: 50.000 € → 10 % de Caro Legión, S.L.</div>
+    <p>La entrada se formaliza mediante <b>ampliación de capital con prima de asunción</b>: se crean
+       participaciones nuevas y la aportación de cada socio (50.000 €) entra íntegramente en la caja de la
+       sociedad para financiar la reforma. Participación directa en el capital, con reparto de beneficios en la
+       junta anual en igualdad de condiciones para todos los socios.</p>
+  </div>
+
+  <h2 class="sec">Reparto resultante (cap table)</h2>
+  <div class="capbar-row">
+    <div class="capbar-name">Fundadores (5)</div>
+    <div class="capbar-track"><div class="capbar-fill" style="width:60%;background:#6366f1"></div></div>
+    <div class="capbar-pct">60 %</div>
+  </div>
+  <div class="capbar-row">
+    <div class="capbar-name">Socios nuevos (4)</div>
+    <div class="capbar-track"><div class="capbar-fill" style="width:40%;background:#7c3aed"></div></div>
+    <div class="capbar-pct">40 %</div>
+  </div>
+
+  <table>
+    <thead><tr><th>Socio</th><th class="num">Aportación</th><th class="num">Participación</th></tr></thead>
+    <tbody>
+      <tr><td>Sergi Caro Folch · <b>Administrador</b></td><td class="num">—</td><td class="num">12,0 %</td></tr>
+      <tr><td>Fundador 2</td><td class="num">—</td><td class="num">12,0 %</td></tr>
+      <tr><td>Fundador 3</td><td class="num">—</td><td class="num">12,0 %</td></tr>
+      <tr><td>Fundador 4</td><td class="num">—</td><td class="num">12,0 %</td></tr>
+      <tr><td>Fundador 5</td><td class="num">—</td><td class="num">12,0 %</td></tr>
+      <tr><td>Socio nuevo 1</td><td class="num">50.000 €</td><td class="num">10,0 %</td></tr>
+      <tr><td>Socio nuevo 2</td><td class="num">50.000 €</td><td class="num">10,0 %</td></tr>
+      <tr><td>Socio nuevo 3</td><td class="num">50.000 €</td><td class="num">10,0 %</td></tr>
+      <tr><td>Socio nuevo 4</td><td class="num">50.000 €</td><td class="num">10,0 %</td></tr>
+    </tbody>
+    <tfoot><tr><td>Total ronda</td><td class="num">200.000 €</td><td class="num">100 %</td></tr></tfoot>
+  </table>
+
+  <h2 class="sec">Estado de la inversión</h2>
+  <table>
+    <tbody>
+      <tr><td>Coste total del proyecto (reforma + equipamiento)</td><td class="num"><b>489.469 €</b></td></tr>
+      <tr><td>Ya ejecutado y pagado por los fundadores</td><td class="num">180.750 €</td></tr>
+      <tr><td>Pendiente de pagar</td><td class="num">308.720 €</td></tr>
+      <tr><td>Saldo disponible en banco</td><td class="num">− 63.246 €</td></tr>
+      <tr><td><b>Necesidad de financiación</b></td><td class="num"><b>245.474 €</b></td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12.5px;color:var(--ink2);margin-top:12px">
+    La ronda de <b>200.000 €</b> cubre la mayor parte de lo pendiente. Los <b>45.474 €</b> restantes se completan
+    con la tesorería del proyecto y, en su caso, financiación bancaria/ICF, sin ceder participación adicional.
+  </p>
+
+  <h2 class="sec">Uso de los fondos</h2>
+  <div class="usebar">
+    <span style="width:32%;background:#0891b2"></span>
+    <span style="width:20%;background:#d97706"></span>
+    <span style="width:20%;background:#4f46e5"></span>
+    <span style="width:16%;background:#0d9488"></span>
+    <span style="width:12%;background:#ea580c"></span>
+  </div>
+  <div class="use-leg">
+    <div class="it"><span class="d" style="background:#0891b2"></span>Climatización, agua y aire (Carulla)</div>
+    <div class="it"><span class="d" style="background:#d97706"></span>Instalación eléctrica e incendios</div>
+    <div class="it"><span class="d" style="background:#4f46e5"></span>Maquinaria, aduana y transporte</div>
+    <div class="it"><span class="d" style="background:#0d9488"></span>Vestuarios, suelo y acabados</div>
+    <div class="it"><span class="d" style="background:#ea580c"></span>Accesos, rótulos y obra final</div>
+  </div>
+
+  <h2 class="sec">Por qué el proyecto</h2>
+  <div class="two">
+    <div>
+      <ul class="mini-list">
+        <li><b>130.000 habitantes</b> en un radio de 20 km.</li>
+        <li><b>Punto de equilibrio: 220 socios</b> para cubrir gastos (300 con devolución de deuda incluida).</li>
+        <li>Nave de <b>~500.000 €</b> propiedad de la familia, cedida al proyecto.</li>
+        <li>Equipo fundador solvente (profesionales) y administrador dedicado a tiempo completo.</li>
+      </ul>
+    </div>
+    <div>
+      <ul class="mini-list">
+        <li>Instalaciones nuevas: clima, contraincendios certificado, vestuarios completos.</li>
+        <li>Maquinaria premium ya adquirida (HSE).</li>
+        <li>Control de acceso con tornos y lector QR.</li>
+        <li>Reparto de beneficios anual, en igualdad para todos los socios.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 class="sec">Marco legal (estatutos)</h2>
+  <div class="two">
+    <div>
+      <ul class="mini-list">
+        <li><b>Sociedad:</b> Caro Legión, S.L. · CNAE 9313 (gimnasio, fitness y culturismo).</li>
+        <li><b>Capital social actual:</b> 5.000 € (5.000 participaciones de 1 € nominal).</li>
+        <li><b>Entrada:</b> ampliación de capital con prima de asunción; nuevas participaciones desembolsadas en efectivo.</li>
+        <li><b>Administrador único:</b> Sergi Caro Folch (cargo retribuido, art. 20).</li>
+      </ul>
+    </div>
+    <div>
+      <ul class="mini-list">
+        <li><b>Transmisión (art. 7):</b> derecho de adquisición preferente de los socios ante ventas a terceros.</li>
+        <li><b>Acuerdos (art. 14):</b> ampliar capital exige &gt;50% del capital.</li>
+        <li><b>Junta anual:</b> aprobación de cuentas y reparto de resultado (cierre 31/12).</li>
+        <li>Todas las participaciones con iguales derechos y obligaciones.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="disc">
+    Documento informativo y confidencial, sin valor de oferta vinculante. Las cifras de coste corresponden al
+    estado de la reforma a la fecha e incluyen partidas estimadas aún pendientes de presupuesto en firme
+    (transporte/aduana, elevador, puerta de acceso y techo RF). La ampliación de capital, la prima de asunción, la
+    valoración y las condiciones definitivas se acordarán en Junta General y se formalizarán ante asesor y notario,
+    con inscripción en el Registro Mercantil. La nave donde se ubica el gimnasio es propiedad de la comunidad de
+    bienes familiar y se encuentra en régimen de leasing (operación vinculada).
+  </div>
+
+  <div class="doc-foot">
+    <span>Caro Legión S.L. · CIF B-22593131</span>
+    <span>Legion Club · Sant Fruitós de Bages, Barcelona</span>
+  </div>
+</div>
+
+</body>
+</html>
