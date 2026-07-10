@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Partida Luis Miguel · Caro Legión S.L.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--ink:#141a2b;--ink2:#3a4260;--muted:#697089;--line:#e4e7f0;--line2:#cdd3e2;--paper:#fff;--soft:#f6f8fc;--navy:#12325a;--navy2:#1c4a80;--gold:#a8791f;--amber-bg:#fdf3e3;--amber:#b45309;}
+  body{font-family:'Inter',sans-serif;background:#e9ecf3;color:var(--ink);line-height:1.55;padding:22px 12px;}
+  .toolbar{max-width:640px;margin:0 auto 16px;display:flex;justify-content:flex-end;gap:8px;}
+  .btn{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;padding:9px 16px;border-radius:8px;border:1px solid var(--line2);background:#fff;color:var(--ink2);cursor:pointer;}
+  .btn.p{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .doc{max-width:640px;margin:0 auto;background:var(--paper);box-shadow:0 12px 44px rgba(20,24,45,.14);}
+  .pg{padding:40px 46px;}
+
+  .head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid var(--navy);padding-bottom:16px;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+  .brand{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;letter-spacing:.03em;color:var(--navy);}
+  .brand small{display:block;font-family:'Inter',sans-serif;font-size:11.5px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;font-weight:400;margin-top:3px;}
+  .head .meta{text-align:right;font-size:11.5px;color:var(--muted);line-height:1.7;}
+  .doctype{font-family:'Space Grotesk',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);}
+
+  h1{font-family:'Space Grotesk',sans-serif;font-size:21px;font-weight:700;color:var(--navy);margin:2px 0 4px;}
+  .sub{font-size:12.5px;color:var(--muted);margin-bottom:18px;}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0;}
+  th{text-align:right;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);padding:9px 10px;border-bottom:2px solid var(--line2);}
+  th:first-child{text-align:left;}
+  td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;font-family:'Space Grotesk',sans-serif;}
+  td:first-child{text-align:left;font-family:'Inter',sans-serif;color:var(--ink2);}
+  tr.sub-tot td{font-weight:700;color:var(--navy);border-top:2px solid var(--navy);}
+  tr.grand td{font-weight:700;color:var(--navy);background:var(--soft);font-size:14.5px;padding:12px 10px;}
+
+  .status{display:inline-flex;align-items:center;gap:6px;background:var(--amber-bg);color:var(--amber);border-radius:20px;padding:6px 14px;font-family:'Space Grotesk',sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.03em;margin-top:16px;}
+  .status::before{content:'●';font-size:9px;}
+
+  .foot{margin-top:24px;padding-top:12px;border-top:1px solid var(--line);font-size:10px;color:var(--muted);}
+
+  @media print{body{background:#fff;padding:0;}.toolbar{display:none;}.doc{box-shadow:none;max-width:none;}.pg{padding:16mm 15mm;}table{page-break-inside:avoid;}@page{size:A4;margin:0;}}
+</style>
+</head>
+<body>
+<div class="toolbar"><button class="btn p" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button></div>
+
+<div class="doc">
+  <div class="pg">
+    <div class="head">
+      <div class="brand">CARO LEGIÓN, S.L.<small>Legion Club · Sant Fruitós de Bages</small></div>
+      <div class="meta"><span class="doctype">Partida de obra</span><br/>Junta de socios · 10 de julio de 2026</div>
+    </div>
+
+    <h1>Luis Miguel — Tabiques y techo vestuarios</h1>
+    <p class="sub">Desglose de la partida pendiente de pago, presupuesto real recibido.</p>
+
+    <table>
+      <thead><tr><th>Concepto</th><th>Material</th><th>Mano de obra</th><th>Total</th></tr></thead>
+      <tbody>
+        <tr><td>Refuerzos pino</td><td>—</td><td>—</td><td>440,00 €</td></tr>
+        <tr><td>Tabique sala poses</td><td>375,00 €</td><td>1.760,00 €</td><td>2.135,00 €</td></tr>
+        <tr><td>Tabique entrada recepción</td><td>595,13 €</td><td>1.300,00 €</td><td>1.895,13 €</td></tr>
+        <tr><td>Tabique ocultación agua/luz</td><td>464,11 €</td><td>2.640,00 €</td><td>3.104,11 €</td></tr>
+        <tr><td>Techo vestuarios</td><td>1.923,54 €</td><td>6.600,00 €</td><td>8.523,54 €</td></tr>
+        <tr class="sub-tot"><td colspan="3">Base (sin IVA)</td><td>16.097,78 €</td></tr>
+        <tr><td colspan="3">+ 21% IVA</td><td>3.380,53 €</td></tr>
+        <tr class="grand"><td colspan="3">TOTAL PENDIENTE</td><td>19.478,31 €</td></tr>
+      </tbody>
+    </table>
+
+    <div class="status">Pendiente de pago — nada abonado todavía</div>
+
+    <div class="foot">Caro Legión, S.L. · CIF B-22593131 · Documento interno para junta de socios.</div>
+  </div>
+</div>
+</body>
+</html>
