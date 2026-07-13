@@ -425,13 +425,13 @@ function seedItems() {
     ({ id: uid(), sk, concepto, categoria, base, currency, iva, estado, nota: nota || '' });
   return [
     mk('maq-pagado', 'Maquinaria HSE (76.750 $ FOB) — pagado', 'maquinaria', 55082.18, 'EUR', 21, 'paid', '66.649,44 € en 2 transferencias (banco)'),
-    mk('maq-pend', 'Maquinaria HSE — IVA importación / pendiente', 'maquinaria', 15527.82, 'EUR', 21, 'pending', 'Al despacho de aduana'),
+    mk('maq-pend', 'Maquinaria HSE — IVA importación / pendiente', 'maquinaria', 18788, 'EUR', 0, 'pending', 'Al despacho de aduana'),
     mk('elec-gimnas-pagado', 'Instalación eléctrica gimnasio (Patrick) — pagado a cuenta', 'electrica', 6923.02, 'EUR', 21, 'paid', '8.376,86 € pagados por banco'),
     mk('elec-gimnas-pend', 'Instalación eléctrica gimnasio (Patrick) — pendiente', 'electrica', 27692.10, 'EUR', 21, 'pending', 'No incluye luces decorativas LED ni medios de elevación'),
     mk('elec-incendi', 'Detección de incendios (central + 37 detectores)', 'incendios', 9611.46, 'EUR', 21, 'pending', 'Incluye certificación contraincendios'),
     mk('elec-comptadors', 'Suministro caja de contadores (TMF-10 + armario)', 'electrica', 2252.90, 'EUR', 21, 'pending'),
     mk('obramat-201', 'Material baños/vestuarios/suelo/iluminación (Obramat, pedido 201)', 'vestuarios', 11599.04, 'EUR', 21, 'pending', 'Total + 21% IVA (base) 14.026,70 €. Depósito obligatorio, entrega 15/07'),
-    mk('rotol-legion', 'Rótulo LEGION letras corpóreas + LED (Franquet Barrau ENP261169)', 'rotulos', 6748.00, 'EUR', 21, 'pending'),
+    mk('rotol-legion', 'Rótulo LEGION letras corpóreas + LED (Franquet Barrau ENP261169)', 'rotulos', 4500, 'EUR', 21, 'pending'),
     mk('rotol-xixo', 'Lonas / decoración La Xixo (Franquet Barrau FBP261143)', 'rotulos', 388.10, 'EUR', 21, 'pending', 'Presupuesto a nombre de La Xixo — confirmar si es del gimnasio'),
     mk('carulla-pagado', 'Carulla (clima+agua+ACS+RITE) — pagado 25%', 'clima', 23600.51, 'EUR', 21, 'paid', 'Incluye climatización, agua, ACS y renovación aire RITE. 25% = 28.556,62 € pagado'),
     mk('carulla-pend-iva', 'Carulla (clima+agua+ACS+RITE) — pendiente 35% (con IVA)', 'clima', 33040.72, 'EUR', 21, 'pending', 'Con IVA. Climatización, agua, ACS y RITE'),
@@ -440,11 +440,11 @@ function seedItems() {
     mk('pulir-suelo', 'Suelo (pavimento gimnasio)', 'suelo', 17000, 'EUR', 21, 'pending', 'Presupuesto'),
     mk('pintura-gral', 'Pintura (paredes + fachada)', 'pintura', 5000, 'EUR', 21, 'pending', 'El suelo va acabado, no se pinta'),
     mk('tornos', 'Tornos de acceso', 'acceso', 9000, 'EUR', 21, 'pending', 'Presupuesto'),
-    mk('puerta-qr', 'Puerta de cristal exterior con lector QR', 'acceso', 8000, 'EUR', 21, 'pending', 'ESTIMACIÓN prudente — pendiente presupuesto firme'),
-    mk('accesibilidad', 'Elevador para minusválidos', 'obra', 12000, 'EUR', 21, 'pending', '≈ 12.000 € (orientativo)'),
+    mk('puerta-qr', 'Puerta de cristal exterior con lector QR', 'acceso', 3412, 'EUR', 21, 'pending', 'ESTIMACIÓN prudente — pendiente presupuesto firme'),
+    mk('accesibilidad', 'Elevador para minusválidos', 'obra', 11500, 'EUR', 21, 'pending', '≈ 12.000 € (orientativo)'),
     mk('lm-pendiente', 'Luis Miguel (tabiques + techo vestuarios)', 'obra', 16097.78, 'EUR', 21, 'pending', 'Presupuesto (sin IVA +21%): refuerzos pino 440 + tabique sala poses 2.135 + entrada recepción 1.895,13 + ocultación agua/luz 3.104,11 + techo vestuarios 8.523,54'),
-    mk('espejos', 'Espejos sala (pared entrenamiento)', 'obra', 5500, 'EUR', 21, 'pending', '5.500 € + 21% IVA (base)'),
-    mk('transporte', 'Transporte marítimo + aduana equipos (estimado)', 'transporte', 30000, 'EUR', 0, 'pending', 'Estimación aduana + transporte ≈ 30.000 €'),
+    mk('espejos', 'Espejos sala (pared entrenamiento)', 'obra', 5302, 'EUR', 21, 'pending', '5.500 € + 21% IVA (base)'),
+    mk('transporte', 'Transporte marítimo + aduana equipos (estimado)', 'transporte', 10800, 'EUR', 0, 'pending', 'Estimación aduana + transporte ≈ 30.000 €'),
     mk('extra-obra', 'Obra y mano de obra ya ejecutada (Rubiralta y otros)', 'obra', 37580.20, 'EUR', 21, 'paid', 'Demolición, pladur, material, limpieza… ya pagado (banco)'),
     mk('extra-otros', 'Residuos, alquileres, web, software, fianza local', 'otros', 15111.74, 'EUR', 21, 'paid', 'Ya pagado (banco)'),
     mk('extra-incendios', 'Ignifugación estructura R-90 (CAT FOC)', 'incendios', 5450.00, 'EUR', 21, 'paid', 'Ya pagado (banco)'),
@@ -658,6 +658,18 @@ function load() {
     const nb = { 'pulir-suelo': 17000, 'pintura-gral': 5000, 'tornos': 9000, 'puerta-qr': 8000, 'accesibilidad': 12000, 'espejos': 5500, 'techo-rf': 4000 };
     Object.entries(nb).forEach(([sk, v]) => { const it = state.items.find(i => i.sk === sk); if (it) it.base = v; });
     state.migV7 = true;
+    migrated = true;
+  }
+
+  // Migración puntual: presupuestos reales definitivos (espejos, rótulo, puerta QR, elevador, IVA máquinas, transporte).
+  if (!state.migV8) {
+    const es = state.items.find(i => i.sk === 'espejos'); if (es) es.base = 5302;
+    const ro = state.items.find(i => i.sk === 'rotol-legion'); if (ro) ro.base = 4500;
+    const pq = state.items.find(i => i.sk === 'puerta-qr'); if (pq) { pq.base = 3412; pq.nota = '3.412 € + 21% IVA (base) — presupuesto real'; }
+    const ac = state.items.find(i => i.sk === 'accesibilidad'); if (ac) ac.base = 11500;
+    const mq = state.items.find(i => i.sk === 'maq-pend'); if (mq) { mq.base = 18788; mq.iva = 0; }
+    const tr = state.items.find(i => i.sk === 'transporte'); if (tr) tr.base = 10800;
+    state.migV8 = true;
     migrated = true;
   }
 
