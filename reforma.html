@@ -431,7 +431,7 @@ function seedItems() {
     mk('elec-incendi', 'Detección de incendios (central + 37 detectores)', 'incendios', 9611.46, 'EUR', 21, 'pending', 'Incluye certificación contraincendios'),
     mk('elec-comptadors', 'Suministro caja de contadores (TMF-10 + armario)', 'electrica', 2252.90, 'EUR', 21, 'pending'),
     mk('obramat-201', 'Material baños/vestuarios/suelo/iluminación (Obramat, pedido 201)', 'vestuarios', 11599.04, 'EUR', 21, 'pending', 'Total + 21% IVA (base) 14.026,70 €. Depósito obligatorio, entrega 15/07'),
-    mk('rotol-legion', 'Rótulo LEGION letras corpóreas + LED (Franquet Barrau ENP261169)', 'rotulos', 4500, 'EUR', 21, 'pending'),
+    mk('rotol-legion', 'Rótulo LEGION letras corpóreas + LED (Franquet Barrau ENP261169)', 'rotulos', 3719.01, 'EUR', 21, 'pending'),
     mk('rotol-xixo', 'Lonas / decoración La Xixo (Franquet Barrau FBP261143)', 'rotulos', 388.10, 'EUR', 21, 'pending', 'Presupuesto a nombre de La Xixo — confirmar si es del gimnasio'),
     mk('carulla-pagado', 'Carulla (clima+agua+ACS+RITE) — pagado 25%', 'clima', 23600.51, 'EUR', 21, 'paid', 'Incluye climatización, agua, ACS y renovación aire RITE. 25% = 28.556,62 € pagado'),
     mk('carulla-pend-iva', 'Carulla (clima+agua+ACS+RITE) — pendiente 35% (con IVA)', 'clima', 33040.72, 'EUR', 21, 'pending', 'Con IVA. Climatización, agua, ACS y RITE'),
@@ -440,10 +440,10 @@ function seedItems() {
     mk('pulir-suelo', 'Suelo (pavimento gimnasio)', 'suelo', 17000, 'EUR', 21, 'pending', 'Presupuesto'),
     mk('pintura-gral', 'Pintura (paredes + fachada)', 'pintura', 5000, 'EUR', 21, 'pending', 'El suelo va acabado, no se pinta'),
     mk('tornos', 'Tornos de acceso', 'acceso', 9000, 'EUR', 21, 'pending', 'Presupuesto'),
-    mk('puerta-qr', 'Puerta de cristal exterior con lector QR', 'acceso', 3412, 'EUR', 21, 'pending', 'ESTIMACIÓN prudente — pendiente presupuesto firme'),
-    mk('accesibilidad', 'Elevador para minusválidos', 'obra', 11500, 'EUR', 21, 'pending', '≈ 12.000 € (orientativo)'),
+    mk('puerta-qr', 'Puerta de cristal exterior con lector QR', 'acceso', 2819.83, 'EUR', 21, 'pending', '3.412 € IVA incl. — presupuesto real'),
+    mk('accesibilidad', 'Elevador para minusválidos', 'obra', 9504.13, 'EUR', 21, 'pending', '11.500 € IVA incl. — presupuesto real'),
     mk('lm-pendiente', 'Luis Miguel (tabiques + techo vestuarios)', 'obra', 16097.78, 'EUR', 21, 'pending', 'Presupuesto (sin IVA +21%): refuerzos pino 440 + tabique sala poses 2.135 + entrada recepción 1.895,13 + ocultación agua/luz 3.104,11 + techo vestuarios 8.523,54'),
-    mk('espejos', 'Espejos sala (pared entrenamiento)', 'obra', 5302, 'EUR', 21, 'pending', '5.500 € + 21% IVA (base)'),
+    mk('espejos', 'Espejos sala (pared entrenamiento)', 'obra', 4381.82, 'EUR', 21, 'pending', '5.302 € IVA incl. — presupuesto real'),
     mk('transporte', 'Transporte marítimo + aduana equipos (estimado)', 'transporte', 10800, 'EUR', 0, 'pending', 'Estimación aduana + transporte ≈ 30.000 €'),
     mk('extra-obra', 'Obra y mano de obra ya ejecutada (Rubiralta y otros)', 'obra', 37580.20, 'EUR', 21, 'paid', 'Demolición, pladur, material, limpieza… ya pagado (banco)'),
     mk('extra-otros', 'Residuos, alquileres, web, software, fianza local', 'otros', 15111.74, 'EUR', 21, 'paid', 'Ya pagado (banco)'),
@@ -561,7 +561,7 @@ function load() {
 
   // Migración puntual: presupuestos concretos (suelo, torno, Luis Miguel, elevador).
   if (!state.migPresu2) {
-    const upd = { 'pulir-suelo': { base: 17000, concepto: 'Suelo (pavimento gimnasio)', nota: 'Presupuesto' }, 'tornos': { base: 9000, nota: 'Presupuesto' }, 'accesibilidad': { base: 12000, concepto: 'Elevador para minusválidos', nota: '≈ 12.000 € (orientativo)' }, 'lm-pendiente': { base: 14000, concepto: 'Luis Miguel (techo vestuarios + paredes)', nota: 'Techo vestuarios c/ mano de obra 9.000 + pared separatoria 3.000 + pared frontal 2.000' } };
+    const upd = { 'pulir-suelo': { base: 17000, concepto: 'Suelo (pavimento gimnasio)', nota: 'Presupuesto' }, 'tornos': { base: 9000, nota: 'Presupuesto' }, 'accesibilidad': { base: 12000, concepto: 'Elevador para minusválidos', nota: '11.500 € IVA incl. — presupuesto real' }, 'lm-pendiente': { base: 14000, concepto: 'Luis Miguel (techo vestuarios + paredes)', nota: 'Techo vestuarios c/ mano de obra 9.000 + pared separatoria 3.000 + pared frontal 2.000' } };
     Object.entries(upd).forEach(([sk, v]) => { const it = state.items.find(i => i.sk === sk); if (it) Object.assign(it, v); });
     state.migPresu2 = true;
     migrated = true;
@@ -665,11 +665,21 @@ function load() {
   if (!state.migV8) {
     const es = state.items.find(i => i.sk === 'espejos'); if (es) es.base = 5302;
     const ro = state.items.find(i => i.sk === 'rotol-legion'); if (ro) ro.base = 4500;
-    const pq = state.items.find(i => i.sk === 'puerta-qr'); if (pq) { pq.base = 3412; pq.nota = '3.412 € + 21% IVA (base) — presupuesto real'; }
+    const pq = state.items.find(i => i.sk === 'puerta-qr'); if (pq) { pq.base = 3412; pq.nota = '3.412 € IVA incl. — presupuesto real'; }
     const ac = state.items.find(i => i.sk === 'accesibilidad'); if (ac) ac.base = 11500;
     const mq = state.items.find(i => i.sk === 'maq-pend'); if (mq) { mq.base = 18788; mq.iva = 0; }
     const tr = state.items.find(i => i.sk === 'transporte'); if (tr) tr.base = 10800;
     state.migV8 = true;
+    migrated = true;
+  }
+
+  // Migración puntual: los 4 importes anteriores eran CON IVA incluido, no base → base = importe/1,21.
+  if (!state.migV9) {
+    const es = state.items.find(i => i.sk === 'espejos'); if (es) es.base = 4381.82;
+    const ro = state.items.find(i => i.sk === 'rotol-legion'); if (ro) ro.base = 3719.01;
+    const pq = state.items.find(i => i.sk === 'puerta-qr'); if (pq) pq.base = 2819.83;
+    const ac = state.items.find(i => i.sk === 'accesibilidad'); if (ac) ac.base = 9504.13;
+    state.migV9 = true;
     migrated = true;
   }
 
