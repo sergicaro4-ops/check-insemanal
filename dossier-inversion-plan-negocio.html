@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dossier de Inversión y Plan de Negocio · Legion Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--ink:#141a2b;--ink2:#3a4260;--muted:#697089;--line:#e4e7f0;--line2:#cdd3e2;--paper:#fff;--soft:#f6f8fc;--navy:#12325a;--navy2:#1c4a80;--gold:#a8791f;--green:#15803d;--red:#b91c1c;}
+  body{font-family:'Inter',sans-serif;background:#e9ecf3;color:var(--ink);line-height:1.55;padding:22px 12px;}
+  .toolbar{max-width:880px;margin:0 auto 16px;display:flex;justify-content:flex-end;gap:8px;}
+  .btn{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;padding:9px 16px;border-radius:8px;border:1px solid var(--line2);background:#fff;color:var(--ink2);cursor:pointer;}
+  .btn.p{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .doc{max-width:880px;margin:0 auto;background:var(--paper);box-shadow:0 12px 44px rgba(20,24,45,.14);}
+  .pg{padding:40px 50px;}
+  .pg+.pg{border-top:1px solid var(--line);}
+  .barra{background:var(--navy);color:#fff;text-align:center;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:.16em;padding:6px;margin:-40px -50px 24px;}
+  .toppag{text-align:center;font-size:10px;color:var(--muted);margin-bottom:6px;}
+
+  h1{font-family:'Space Grotesk',sans-serif;font-size:30px;font-weight:700;text-align:center;color:var(--navy);margin:30px 0 6px;letter-spacing:.02em;}
+  .sub1{text-align:center;font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;margin-bottom:10px;}
+  .sub2{text-align:center;font-size:12px;color:var(--muted);margin-bottom:28px;}
+
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:22px;}
+  .kpi{background:#fff;padding:14px 10px;text-align:center;}
+  .kpi .v{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--navy);}
+  .kpi .l{font-size:9.5px;color:var(--muted);margin-top:3px;}
+  @media(max-width:640px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+
+  .tesis{font-weight:700;text-align:center;font-size:13px;margin-bottom:16px;line-height:1.5;}
+  .nota-uso{font-size:10.5px;color:var(--muted);font-style:italic;line-height:1.6;text-align:center;max-width:680px;margin:0 auto;}
+  .foot-doc{text-align:center;font-size:9.5px;color:var(--muted);margin-top:30px;}
+
+  h2{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:var(--navy);margin:22px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--navy);}
+  h3{font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:700;color:var(--ink);margin:16px 0 8px;}
+  p{font-size:12px;color:var(--ink2);margin-bottom:9px;}
+  ul{margin:0 0 10px 18px;font-size:12px;color:var(--ink2);line-height:1.65;}
+  li{margin-bottom:5px;}
+  b{color:var(--ink);}
+  ol.toc{margin-left:18px;font-size:13px;color:var(--ink2);line-height:2.1;}
+
+  table{width:100%;border-collapse:collapse;font-size:11px;margin:6px 0 14px;}
+  th{text-align:left;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;color:#fff;background:var(--navy);padding:8px 9px;}
+  td{padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink2);}
+  tr:nth-child(even) td{background:var(--soft);}
+  tr.tot td{font-weight:700;color:var(--navy);background:var(--soft);border-top:2px solid var(--navy);}
+  .note-sm{font-size:10px;color:var(--muted);font-style:italic;margin:-4px 0 12px;}
+
+  .img-block{border:1px solid var(--line);border-radius:6px;padding:14px;margin:10px 0 16px;background:var(--soft);}
+  .esquema{display:flex;border:1px solid var(--line2);border-radius:6px;overflow:hidden;margin-bottom:6px;}
+  .esquema div{flex:1;padding:10px 6px;text-align:center;font-size:9.5px;border-right:1px solid var(--line2);}
+  .esquema div:last-child{border-right:none;}
+  .esquema .zt{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9.5px;margin-bottom:4px;}
+  .esq-cap{font-size:9.5px;color:var(--muted);}
+
+  @media print{
+    body{background:#fff;padding:0;}
+    .toolbar{display:none;}
+    .doc{box-shadow:none;max-width:none;}
+    .pg{padding:16mm 15mm;}
+    .barra{margin:-16mm -15mm 20px;}
+    .pg+.pg{border-top:none;page-break-before:always;}
+    h2,table,.kpi-grid{page-break-inside:avoid;}
+    @page{size:A4;margin:0;}
+  }
+</style>
+</head>
+<body>
+<div class="toolbar"><button class="btn p" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button></div>
+
+<div class="doc">
+
+  <!-- PORTADA -->
+  <div class="pg">
+    <div class="barra">CONFIDENCIAL</div>
+    <div class="toppag">LEGION CLUB | Dossier de inversión y plan de negocio | Confidencial</div>
+    <h1>LEGION CLUB</h1>
+    <div class="sub1">Dossier de inversión y plan de negocio</div>
+    <div class="sub2">CARO LEGIÓN S.L. | Versión para entrega inicial a inversores | 11/07/2026</div>
+
+    <div class="kpi-grid">
+      <div class="kpi"><div class="v">310.000 €</div><div class="l">Objetivo financiero inicial</div></div>
+      <div class="kpi"><div class="v">500.000 €</div><div class="l">Valoración pre-money orientativa</div></div>
+      <div class="kpi"><div class="v">Pre-revenue</div><div class="l">Fase actual del proyecto</div></div>
+      <div class="kpi"><div class="v">Octubre 2026</div><div class="l">Apertura objetivo planta baja</div></div>
+      <div class="kpi"><div class="v">180.750 €</div><div class="l">Inversión ejecutada informada</div></div>
+      <div class="kpi"><div class="v">308.720 €</div><div class="l">Inversión pendiente identificada</div></div>
+      <div class="kpi"><div class="v">346</div><div class="l">Usuarios registrados en app</div></div>
+      <div class="kpi"><div class="v">170</div><div class="l">Tarjetas / pagos iniciales</div></div>
+      <div class="kpi"><div class="v">50 €/mes</div><div class="l">Cuota media IVA incluido</div></div>
+      <div class="kpi"><div class="v">1.822,74 m²</div><div class="l">Superficie construida total nave</div></div>
+      <div class="kpi"><div class="v">986,05 m²</div><div class="l">Planta baja construida</div></div>
+      <div class="kpi"><div class="v">836,69 m²</div><div class="l">Planta primera construida</div></div>
+    </div>
+
+    <div class="tesis">Tesis central: planta baja como negocio financiable y autosostenible; planta superior como Fase 2 de crecimiento, retención y valor percibido.</div>
+
+    <p class="nota-uso">Nota de uso: este documento se prepara para conversaciones preliminares con potenciales inversores, financiadores y asesores. Las cifras son estimaciones de trabajo basadas en información interna, presupuestos disponibles y documentación societaria/inmobiliaria. Toda operación final quedará sujeta a due diligence, contratos definitivos, validación fiscal, mercantil, laboral y técnica.</p>
+
+    <div class="foot-doc">Documento de trabajo para conversaciones con financiadores e inversores. No constituye oferta pública ni compromiso vinculante.</div>
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="pg">
+    <div class="toppag">LEGION CLUB | Dossier de inversión y plan de negocio | Confidencial</div>
+    <h2 style="border:none;font-size:20px;margin-top:10px">Contenido</h2>
+    <ol class="toc">
+      <li>Resumen ejecutivo</li>
+      <li>Situación actual y tesis de inversión</li>
+      <li>Activo, ubicación y soporte documental</li>
+      <li>Fase 1 - Planta baja: gimnasio 24h automatizado</li>
+      <li>Tracción comercial y propuesta de valor</li>
+      <li>Modelo de ingresos y costes fijos indispensables</li>
+      <li>Escenarios financieros de planta baja y punto muerto</li>
+      <li>Necesidad de financiación y uso de fondos</li>
+      <li>Fase 2 - Planta superior: multiplicador de valor 2027</li>
+      <li>Valoración pre-revenue y estructura propuesta</li>
+      <li>Riesgos principales y mitigación</li>
+      <li>Gobierno, reporting y documentación de soporte</li>
+      <li>Conclusiones para el inversor</li>
+    </ol>
+    <div class="foot-doc" style="position:absolute;bottom:40px;left:50px;right:50px">Documento de trabajo para conversaciones con financiadores e inversores. No constituye oferta pública ni compromiso vinculante.</div>
+  </div>
+
+  <!-- 1 y 2 y 3 (inicio) -->
+  <div class="pg">
+    <div class="toppag">LEGION CLUB | Dossier de inversión y plan de negocio | Confidencial</div>
+    <h2>1. Resumen ejecutivo</h2>
+    <p><b>LEGION CLUB</b> es un proyecto de gimnasio de gran formato ubicado en Sant Fruitós de Bages / Manresa, impulsado por CARO LEGIÓN S.L. El objetivo es abrir en octubre de 2026 una planta baja de gimnasio 24h, altamente automatizada, con acceso digital por app/QR, maquinaria comprada y una estructura de costes fijos controlada. La planta superior se plantea como una segunda fase de crecimiento dentro de los 12 meses posteriores a la apertura, no como condición necesaria para la viabilidad inicial.</p>
+    <table>
+      <tr><th>Elemento</th><th>Situación actual / propuesta</th></tr>
+      <tr><td>Sociedad promotora</td><td>Caro Legión, S.L.</td></tr>
+      <tr><td>Marca comercial</td><td>Legion Club</td></tr>
+      <tr><td>Ubicación</td><td>Carrer Ensija 32, Polígono Industrial San Isidro, Sant Fruitós de Bages</td></tr>
+      <tr><td>Modelo fase 1</td><td>Gimnasio 24h con app, QR, doble barrera de acceso, maquinaria comprada y estructura ligera</td></tr>
+      <tr><td>Modelo fase 2</td><td>Planta superior con zona social, vending fitness, coworking, clases premium, profesionales externos y terraza</td></tr>
+      <tr><td>Valoración pre-money orientativa</td><td>500.000 €, propia de fase pre-revenue avanzada</td></tr>
+      <tr><td>Operación buscada</td><td>Financiación hasta 310.000 €, con posibilidad de capital, deuda privada, financiación mixta o convertible</td></tr>
+      <tr><td>Protección propuesta para inversor</td><td>Subordinación de préstamos de socios y preferencia económica de recuperación hasta 2,0× antes de devoluciones a socios</td></tr>
+    </table>
+    <p><b>Lectura clave:</b> el proyecto no se presenta como una idea sin validar. Se presenta como una apertura avanzada, con activo físico identificado, inversión ya ejecutada, maquinaria adquirida, app desarrollada/en lanzamiento, tracción comercial previa y una expansión futura capaz de aumentar la captación, la retención y el consumo por socio.</p>
+
+    <h2>2. Situación actual y tesis de inversión</h2>
+    <ul>
+      <li>El negocio inicial debe sostenerse con la planta baja: cuota recurrente, acceso 24h, maquinaria y comunidad.</li>
+      <li>La planta superior se trata como upside estratégico: aumenta el valor percibido de la cuota, genera servicios complementarios y mejora la diferenciación frente a gimnasios low-cost o centros convencionales.</li>
+      <li>La automatización permite reducir recepción permanente, pero no elimina el personal indispensable: se presupuestan limpieza y soporte operativo esencial.</li>
+      <li>Sergi Caro se incorpora como cara visible y responsable operativo. En escenarios no pesimistas se contempla sueldo; en escenario pesimista solo retribución mínima/simbólica para no tensionar la caja.</li>
+      <li>La maquinaria principal está comprada, por lo que no se plantea una carga mensual de leasing/renting de maquinaria dentro del modelo operativo inicial.</li>
+    </ul>
+    <p><b>Tesis de inversión:</b> Legion Club combina un gimnasio 24h eficiente con una propuesta de club. La planta baja monetiza la base de abonados; la planta superior aumenta el valor de pertenencia, crea nuevas líneas de ingreso y puede acelerar la captación y retención de socios.</p>
+
+    <h2>3. Activo, ubicación y soporte documental</h2>
+    <table>
+      <tr><th>Dato documental</th><th>Detalle</th></tr>
+      <tr><td>Inmueble</td><td>Nave entre medianeras en Carrer Ensija 32, Polígono Industrial San Isidro, Sant Fruitós de Bages</td></tr>
+      <tr><td>Superficie total construida</td><td>1.822,74 m²</td></tr>
+      <tr><td>Planta baja construida</td><td>986,05 m²</td></tr>
+      <tr><td>Planta primera construida</td><td>836,69 m²</td></tr>
+    </table>
+    <div class="foot-doc">Documento de trabajo para conversaciones con financiadores e inversores. No constituye oferta pública ni compromiso vinculante.</div>
+  </div>
+
+  <!-- 3 (cont) + 4 + 5 (inicio) -->
+  <div class="pg">
+    <div class="toppag">LEGION CLUB | Dossier de inversión y plan de negocio | Confidencial</div>
+    <table>
+      <tr><th>Dato documental</th><th>Detalle</th></tr>
+      <tr><td>Superficie útil total</td><td>1.640,46 m²</td></tr>
+      <tr><td>Superficie útil planta baja</td><td>887,44 m²</td></tr>
+      <tr><td>Superficie útil planta primera</td><td>753,02 m²</td></tr>
+      <tr><td>Terraza planta primera</td><td>149,36 m²</td></tr>
+      <tr><td>Derecho de uso</td><td>Arrendamiento financiero inmobiliario a largo plazo con opción de compra final</td></tr>
+      <tr><td>Autorización de uso por Caro Legión, S.L.</td><td>Documentación BBVA con autorización de subarriendo/uso a favor de Caro Legión, S.L., a aportar y ordenar en due diligence</td></tr>
+    </table>
+    <p class="note-sm">Fuente interna/documental: escritura de arrendamiento financiero inmobiliario y dossier de financiación anterior. Las superficies utilizadas en este documento son las superficies documentales de la nave.</p>
+
+    <h2>4. Fase 1 – Planta baja: gimnasio 24h automatizado</h2>
+    <h3>4.1. Funcionamiento operativo</h3>
+    <ul>
+      <li>Apertura objetivo: octubre de 2026, sujeta a finalización de obra, licencias, instalaciones, proveedores y cierre de financiación.</li>
+      <li>Modelo 24h con acceso mediante app móvil propia/en lanzamiento.</li>
+      <li>Entrada mediante QR generado desde la app.</li>
+      <li>Doble barrera de acceso: puerta de cristal + torno alto, reduciendo el riesgo de entradas no autorizadas.</li>
+      <li>Recepción no permanente: mostrador operativo y presencia puntual de Sergi Caro para atención, incidencias y soporte al socio.</li>
+      <li>Cartelería de entrada con instrucciones de descarga de app, uso del QR, normas básicas, número de contacto y protocolo de emergencia.</li>
+      <li>Zona de chill-out en planta baja con dos sofás y mesa para pre-entreno, comida o descanso breve.</li>
+    </ul>
+    <h3>4.2. Propuesta de valor al socio</h3>
+    <ul>
+      <li>Maquinaria de última generación y equipamiento comprado, sin leasing ni renting de maquinaria en el modelo inicial.</li>
+      <li>Gimnasio 24h para maximizar flexibilidad horaria.</li>
+      <li>Estética industrial/premium y marca con identidad clara.</li>
+      <li>Acompañamiento 1 a 1 con Sergi Caro, centrado en adherencia, hábitos, entrenamiento, nutrición, disciplina y seguimiento del proceso físico.</li>
+      <li>Comunidad local y cara visible del proyecto, evitando que el modelo automatizado se perciba como impersonal.</li>
+    </ul>
+    <p class="note-sm">El acompañamiento personal de Sergi Caro se describe como apoyo en hábitos, adherencia, entrenamiento y nutrición. Cualquier servicio sanitario, psicológico o clínico deberá prestarse exclusivamente por profesionales habilitados.</p>
+
+    <h2>5. Tracción comercial y propuesta de valor</h2>
+    <table>
+      <tr><th>Métrica</th><th>Dato actual</th><th>Lectura</th></tr>
+      <tr><td>Usuarios/socios registrados en app</td><td>346</td><td>Base digital previa a la apertura.</td></tr>
+      <tr><td>Usuarios activos en app</td><td>343</td><td>La mayoría de usuarios registrados mantiene actividad en la plataforma.</td></tr>
+      <tr><td>Altas netas último año</td><td>+230</td><td>Captación neta previa a la apertura física.</td></tr>
+      <tr><td>Tarjetas registradas / pagos iniciales</td><td>170</td><td>Señal económica real, no solo intención.</td></tr>
+      <tr><td>Seguidores Instagram</td><td>815 aprox.</td><td>Comunidad local en crecimiento.</td></tr>
+    </table>
+    <div class="foot-doc">Documento de trabajo para conversaciones con financiadores e inversores. No constituye oferta pública ni compromiso vinculante.</div>
+  </div>
+
+  <!-- 5 (cont) + 6 -->
+  <div class="pg">
+    <div class="toppag">LEGION CLUB | Dossier de inversión y plan de negocio | Confidencial</div>
+    <table>
+      <tr><th>Métrica</th><th>Dato actual</th><th>Lectura</th></tr>
+      <tr><td>Visualizaciones Instagram último mes</td><td>62.000 aprox.</td><td>Alcance orgánico relevante sin depender inicialmente de marketing pagado.</td></tr>
+    </table>
+    <p><b>Interpretación prudente:</b> estas cifras no se presentan como socios recurrentes ya facturando 50 €/mes antes de la apertura, sino como indicadores de demanda, conversión inicial y base de captación. La viabilidad debe medirse por socios activos de pago tras apertura.</p>
+
+    <h2>6. Modelo de ingresos y costes fijos indispensables</h2>
+    <h3>6.1. Ingresos principales</h3>
+    <table>
+      <tr><th>Concepto</th><th>Hipótesis</th></tr>
+      <tr><td>Cuota media</td><td>50 €/mes IVA incluido por socio activo.</td></tr>
+      <tr><td>Ingreso neto aproximado sin IVA</td><td>41,32 €/mes por socio activo.</td></tr>
+      <tr><td>Matrícula</td><td>60 € para altas posteriores a la apertura. No se aplica a preinscripciones/acciones iniciales si así se decide comercialmente.</td></tr>
+      <tr><td>Permanencia</td><td>Sin permanencia mínima como barrera de entrada baja.</td></tr>
+      <tr><td>Servicios complementarios fase 1</td><td>Entrenamiento personal, coaching, merchandising, colaboraciones y vending básico, a desarrollar de forma progresiva.</td></tr>
+      <tr><td>Servicios complementarios fase 2</td><td>Vending fitness, cafetería automatizada, coworking, actividades premium y profesionales externos.</td></tr>
+    </table>
+
+    <h3>6.2. Costes fijos indispensables – Fase 1</h3>
+    <table>
+      <tr><th>Partida mensual</th><th>Estimación</th><th>Comentario</th></tr>
+      <tr><td>Nave / leasing / alquiler interno</td><td>2.600 €</td><td>Dato a cerrar contractualmente en la relación de uso de la nave.</td></tr>
+      <tr><td>Luz</td><td>3.500 €</td><td>Estimación prudente inicial.</td></tr>
+      <tr><td>Agua</td><td>1.000 €</td><td>Estimación inicial.</td></tr>
+      <tr><td>Internet</td><td>60 €</td><td>Conexión operativa básica.</td></tr>
+      <tr><td>App / software</td><td>350 €</td><td>Coste mensual informado por el promotor.</td></tr>
+      <tr><td>Limpieza interna mínima</td><td>2.500 €</td><td>1 persona jornada completa o 2 personas a jornada parcial/partida, según organización final.</td></tr>
+      <tr><td>Seguro</td><td>200 €</td><td>Estimación inicial hasta cierre de póliza definitiva.</td></tr>
+      <tr><td>Gestoría</td><td>180 €</td><td>Estimación informada por el promotor.</td></tr>
+      <tr><td>Alarma / seguridad básica</td><td>70 €</td><td>Coste mensual estimado.</td></tr>
+      <tr><td>Mantenimiento / pequeñas reparaciones</td><td>400 €</td><td>Bolsa prudente inicial.</td></tr>
+      <tr><td>Marketing orgánico/local</td><td>300 €</td><td>No se presupone una gran inversión inicial en paid media.</td></tr>
+      <tr class="tot"><td>Total base sin sueldo promotor ni deuda</td><td>11.160 €/mes</td><td>Incluye personal indispensable de limpieza.</td></tr>
+    </table>
+    <p class="note-sm">Las estimaciones de personal deben validarse por gestoría según convenio aplicable, jornada, categoría profesional, calendario y coste empresa completo. Este dossier presupone personal indispensable; no presupone recepción permanente en planta baja.</p>
+    <div class="foot-doc">Documento de trabajo para conversaciones con financiadores e inversores. No constituye oferta pública ni compromiso vinculante.</div>
+  </div>
+
+  <!-- 7 + 8 -->
+  <div class="pg">
+    <div class="toppag">LEGION CLUB | Dossier de inversión y plan de negocio | Confidencial</div>
+    <h2>7. Escenarios financieros de planta baja y punto muerto</h2>
+    <h3>7.1. Escenarios de socios</h3>
+    <table>
+      <tr><th>Escenario</th><th>Socios apertura</th><th>Ingresos brutos apertura</th><th>Ingresos netos apertura</th><th>Socios mes 12</th><th>Ingresos brutos mes 12</th><th>Ingresos netos mes 12</th></tr>
+      <tr><td>Pesimista</td><td>300</td><td>15.000 €</td><td>12.396 €</td><td>500</td><td>25.000 €</td><td>20.660 €</td></tr>
+      <tr><td>Base</td><td>400</td><td>20.000 €</td><td>16.528 €</td><td>700</td><td>35.000 €</td><td>28.924 €</td></tr>
+      <tr><td>Optimista</td><td>600</td><td>30.000 €</td><td>24.792 €</td><td>1.100</td><td>55.000 €</td><td>45.452 €</td></tr>
+    </table>
+    <p class="note-sm">Los ingresos netos aproximados se calculan excluyendo IVA al 21% sobre una cuota de 50 € IVA incluido. No incluyen impagos, comisiones, promociones ni estacionalidad.</p>
+
+    <h3>7.2. Punto muerto operativo</h3>
+    <table>
+      <tr><th>Lectura</th><th>Coste mensual estimado</th><th>Socios necesarios aprox.</th></tr>
+      <tr><td>Operación base sin sueldo promotor ni deuda</td><td>11.160 €</td><td>270 socios</td></tr>
+      <tr><td>Operación pesimista con retribución mínima administrador</td><td>11.660 €</td><td>282 socios</td></tr>
+      <tr><td>Operación base con sueldo promotor ordinario</td><td>13.660 €</td><td>331 socios</td></tr>
+      <tr><td>Operación base + deuda ilustrativa 310.000 € / 10 años / 6%</td><td>15.101 €</td><td>366 socios</td></tr>
+      <tr><td>Operación base + sueldo promotor + deuda ilustrativa</td><td>17.101 €</td><td>414 socios</td></tr>
+    </table>
+    <p><b>Política de prudencia del promotor:</b> en escenario pesimista, Sergi Caro no cargará el gimnasio con un sueldo ordinario. Se contempla únicamente una retribución mínima o simbólica de administrador/promotor hasta que la caja permita una remuneración normalizada. En escenarios base y optimista se contempla sueldo de promotor, al ser una dedicación operativa real al proyecto.</p>
+
+    <h2>8. Necesidad de financiación y uso de fondos</h2>
+    <p><b>Importe objetivo: 310.000 €.</b> La cifra se alinea con la inversión pendiente identificada para completar obra, instalaciones, accesos, equipamiento, ingeniería y puesta en marcha de la fase de apertura.</p>
+    <table>
+      <tr><th>Concepto</th><th>Importe pendiente</th><th>Situación / soporte</th></tr>
+      <tr><td>Obra / reforma: tabiques, pintura y techo RF</td><td>30.368,31 €</td><td>Presupuestos de obra, pintura y estimación técnica.</td></tr>
+      <tr><td>Climatización, agua y aire</td><td>77.740,09 €</td><td>Presupuesto de instalación completa.</td></tr>
+      <tr><td>Vestuarios</td><td>39.664,45 €</td><td>Taquillas, cabinas, materiales y espejos.</td></tr>
+      <tr><td>Suelo</td><td>20.570,00 €</td><td>Presupuesto de pavimento gimnasio.</td></tr>
+      <tr><td>Maquinaria: importación, transporte y aduana</td><td>48.788,66 €</td><td>IVA importación, transporte y aduana estimada. Maquinaria principal ya comprada.</td></tr>
+      <tr><td>Electricidad / iluminación</td><td>47.863,32 €</td><td>Instalación eléctrica, detección incendios y contadores.</td></tr>
+      <tr><td>Accesos y rótulos</td><td>43.724,68 €</td><td>Tornos, puerta QR, elevador, rótulo y lonas.</td></tr>
+      <tr class="tot"><td>Total inversión pendiente identificada</td><td>308.719,51 €</td><td>Base de la solicitud de financiación.</td></tr>
+      <tr><td>Ingeniería pendiente</td><td>7.000 €</td><td>Partida adicional a encajar en calendario final o margen de negociación.</td></tr>
+      <tr><td>PCI: extintores y mangueras</td><td>A confirmar</td><td>Partida pendiente de cierre técnico/proveedor.</td></tr>
+    </table>
+    <div class="foot-doc">Documento de trabajo para conversaciones con financiadores e inversores. No constituye oferta pública ni compromiso vinculante.</div>
+  </div>
+
+  <!-- 9.1 -->
+  <div class="pg">
+    <div class="toppag">LEGION CLUB | Dossier de inversión y plan de negocio | Confidencial</div>
+    <h2>9. Fase 2 – Planta superior: multiplicador de valor 2027</h2>
+    <p><b>Tesis:</b> la planta superior no se incluye como condición necesaria del punto muerto inicial. Se plantea como una Fase 2 prevista dentro de los 12 meses posteriores a la apertura de planta baja, condicionada a caja, demanda, acuerdos con profesionales, seguros, presupuesto final y validación técnica. Su objetivo es aumentar valor percibido, captación, retención, permanencia y consumo por socio.</p>
+
+    <div class="img-block">
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;margin-bottom:2px">Legion Club – Esquema preliminar planta superior / Fase 2</div>
+      <div style="font-size:9.5px;color:var(--muted);margin-bottom:10px">Distribución funcional orientativa. Pendiente de medición final, aforos y proyecto técnico.</div>
+      <div class="esquema">
+        <div><div class="zt">Chill-out + vending fitness + terraza</div><div class="esq-cap">Zona social y consumo</div></div>
+        <div style="background:#fdf3e3"><div class="zt">Coworking</div><div class="esq-cap">Trabajo online y permanencia</div></div>
+        <div style="background:#fce9e9"><div class="zt">Vestuarios</div><div class="esq-cap">Soporte actividades</div></div>
+        <div style="background:#e3f0fb"><div class="zt">Sala 1 · Artes marciales</div><div class="esq-cap">12–18 alumnos según disciplina</div></div>
+        <div style="background:#e3f0fb"><div class="zt">Sala 2 · Pole fitness</div><div class="esq-cap">5–6 alumnos grupo premium</div></div>
+        <div style="background:#e3f0fb"><div class="zt">Sala 3 · Grupos reducidos</div><div class="esq-cap">6–10 alumnos fuerza/técnica</div></div>
+        <div style="background:#f0eafc"><div class="zt">Consultas profesionales</div><div class="esq-cap">Fisio / podología / nutrición / psico.</div></div>
+      </div>
+      <div style="font-size:9.5px;color:var(--muted);text-align:center">Tesis: planta baja = negocio financiable; planta superior = multiplicador de valor, retención e ingresos complementarios.</div>
+    </div>
+    <p class="note-sm">Esquema funcional preliminar de planta superior. Zonificación orientativa pendiente de medición final, aforos y proyecto técnico.</p>
+
+    <h3>9.1. Distribución funcional propuesta</h3>
+    <table>
+      <tr><th>Zona</th><th>Uso previsto</th><th>m² interiores orientativos</th><th>Capacidad operativa prudente</th></tr>
+      <tr><td>Chill-out + vending fitness + terraza</td><td>Café automatizado, batidos, pre-entrenos, bebidas deportivas, crema de arroz, harina de avena y zona social.</td><td>150 m² + terraza 149 m²</td><td>30–50 personas en uso flexible</td></tr>
+      <tr><td>Coworking insonorizado</td><td>Mesas, trabajo online, enchufes, red, ambiente silencioso y permanencia en el club.</td><td>60 m²</td><td>10–14 puestos</td></tr>
+      <tr><td>Vestuarios y soporte</td><td>Vestuarios existentes de hombres, mujeres y PMR pendientes de adecuación.</td><td>100 m²</td><td>Según aforo técnico</td></tr>
+      <tr><td>Sala 1 – Artes marciales</td><td>Artes marciales, defensa personal, boxeo técnico, grappling o workshops.</td><td>140 m²</td><td>12–18 alumnos/clase según disciplina</td></tr>
+      <tr><td>Sala 2 – Pole fitness / aerial strength</td><td>Pole fitness, fuerza aérea, movilidad, flexibilidad y técnica corporal.</td><td>80 m²</td><td>5–6 alumnos/clase premium</td></tr>
+      <tr><td>Sala 3 – Grupos reducidos</td><td>Entrenamiento funcional, fuerza, técnica, glúteo/pierna, readaptación no sanitaria y grupos premium.</td><td>95 m²</td><td>6–10 alumnos/clase</td></tr>
+      <tr><td>Consultas profesionales</td><td>Fisio, podólogo deportivo, nutrición, psicología deportiva, estética deportiva o recuperación.</td><td>70 m²</td><td>2 consultas/salas iniciales</td></tr>
+      <tr><td>Circulaciones / almacén / control</td><td>Pasillos, control, limpieza, espera y ajustes de distribución.</td><td>58 m²</td><td>Uso interno</td></tr>
+    </table>
+    <p class="note-sm">La capacidad final quedará sujeta a la actividad concreta, criterio del especialista, aforo legal, evacuación, distribución definitiva y seguridad de la práctica. Legion priorizará grupos reducidos y calidad técnica frente a ocupación máxima.</p>
+    <div class="foot-doc">Documento de trabajo para conversaciones con financiadores e inversores. No constituye oferta pública ni compromiso vinculante.</div>
+  </div>
+
+  <!-- 9.2 -->
+  <div class="pg">
+    <div class="toppag">LEGION CLUB | Dossier de inversión y plan de negocio | Confidencial</div>
+    <h3>9.2. Modelo de explotación por línea</h3>
+    <table>
+      <tr><th>Línea</th><th>Modelo económico</th><th>Lógica</th></tr>
+      <tr><td>Vending fitness / café automatizado</td><td>Margen directo para Legion o acuerdo con operador/proveedor.</td><td>Automatización, bajo personal, consumo alineado con usuario fitness.</td></tr>
+      <tr><td>VitalFit / productos fitness</td><td>Negociación verbal para suministro a precio reducido. Pendiente LOI o contrato de suministro.</td><td>Materia prima y producto demandado: proteína, crema de arroz, harina de avena, bebidas deportivas.</td></tr>
+      <tr><td>Coworking</td><td>Ingreso directo, bono/acceso premium o servicio de valor que aumenta permanencia y consumo.</td><td>El socio puede entrenar, trabajar, consumir café/batidos y permanecer en el ecosistema Legion.</td></tr>
+      <tr><td>Artes marciales</td><td>Revenue share orientativo 40% Legion / 60% profesional.</td><td>Inversión baja/media, prioridad en calidad del instructor.</td></tr>
+      <tr><td>Pole fitness / aerial</td><td>Revenue share orientativo 40% Legion / 60% profesional.</td><td>Inversión inferior a reformer, alto atractivo visual, clases premium y sala reversible.</td></tr>
+      <tr><td>Grupos reducidos</td><td>Revenue share orientativo 40% Legion / 60% profesional.</td><td>Atrae perfiles que buscan atención separada de la sala principal.</td></tr>
+      <tr><td>Profesionales externos</td><td>Modelo orientativo 50% Legion / 50% profesional o mínimo garantizado + variable.</td><td>Legion aporta espacio, flujo, marca e instalación; el profesional aporta servicio técnico y reputación.</td></tr>
+    </table>
+    <div class="foot-doc">Documento de trabajo para conversaciones con financiadores e inversores. No constituye oferta pública ni compromiso vinculante.</div>
+  </div>
+
+  <!-- 9.3 -->
+  <div class="pg">
+    <div class="toppag">LEGION CLUB | Dossier de inversión y plan de negocio | Confidencial</div>
+    <h3>9.3. CAPEX orientativo planta superior</h3>
+    <p><b>Inversión estimada para activación completa: 300.000 €.</b> La cifra debe tratarse como una distribución orientativa por bloques, no como presupuesto cerrado. La ejecución se recomienda por fases para no comprometer caja si la demanda no está validada.</p>
+    <table>
+      <tr><th>Partida</th><th>Estimación orientativa</th></tr>
+      <tr><td>Reforma interior, divisiones, pintura, pavimentos, acabados e insonorización parcial</td><td>50.000 €</td></tr>
+      <tr><td>Instalaciones técnicas: electricidad, iluminación, clima, ventilación, PCI y ajustes</td><td>45.000 €</td></tr>
+      <tr><td>Reforma/acabado de vestuarios existentes</td><td>35.000 €</td></tr>
+      <tr><td>Zona chill-out, cafetería automatizada, vending, mobiliario y terraza</td><td>30.000 €</td></tr>
+      <tr><td>Coworking: mobiliario, acústica, enchufes, red e iluminación</td><td>12.000 €</td></tr>
+      <tr><td>Sala artes marciales: tatami, protecciones, sacos, almacenaje y sonido</td><td>18.000 €</td></tr>
+      <tr><td>Sala pole fitness: barras, anclajes, espejos, colchonetas, iluminación y sonido</td><td>25.000 €</td></tr>
+      <tr><td>Sala grupos reducidos: material funcional, suelo y almacenaje</td><td>15.000 €</td></tr>
+      <tr><td>Salas profesionales: camillas, mobiliario, lavamanos/equipamiento básico y acabados</td><td>15.000 €</td></tr>
+      <tr><td>Seguridad, cámaras, control de acceso, señalética, software y TPV</td><td>15.000 €</td></tr>
+      <tr><td>Honorarios técnicos, legal, contratos, gestión y coordinación</td><td>10.000 €</td></tr>
+      <tr><td>Contingencia / desviaciones / mejoras</td><td>30.000 €</td></tr>
+      <tr class="tot"><td>Total orientativo</td><td>300.000 €</td></tr>
+    </table>
+    <div class="foot-doc">Documento de trabajo para conversaciones con financiadores e inversores. No constituye oferta pública ni compromiso vinculante.</div>
+  </div>
+
+  <!-- 9.4 -->
+  <div class="pg">
+    <div class="toppag">LEGION CLUB | Dossier de inversión y plan de negocio | Confidencial</div>
+    <h3>9.4. Escenarios económicos directos de planta superior</h3>
+    <table>
+      <tr><th>Línea de ingreso para Legion</th><th>Prudente</th><th>Base validado</th><th>Expansivo</th></tr>
+      <tr><td>Vending, café, batidos, pre-entrenos y productos fitness</td><td>1.500 €</td><td>4.500 €</td><td>9.000 €</td></tr>
+      <tr><td>Coworking</td><td>500 €</td><td>1.200 €</td><td>2.400 €</td></tr>
+      <tr><td>Artes marciales</td><td>900 €</td><td>2.500 €</td><td>5.000 €</td></tr>
+      <tr><td>Pole fitness / aerial strength</td><td>1.500 €</td><td>4.000 €</td><td>7.000 €</td></tr>
+      <tr><td>Grupos reducidos</td><td>1.000 €</td><td>2.500 €</td><td>5.000 €</td></tr>
+      <tr><td>Profesionales externos</td><td>1.500 €</td><td>3.500 €</td><td>7.000 €</td></tr>
+      <tr><td>Eventos, workshops y colaboraciones</td><td>300 €</td><td>800 €</td><td>1.500 €</td></tr>
+      <tr class="tot"><td>Ingreso mensual Legion</td><td>7.200 €</td><td>19.000 €</td><td>36.900 €</td></tr>
+    </table>
+    <table>
+      <tr><th>Coste adicional planta superior</th><th>Prudente</th><th>Base validado</th><th>Expansivo</th></tr>
+      <tr><td>Personal control/soporte planta superior</td><td>3.500 €</td><td>5.000 €</td><td>6.500 €</td></tr>
+      <tr><td>Limpieza adicional</td><td>700 €</td><td>1.000 €</td><td>1.400 €</td></tr>
+      <tr><td>Suministros adicionales</td><td>900 €</td><td>1.500 €</td><td>2.200 €</td></tr>
+      <tr><td>Mantenimiento / consumibles</td><td>500 €</td><td>900 €</td><td>1.500 €</td></tr>
+      <tr><td>Seguro / software / TPV / cámaras</td><td>400 €</td><td>700 €</td><td>1.000 €</td></tr>
+      <tr><td>Marketing específico</td><td>300 €</td><td>600 €</td><td>1.000 €</td></tr>
+      <tr class="tot"><td>Coste mensual adicional</td><td>6.300 €</td><td>9.700 €</td><td>13.600 €</td></tr>
+    </table>
+    <table>
+      <tr><th>Escenario</th><th>Ingreso mensual Legion</th><th>Coste adicional</th><th>Resultado mensual directo</th></tr>
+      <tr><td>Prudente</td><td>7.200 €</td><td>6.300 €</td><td>+900 €</td></tr>
+      <tr><td>Base validado</td><td>19.000 €</td><td>9.700 €</td><td>+9.300 €</td></tr>
+      <tr><td>Expansivo</td><td>36.900 €</td><td>13.600 €</td><td>+23.300 €</td></tr>
+    </table>
+    <div class="foot-doc">Documento de trabajo para conversaciones con financiadores e inversores. No constituye oferta pública ni compromiso vinculante.</div>
+  </div>
+
+  <!-- 9.5 + 10 -->
+  <div class="pg">
+    <div class="toppag">LEGION CLUB | Dossier de inversión y plan de negocio | Confidencial</div>
+    <h3>9.5. Impacto indirecto sobre abonados</h3>
+    <p><b>Punto estratégico:</b> la planta superior no solo genera ingresos directos. Al aportar más valor al conjunto del club, puede aumentar abonados, mejorar conversión, reducir bajas y justificar que Legion sea percibido como club integral, no solo como sala de máquinas.</p>
+    <table>
+      <tr><th>Escenario</th><th>Incremento potencial de abonados</th><th>Ingreso neto mensual adicional por cuota</th><th>Lectura</th></tr>
+      <tr><td>Prudente</td><td>+50 a +75 socios</td><td>2.066 – 3.099 €</td><td>Mejora moderada por valor percibido y retención.</td></tr>
+      <tr><td>Base</td><td>+100 a +150 socios</td><td>4.132 – 6.198 €</td><td>La Fase 2 acelera captación y reduce bajas.</td></tr>
+      <tr><td>Expansivo</td><td>+150 a +250 socios</td><td>6.198 – 10.330 €</td><td>Legion se posiciona como club referente de la zona.</td></tr>
+    </table>
+    <p class="note-sm">Criterio de prudencia: este uplift de abonados no se usa como condición necesaria de viabilidad inicial. Se presenta como sensibilidad positiva del modelo cuando la planta superior esté validada y operativa.</p>
+
+    <h2>10. Valoración pre-revenue y estructura propuesta</h2>
+    <h3>10.1. Valoración pre-money orientativa</h3>
+    <p><b>Valoración pre-money orientativa: 500.000 €.</b> La sociedad se encuentra en fase pre-revenue, por lo que la valoración no se basa en ingresos históricos. Se basa en el grado de avance del proyecto, inversión ejecutada, maquinaria adquirida, instalaciones realizadas, app desarrollada/en lanzamiento, tracción comercial previa, derecho de explotación de la nave, modelo operativo automatizado y potencial de caja tras apertura.</p>
+    <table>
+      <tr><th>Factor</th><th>Lectura para valoración</th></tr>
+      <tr><td>Capital social</td><td>5.000 €. No representa por sí solo el valor económico del proyecto.</td></tr>
+      <tr><td>Inversión ejecutada</td><td>180.750 € informados, instrumentados total o parcialmente mediante préstamos de socios/personas vinculadas.</td></tr>
+      <tr><td>Activos tangibles principales</td><td>Maquinaria comprada, instalaciones ejecutadas, app/tecnología, acondicionamiento y elementos de acceso/operación.</td></tr>
+      <tr><td>Deuda vinculada / préstamos de socios</td><td>No se ignora en la valoración. Su tratamiento se pactará expresamente para proteger al inversor.</td></tr>
+      <tr><td>Fase 2 planta superior</td><td>No se incorpora como condición necesaria del valor inicial; se considera upside estratégico.</td></tr>
+      <tr><td>Rango de conversación</td><td>500.000 € como referencia prudente de salida en fase pre-revenue avanzada.</td></tr>
+    </table>
+    <div class="foot-doc">Documento de trabajo para conversaciones con financiadores e inversores. No constituye oferta pública ni compromiso vinculante.</div>
+  </div>
+
+  <!-- 10.2 + 10.3 -->
+  <div class="pg">
+    <div class="toppag">LEGION CLUB | Dossier de inversión y plan de negocio | Confidencial</div>
+    <h3>10.2. Tratamiento de préstamos de socios y protección del inversor</h3>
+    <p><b>Principio acordado:</b> los préstamos de socios y personas vinculadas se devolverán después del inversor. La operación podrá incorporar una preferencia económica a favor del inversor de hasta 2,0× sobre el importe efectivamente desembolsado, antes de cualquier devolución de préstamos de socios o distribución económica a favor de socios/promotores.</p>
+    <table>
+      <tr><th>Elemento</th><th>Propuesta de estructura</th></tr>
+      <tr><td>Subordinación de préstamos de socios</td><td>Los préstamos de socios no se devolverán antes de cumplir las condiciones económicas pactadas con el inversor.</td></tr>
+      <tr><td>Preferencia económica del inversor</td><td>Hasta 2,0× sobre el importe desembolsado, antes de devoluciones a socios vinculados.</td></tr>
+      <tr><td>Caja operativa</td><td>Cualquier pago al inversor o socio deberá respetar la continuidad operativa, tesorería mínima, impuestos, salarios, proveedores y obligaciones ordinarias.</td></tr>
+      <tr><td>Documentación</td><td>A instrumentar en contrato de inversión, pacto de socios, contrato de préstamo, participativo o convertible, según estructura final.</td></tr>
+      <tr><td>Efecto para valoración</td><td>Esta protección permite defender 500.000 € pre-money sin presentar la operación como una sociedad pre-revenue sin garantías económicas para el nuevo capital.</td></tr>
+    </table>
+
+    <h3>10.3. Vías de operación</h3>
+    <ul>
+      <li><b>Capital:</b> entrada a valoración pre-money de 500.000 €, con pacto de socios y preferencia económica si procede.</li>
+      <li><b>Préstamo privado:</b> importe, interés, plazo, carencia y garantías a negociar, orientado a financiar apertura sin dilución adicional.</li>
+      <li><b>Financiación mixta:</b> parte capital y parte préstamo/participativo, equilibrando caja, riesgo y dilución.</li>
+      <li><b>Convertible o participativo:</b> útil si conviene vincular conversión o remuneración a hitos de apertura, socios activos o caja.</li>
+    </ul>
+    <div class="foot-doc">Documento de trabajo para conversaciones con financiadores e inversores. No constituye oferta pública ni compromiso vinculante.</div>
+  </div>
+
+  <!-- 11 -->
+  <div class="pg">
+    <div class="toppag">LEGION CLUB | Dossier de inversión y plan de negocio | Confidencial</div>
+    <h2>11. Riesgos principales y mitigación</h2>
+    <table>
+      <tr><th>Riesgo</th><th>Impacto</th><th>Mitigación prevista</th></tr>
+      <tr><td>Retraso en obra, licencias o proveedores</td><td>Retrasa apertura y caja.</td><td>Calendario por fases, seguimiento semanal, desembolsos contra hitos, priorización de partidas críticas.</td></tr>
+      <tr><td>Captación de socios inferior al escenario base</td><td>Reduce ingresos iniciales.</td><td>Base app/pagos, marketing orgánico/local, colaboraciones, control de costes y no activar Fase 2 completa sin demanda.</td></tr>
+      <tr><td>Costes fijos superiores</td><td>Eleva punto muerto.</td><td>Presupuesto con limpieza indispensable, sin recepción permanente, revisión de suministros, seguros y mantenimiento antes de apertura.</td></tr>
+      <tr><td>Dependencia del promotor</td><td>Riesgo operativo si todo recae en Sergi.</td><td>Automatización, procesos, cartelería, app, personal de limpieza y progresiva profesionalización operativa.</td></tr>
+      <tr><td>Riesgo de autónomos/profesionales externos</td><td>Calidad desigual o salida del profesional.</td><td>Contratos mercantiles, preaviso, seguros, estándares de calidad, control de marca y posibilidad de sustitución.</td></tr>
+      <tr><td>Riesgo laboral/falso autónomo</td><td>Contingencias laborales.</td><td>Contratos revisados por asesoría laboral/mercantil, autonomía real del profesional, facturación y responsabilidades claras.</td></tr>
+      <tr><td>Vending / productos alimentarios</td><td>Riesgo sanitario o técnico si se gestiona mal.</td><td>Modelo automatizado con producto envasado, operador/proveedor responsable y validación técnica/sanitaria según corresponda.</td></tr>
+      <tr><td>Planta superior sobredimensionada</td><td>CAPEX elevado sin retorno inmediato.</td><td>Apertura por fases; primero zonas de menor inversión y mayor validación; Fase 2 no incluida en punto muerto inicial.</td></tr>
+      <tr><td>Deuda vinculada de socios</td><td>Puede preocupar a nuevo inversor.</td><td>Subordinación de préstamos y preferencia económica del inversor hasta 2,0× antes de devoluciones a socios.</td></tr>
+    </table>
+    <div class="foot-doc">Documento de trabajo para conversaciones con financiadores e inversores. No constituye oferta pública ni compromiso vinculante.</div>
+  </div>
+
+  <!-- 12 -->
+  <div class="pg">
+    <div class="toppag">LEGION CLUB | Dossier de inversión y plan de negocio | Confidencial</div>
+    <h2>12. Gobierno, reporting y documentación de soporte</h2>
+    <h3>12.1. Reporting propuesto al inversor</h3>
+    <ul>
+      <li>Reporting mensual durante fase de obra, apertura y primeros 12 meses: caja, socios activos, altas, bajas, MRR, costes fijos, incidencias y avance de hitos.</li>
+      <li>Control de uso de fondos por partidas, facturas y pagos reales.</li>
+      <li>Reunión de seguimiento mensual durante la fase de apertura y trimestral una vez estabilizada la operación.</li>
+      <li>Presupuesto anual y comparativa presupuesto vs real.</li>
+      <li>No devolución de préstamos de socios ni distribuciones mientras no se cumplan las condiciones pactadas con el inversor.</li>
+    </ul>
+
+    <h3>12.2. Documentación disponible y a aportar</h3>
+    <table>
+      <tr><th>Bloque</th><th>Disponible / avanzado</th><th>A aportar o formalizar</th></tr>
+      <tr><td>Sociedad</td><td>Estatutos sociales de Caro Legión, S.L. y documentación societaria básica.</td><td>Escritura, CIF, nota mercantil, titularidad real, cap table, libro registro de socios y acuerdos sobre préstamos.</td></tr>
+      <tr><td>Inmueble</td><td>Escritura de arrendamiento financiero, descripción del inmueble y soporte de autorización BBVA.</td><td>Copia completa ordenada y, si se solicita, confirmación bancaria/contrato interno de cesión o subarriendo.</td></tr>
+      <tr><td>Actividad/licencia</td><td>Licencia/uso de centro deportivo según información del promotor.</td><td>Proyecto técnico actualizado, aforos, evacuación y validación de distribución final.</td></tr>
+      <tr><td>Proveedores</td><td>Presupuestos principales de inversión pendiente.</td><td>Cerrar PCI, ingeniería, accesos, rótulos, calendario de pagos y condiciones.</td></tr>
+      <tr><td>App/comercial</td><td>Capturas de app, usuarios, pagos/tarjetas e Instagram.</td><td>Anexo anonimizando datos personales y métricas actualizadas.</td></tr>
+      <tr><td>VitalFit</td><td>Negociación verbal/avanzada para suministro de producto.</td><td>Carta de intenciones o contrato de suministro.</td></tr>
+      <tr><td>Profesionales externos</td><td>Modelo de colaboración definido conceptualmente.</td><td>Contrato mercantil tipo: reparto, uso de marca, seguros, responsabilidad, datos, preaviso y no captación desleal.</td></tr>
+      <tr><td>Seguro</td><td>Previsión de contratar/ampliar con BBVA.</td><td>Póliza final: RC general, actividades, profesionales, terraza/coworking/vending si procede.</td></tr>
+    </table>
+    <div class="foot-doc">Documento de trabajo para conversaciones con financiadores e inversores. No constituye oferta pública ni compromiso vinculante.</div>
+  </div>
+
+  <!-- 13 -->
+  <div class="pg">
+    <div class="toppag">LEGION CLUB | Dossier de inversión y plan de negocio | Confidencial</div>
+    <h2>13. Conclusiones para el inversor</h2>
+    <p><b>Legion Club</b> busca financiar la fase final de apertura de un proyecto avanzado, no una idea inicial. La planta baja debe demostrar la viabilidad por cuota recurrente y estructura operativa ligera. La planta superior no se usa para justificar el punto muerto inicial; se presenta como multiplicador de valor, retención, consumo y captación futura.</p>
+    <table>
+      <tr><th>Motivo de interés</th><th>Lectura</th></tr>
+      <tr><td>Proyecto avanzado</td><td>Inversión ejecutada, maquinaria comprada, app, tracción y apertura objetivo definida.</td></tr>
+      <tr><td>Coste fijo controlado</td><td>Modelo 24h automatizado, sin recepción permanente y con personal indispensable presupuestado.</td></tr>
+      <tr><td>Promotor visible</td><td>Sergi Caro aporta comunidad, seguimiento y liderazgo operativo.</td></tr>
+      <tr><td>Valoración prudente</td><td>500.000 € pre-money en fase pre-revenue, no sobrevalorada respecto al riesgo actual.</td></tr>
+      <tr><td>Protección inversor</td><td>Subordinación de préstamos de socios y preferencia económica hasta 2,0× antes de devoluciones a socios.</td></tr>
+      <tr><td>Upside real</td><td>Planta superior con servicios de alto valor, bajo personal fijo relativo y efecto positivo en abonados totales.</td></tr>
+    </table>
+    <p><b>Mensaje final:</b> la planta baja sostiene el negocio; la planta superior aumenta el techo de crecimiento. La operación se plantea con prudencia pre-revenue, protección al inversor y activación por hitos para evitar comprometer caja antes de validar demanda.</p>
+    <div class="foot-doc">Documento de trabajo para conversaciones con financiadores e inversores. No constituye oferta pública ni compromiso vinculante.</div>
+  </div>
+
+  <!-- ANEXO -->
+  <div class="pg">
+    <div class="toppag">LEGION CLUB | Dossier de inversión y plan de negocio | Confidencial</div>
+    <h2>Anexo. Supuestos utilizados</h2>
+    <table>
+      <tr><th>Variable</th><th>Supuesto de trabajo</th></tr>
+      <tr><td>Cuota media</td><td>50 €/mes IVA incluido.</td></tr>
+      <tr><td>Ingreso neto por socio</td><td>41,32 €/mes aproximado sin IVA.</td></tr>
+      <tr><td>Apertura planta baja</td><td>Octubre 2026, sujeta a hitos de obra, proveedores, licencias y financiación.</td></tr>
+      <tr><td>Fase 2 planta superior</td><td>Dentro de los 12 meses posteriores a apertura de planta baja, condicionada a caja y demanda.</td></tr>
+      <tr><td>CAPEX planta superior</td><td>300.000 € orientativos para activación completa; ejecución progresiva por fases.</td></tr>
+      <tr><td>Sueldo promotor</td><td>Incluido en escenarios no pesimistas; mínimo/simbólico en pesimista.</td></tr>
+      <tr><td>Personal indispensable</td><td>Limpieza mínima en planta baja y control/soporte para planta superior cuando se active.</td></tr>
+      <tr><td>Valoración pre-money</td><td>500.000 € orientativa en fase pre-revenue avanzada.</td></tr>
+      <tr><td>Préstamos socios</td><td>Subordinados frente al inversor, con posible preferencia económica hasta 2,0× para el inversor.</td></tr>
+    </table>
+    <div class="foot-doc">Documento de trabajo para conversaciones con financiadores e inversores. No constituye oferta pública ni compromiso vinculante.</div>
+  </div>
+
+</div>
+</body>
+</html>
