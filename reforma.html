@@ -444,8 +444,8 @@ function seedItems() {
     mk('tornos', 'Tornos de acceso', 'acceso', 9000, 'EUR', 21, 'pending', 'Presupuesto'),
     mk('puerta-qr', 'Puerta de cristal exterior con lector QR', 'acceso', 2819.83, 'EUR', 21, 'pending', '3.412 € IVA incl. — presupuesto real'),
     mk('accesibilidad', 'Elevador para minusválidos', 'obra', 9504.13, 'EUR', 21, 'pending', '11.500 € IVA incl. — presupuesto real'),
-    mk('lm-pagado', 'Luis Miguel (tabiques + techo vestuarios) — pagado', 'obra', 4545.45, 'EUR', 21, 'paid', '5.500 € pagados por banco (03/07, vestuarios)'),
-    mk('lm-pendiente', 'Luis Miguel (tabiques + techo vestuarios) — pendiente', 'obra', 11552.33, 'EUR', 21, 'pending', 'Presupuesto (sin IVA +21%): refuerzos pino 440 + tabique sala poses 2.135 + entrada recepción 1.895,13 + ocultación agua/luz 3.104,11 + techo vestuarios 8.523,54'),
+    mk('lm-vestuarios-extra', 'Luis Miguel — vestuarios (partida adicional, no incluida en tabiques+techo)', 'obra', 4545.45, 'EUR', 21, 'paid', '5.500 € pagados por banco (03/07). Partida distinta de la de tabiques+techo.'),
+    mk('lm-pendiente', 'Luis Miguel (tabiques + techo vestuarios)', 'obra', 16097.78, 'EUR', 21, 'pending', 'Presupuesto (sin IVA +21%): refuerzos pino 440 + tabique sala poses 2.135 + entrada recepción 1.895,13 + ocultación agua/luz 3.104,11 + techo vestuarios 8.523,54'),
     mk('espejos', 'Espejos sala (pared entrenamiento)', 'obra', 4381.82, 'EUR', 21, 'pending', '5.302 € IVA incl. — presupuesto real'),
     mk('transporte', 'Transporte marítimo + aduana equipos (estimado)', 'transporte', 10800, 'EUR', 0, 'pending', 'Estimación aduana + transporte ≈ 30.000 €'),
     mk('extra-obra', 'Obra y mano de obra ya ejecutada (Rubiralta y otros)', 'obra', 37580.20, 'EUR', 21, 'paid', 'Demolición, pladur, material, limpieza… ya pagado (banco)'),
@@ -711,6 +711,15 @@ function load() {
     const eo2 = state.items.find(i => i.sk === 'extra-otros'); if (eo2) { eo2.base = 15342.16; eo2.nota = 'Ya pagado (banco), incl. Josep Selga (adeudo recurrente)'; }
     const ob = state.items.find(i => i.sk === 'obramat-201'); if (ob) ob.base = 9829.26;
     state.migV12 = true;
+    migrated = true;
+  }
+
+  // Migración puntual: los 5.500€ de Luis Miguel NO son de la partida de tabiques+techo (19.478€).
+  if (!state.migV13) {
+    const lmOld = state.items.find(i => i.sk === 'lm-pagado');
+    if (lmOld) { lmOld.sk = 'lm-vestuarios-extra'; lmOld.concepto = 'Luis Miguel — vestuarios (partida adicional, no incluida en tabiques+techo)'; lmOld.nota = '5.500 € pagados por banco (03/07). Partida distinta de la de tabiques+techo.'; }
+    const lp2 = state.items.find(i => i.sk === 'lm-pendiente'); if (lp2) lp2.base = 16097.78;
+    state.migV13 = true;
     migrated = true;
   }
 
