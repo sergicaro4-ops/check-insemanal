@@ -163,7 +163,8 @@ function seedItems(){
     mk('elec-gimnas-pend','Instalación eléctrica gimnasio (Patrick) — pendiente','electrica',15154.91,'EUR',21,'pending'),
     mk('elec-incendi','Detección de incendios (central + 37 detectores)','incendios',9611.46,'EUR',21,'pending'),
     mk('elec-comptadors','Suministro caja de contadores (TMF-10 + armario)','electrica',2252.90,'EUR',21,'pending'),
-    mk('obramat-201','Material baños/vestuarios/suelo/iluminación (Obramat)','vestuarios',11599.04,'EUR',21,'pending','Total + 21% IVA (base) 14.026,70 €'),
+    mk('obramat-pagado','Material baños/vestuarios/suelo/iluminación (Obramat) — pagado','vestuarios',1769.78,'EUR',21,'paid','2.141,43 € pagados por banco (01/07, luces Obramat vía Terrassa)'),
+    mk('obramat-201','Material baños/vestuarios/suelo/iluminación (Obramat) — pendiente','vestuarios',9829.26,'EUR',21,'pending','Total + 21% IVA (base) 14.026,70 €'),
     mk('rotol-legion','Rótulo LEGION letras corpóreas + LED','rotulos',3719.01,'EUR',21,'pending'),
     mk('rotol-xixo','Lonas / decoración La Xixo','rotulos',388.10,'EUR',21,'pending','A nombre de La Xixo — confirmar'),
     mk('carulla-pagado','Carulla (clima+agua+ACS+RITE) — pagado 25%','clima',23600.51,'EUR',21,'paid','Incluye climatización, agua, ACS y renovación aire RITE. 25% = 28.556,62 € pagado'),
@@ -181,7 +182,7 @@ function seedItems(){
     mk('espejos','Espejos sala (pared entrenamiento)','obra',4381.82,'EUR',21,'pending','5.302 € IVA incl. — presupuesto real'),
     mk('transporte','Transporte marítimo + aduana equipos (estimado)','transporte',10800,'EUR',0,'pending','Estimación ≈ 30.000 €'),
     mk('extra-obra','Obra y mano de obra ya ejecutada (Rubiralta y otros)','obra',37580.20,'EUR',21,'paid','Demolición, pladur, material, limpieza… ya pagado (banco)'),
-    mk('extra-otros','Residuos, alquileres, web, software, fianza local','otros',17111.94,'EUR',21,'paid','Ya pagado (banco), incl. Josep Selga y Terrassa (conceptos a confirmar)'),
+    mk('extra-otros','Residuos, alquileres, web, software, fianza local','otros',15342.16,'EUR',21,'paid','Ya pagado (banco), incl. Josep Selga (adeudo recurrente)'),
     mk('extra-incendios','Ignifugación estructura R-90 (CAT FOC)','incendios',5450.00,'EUR',21,'paid','Ya pagado (banco)'),
     mk('extra-fontaneria','Agua y contador de obra (varios)','fontaneria',1917.36,'EUR',21,'paid','Ya pagado (banco)'),
     mk('extra-transporte','Transporte de materiales (Larriba)','transporte',1185.12,'EUR',21,'paid','Ya pagado (banco)'),
@@ -202,7 +203,7 @@ function seedMov(){
     ['2026-07-03','Luis Miguel Rubiralta','Vestuarios gimnasio',-5500.00,'gasto','obra'],
     ['2026-07-03','Caro Folch Arnau','Préstamo Arnau Caro Folch',10000.00,'aportacion','otros'],
     ['2026-07-02','Josep Selga Brunet','Adeudo (recibo domiciliado)',-278.81,'gasto','otros'],
-    ['2026-07-01','Terrassa','Ref. 3020252522 (concepto a confirmar)',-2141.43,'gasto','otros'],
+    ['2026-07-01','Terrassa','Luces Obramat (ref. 3020252522)',-2141.43,'gasto','vestuarios'],
     ['2026-06-17','COMACE IMPORT S.L.','Alquiler pulidora',-2058.21,'gasto','otros'],
     ['2026-06-11','SIRA, S.L.U.','Factura 2026043',-365.00,'gasto','otros'],
     ['2026-06-08','CAT FOC','Repaso ignifugación estructura R-90',-4616.15,'gasto','incendios'],
@@ -372,6 +373,14 @@ function load(){
     const eo=R.items.find(i=>i.sk==='extra-otros'); if(eo){eo.base=17111.94;eo.nota='Ya pagado (banco), incl. Josep Selga y Terrassa (conceptos a confirmar)';}
     const ei=R.items.find(i=>i.sk==='extra-impuestos'); if(ei) ei.base=1065.67;
     localStorage.setItem('migV11','1'); saveR();
+  }
+  // Migración puntual: el pago a "Terrassa" era en realidad Obramat (luces), no gasto genérico.
+  if(!localStorage.getItem('migV12')){
+    const eo2=R.items.find(i=>i.sk==='extra-otros'); if(eo2){eo2.base=15342.16;eo2.nota='Ya pagado (banco), incl. Josep Selga (adeudo recurrente)';}
+    if(!R.items.some(i=>i.sk==='obramat-pagado')) R.items.push(...seedItems().filter(i=>i.sk==='obramat-pagado'));
+    const ob=R.items.find(i=>i.sk==='obramat-201'); if(ob){ob.base=9829.26;ob.c='Material baños/vestuarios/suelo/iluminación (Obramat) — pendiente';}
+    B.mov.forEach(m=>{ if(m.ben==='Terrassa'){m.con='Luces Obramat (ref. 3020252522)';m.c='vestuarios';} });
+    localStorage.setItem('migV12','1'); saveR(); saveB();
   }
   // Migración puntual: quitar vidrios recepción (Franquet Barrau).
   if(!localStorage.getItem('migVidres')){

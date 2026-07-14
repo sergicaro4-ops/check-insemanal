@@ -430,7 +430,8 @@ function seedItems() {
     mk('elec-gimnas-pend', 'Instalación eléctrica gimnasio (Patrick) — pendiente', 'electrica', 15154.91, 'EUR', 21, 'pending', 'No incluye luces decorativas LED ni medios de elevación'),
     mk('elec-incendi', 'Detección de incendios (central + 37 detectores)', 'incendios', 9611.46, 'EUR', 21, 'pending', 'Incluye certificación contraincendios'),
     mk('elec-comptadors', 'Suministro caja de contadores (TMF-10 + armario)', 'electrica', 2252.90, 'EUR', 21, 'pending'),
-    mk('obramat-201', 'Material baños/vestuarios/suelo/iluminación (Obramat, pedido 201)', 'vestuarios', 11599.04, 'EUR', 21, 'pending', 'Total + 21% IVA (base) 14.026,70 €. Depósito obligatorio, entrega 15/07'),
+    mk('obramat-pagado', 'Material baños/vestuarios/suelo/iluminación (Obramat) — pagado', 'vestuarios', 1769.78, 'EUR', 21, 'paid', '2.141,43 € pagados por banco (01/07, luces Obramat vía Terrassa)'),
+    mk('obramat-201', 'Material baños/vestuarios/suelo/iluminación (Obramat, pedido 201) — pendiente', 'vestuarios', 9829.26, 'EUR', 21, 'pending', 'Total + 21% IVA (base) 14.026,70 €. Depósito obligatorio, entrega 15/07'),
     mk('rotol-legion', 'Rótulo LEGION letras corpóreas + LED (Franquet Barrau ENP261169)', 'rotulos', 3719.01, 'EUR', 21, 'pending'),
     mk('rotol-xixo', 'Lonas / decoración La Xixo (Franquet Barrau FBP261143)', 'rotulos', 388.10, 'EUR', 21, 'pending', 'Presupuesto a nombre de La Xixo — confirmar si es del gimnasio'),
     mk('carulla-pagado', 'Carulla (clima+agua+ACS+RITE) — pagado 25%', 'clima', 23600.51, 'EUR', 21, 'paid', 'Incluye climatización, agua, ACS y renovación aire RITE. 25% = 28.556,62 € pagado'),
@@ -448,7 +449,7 @@ function seedItems() {
     mk('espejos', 'Espejos sala (pared entrenamiento)', 'obra', 4381.82, 'EUR', 21, 'pending', '5.302 € IVA incl. — presupuesto real'),
     mk('transporte', 'Transporte marítimo + aduana equipos (estimado)', 'transporte', 10800, 'EUR', 0, 'pending', 'Estimación aduana + transporte ≈ 30.000 €'),
     mk('extra-obra', 'Obra y mano de obra ya ejecutada (Rubiralta y otros)', 'obra', 37580.20, 'EUR', 21, 'paid', 'Demolición, pladur, material, limpieza… ya pagado (banco)'),
-    mk('extra-otros', 'Residuos, alquileres, web, software, fianza local', 'otros', 17111.94, 'EUR', 21, 'paid', 'Ya pagado (banco), incl. Josep Selga y Terrassa (conceptos a confirmar)'),
+    mk('extra-otros', 'Residuos, alquileres, web, software, fianza local', 'otros', 15342.16, 'EUR', 21, 'paid', 'Ya pagado (banco), incl. Josep Selga (adeudo recurrente)'),
     mk('extra-incendios', 'Ignifugación estructura R-90 (CAT FOC)', 'incendios', 5450.00, 'EUR', 21, 'paid', 'Ya pagado (banco)'),
     mk('extra-fontaneria', 'Agua y contador de obra (varios)', 'fontaneria', 1917.36, 'EUR', 21, 'paid', 'Ya pagado (banco)'),
     mk('extra-transporte', 'Transporte de materiales (Larriba)', 'transporte', 1185.12, 'EUR', 21, 'paid', 'Ya pagado (banco)'),
@@ -702,6 +703,14 @@ function load() {
     const eo = state.items.find(i => i.sk === 'extra-otros'); if (eo) { eo.base = 17111.94; eo.nota = 'Ya pagado (banco), incl. Josep Selga y Terrassa (conceptos a confirmar)'; }
     const ei = state.items.find(i => i.sk === 'extra-impuestos'); if (ei) ei.base = 1065.67;
     state.migV11 = true;
+    migrated = true;
+  }
+
+  // Migración puntual: el pago a "Terrassa" era en realidad Obramat (luces), no gasto genérico.
+  if (!state.migV12) {
+    const eo2 = state.items.find(i => i.sk === 'extra-otros'); if (eo2) { eo2.base = 15342.16; eo2.nota = 'Ya pagado (banco), incl. Josep Selga (adeudo recurrente)'; }
+    const ob = state.items.find(i => i.sk === 'obramat-201'); if (ob) ob.base = 9829.26;
+    state.migV12 = true;
     migrated = true;
   }
 
