@@ -169,7 +169,7 @@ function seedItems(){
     mk('rotol-xixo','Lonas / decoración La Xixo','rotulos',388.10,'EUR',21,'pending','A nombre de La Xixo — confirmar'),
     mk('carulla-pagado','Carulla (clima+agua+ACS+RITE) — pagado 25%','clima',23600.51,'EUR',21,'paid','Incluye climatización, agua, ACS y renovación aire RITE. 25% = 28.556,62 € pagado'),
     mk('carulla-pend-iva','Carulla (clima+agua+ACS+RITE) — pendiente 35% (con IVA)','clima',33040.72,'EUR',21,'pending','Con IVA. Climatización, agua, ACS y RITE'),
-    mk('carulla-pend-siniva','Carulla (clima+agua+ACS+RITE) — pendiente 40% (sin IVA)','clima',37760.82,'EUR',0,'pending','Sin IVA. Climatización, agua, ACS y RITE'),
+    mk('carulla-pend-siniva','Carulla (clima+agua+ACS+RITE) — pendiente 40% (con IVA)','clima',37760.82,'EUR',21,'pending','Con IVA. Climatización, agua, ACS y RITE'),
     mk('taquillas-bellum-pagado','Taquillas + cabinas sanitarias (Bellum Logistics) — pagado','vestuarios',7840.75,'EUR',21,'paid','9.487,31 € pagados por banco (13/07)'),
     mk('taquillas-bellum','Taquillas + cabinas sanitarias (Bellum Logistics) — pendiente','vestuarios',7840.75,'EUR',21,'pending'),
     mk('pulir-suelo','Suelo (pavimento gimnasio)','suelo',17000,'EUR',21,'pending','17.000 € + 21% IVA (base)'),
@@ -389,6 +389,11 @@ function load(){
     else if(!R.items.some(i=>i.sk==='lm-vestuarios-extra')) R.items.push(...seedItems().filter(i=>i.sk==='lm-vestuarios-extra'));
     const lp2=R.items.find(i=>i.sk==='lm-pendiente'); if(lp2){lp2.base=16097.78;lp2.concepto='Luis Miguel (tabiques + techo vestuarios)';}
     localStorage.setItem('migV13','1'); saveR();
+  }
+  // Migración puntual: a partir de ahora todo va con IVA, no hay tramo de Carulla sin IVA.
+  if(!localStorage.getItem('migV14')){
+    const cs2=R.items.find(i=>i.sk==='carulla-pend-siniva'); if(cs2){cs2.iva=21;cs2.concepto='Carulla (clima+agua+ACS+RITE) — pendiente 40% (con IVA)';cs2.nota='Con IVA. Climatización, agua, ACS y RITE';}
+    localStorage.setItem('migV14','1'); saveR();
   }
   // Migración puntual: quitar vidrios recepción (Franquet Barrau).
   if(!localStorage.getItem('migVidres')){
