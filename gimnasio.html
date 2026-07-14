@@ -177,8 +177,8 @@ function seedItems(){
     mk('tornos','Tornos de acceso','acceso',9000,'EUR',21,'pending','9.000 € + 21% IVA (base)'),
     mk('puerta-qr','Puerta de cristal exterior con lector QR','acceso',2819.83,'EUR',21,'pending','3.412 € IVA incl. — presupuesto real'),
     mk('accesibilidad','Elevador para minusválidos','obra',9504.13,'EUR',21,'pending','11.500 € IVA incl. — presupuesto real'),
-    mk('lm-pagado','Luis Miguel (tabiques + techo vestuarios) — pagado','obra',4545.45,'EUR',21,'paid','5.500 € pagados por banco (03/07, vestuarios)'),
-    mk('lm-pendiente','Luis Miguel (tabiques + techo vestuarios) — pendiente','obra',11552.33,'EUR',21,'pending','Presupuesto (sin IVA +21%): refuerzos pino 440 + tabique sala poses 2.135 + entrada recepción 1.895,13 + ocultación agua/luz 3.104,11 + techo vestuarios 8.523,54'),
+    mk('lm-vestuarios-extra','Luis Miguel — vestuarios (partida adicional, no incluida en tabiques+techo)','obra',4545.45,'EUR',21,'paid','5.500 € pagados por banco (03/07). Partida distinta de la de tabiques+techo.'),
+    mk('lm-pendiente','Luis Miguel (tabiques + techo vestuarios)','obra',16097.78,'EUR',21,'pending','Presupuesto (sin IVA +21%): refuerzos pino 440 + tabique sala poses 2.135 + entrada recepción 1.895,13 + ocultación agua/luz 3.104,11 + techo vestuarios 8.523,54'),
     mk('espejos','Espejos sala (pared entrenamiento)','obra',4381.82,'EUR',21,'pending','5.302 € IVA incl. — presupuesto real'),
     mk('transporte','Transporte marítimo + aduana equipos (estimado)','transporte',10800,'EUR',0,'pending','Estimación ≈ 30.000 €'),
     mk('extra-obra','Obra y mano de obra ya ejecutada (Rubiralta y otros)','obra',37580.20,'EUR',21,'paid','Demolición, pladur, material, limpieza… ya pagado (banco)'),
@@ -367,9 +367,9 @@ function load(){
     const eg=R.items.find(i=>i.sk==='elec-gimnas-pagado'); if(eg){eg.base=19460.21;eg.nota='23.546,85 € pagados por banco (incl. iluminación julio)';}
     const ep=R.items.find(i=>i.sk==='elec-gimnas-pend'); if(ep) ep.base=15154.91;
     if(!R.items.some(i=>i.sk==='taquillas-bellum-pagado')) R.items.push(...seedItems().filter(i=>i.sk==='taquillas-bellum-pagado'));
-    const tb=R.items.find(i=>i.sk==='taquillas-bellum'); if(tb){tb.base=7840.75;tb.c='Taquillas + cabinas sanitarias (Bellum Logistics) — pendiente';}
+    const tb=R.items.find(i=>i.sk==='taquillas-bellum'); if(tb){tb.base=7840.75;tb.concepto='Taquillas + cabinas sanitarias (Bellum Logistics) — pendiente';}
     if(!R.items.some(i=>i.sk==='lm-pagado')) R.items.push(...seedItems().filter(i=>i.sk==='lm-pagado'));
-    const lp=R.items.find(i=>i.sk==='lm-pendiente'); if(lp){lp.base=11552.33;lp.c='Luis Miguel (tabiques + techo vestuarios) — pendiente';}
+    const lp=R.items.find(i=>i.sk==='lm-pendiente'); if(lp){lp.base=11552.33;lp.concepto='Luis Miguel (tabiques + techo vestuarios) — pendiente';}
     const eo=R.items.find(i=>i.sk==='extra-otros'); if(eo){eo.base=17111.94;eo.nota='Ya pagado (banco), incl. Josep Selga y Terrassa (conceptos a confirmar)';}
     const ei=R.items.find(i=>i.sk==='extra-impuestos'); if(ei) ei.base=1065.67;
     localStorage.setItem('migV11','1'); saveR();
@@ -378,9 +378,17 @@ function load(){
   if(!localStorage.getItem('migV12')){
     const eo2=R.items.find(i=>i.sk==='extra-otros'); if(eo2){eo2.base=15342.16;eo2.nota='Ya pagado (banco), incl. Josep Selga (adeudo recurrente)';}
     if(!R.items.some(i=>i.sk==='obramat-pagado')) R.items.push(...seedItems().filter(i=>i.sk==='obramat-pagado'));
-    const ob=R.items.find(i=>i.sk==='obramat-201'); if(ob){ob.base=9829.26;ob.c='Material baños/vestuarios/suelo/iluminación (Obramat) — pendiente';}
+    const ob=R.items.find(i=>i.sk==='obramat-201'); if(ob){ob.base=9829.26;ob.concepto='Material baños/vestuarios/suelo/iluminación (Obramat) — pendiente';}
     B.mov.forEach(m=>{ if(m.ben==='Terrassa'){m.con='Luces Obramat (ref. 3020252522)';m.c='vestuarios';} });
     localStorage.setItem('migV12','1'); saveR(); saveB();
+  }
+  // Migración puntual: los 5.500€ de Luis Miguel NO son de la partida de tabiques+techo (19.478€).
+  if(!localStorage.getItem('migV13')){
+    const lmOld=R.items.find(i=>i.sk==='lm-pagado');
+    if(lmOld){ lmOld.sk='lm-vestuarios-extra'; lmOld.concepto='Luis Miguel — vestuarios (partida adicional, no incluida en tabiques+techo)'; lmOld.nota='5.500 € pagados por banco (03/07). Partida distinta de la de tabiques+techo.'; }
+    else if(!R.items.some(i=>i.sk==='lm-vestuarios-extra')) R.items.push(...seedItems().filter(i=>i.sk==='lm-vestuarios-extra'));
+    const lp2=R.items.find(i=>i.sk==='lm-pendiente'); if(lp2){lp2.base=16097.78;lp2.concepto='Luis Miguel (tabiques + techo vestuarios)';}
+    localStorage.setItem('migV13','1'); saveR();
   }
   // Migración puntual: quitar vidrios recepción (Franquet Barrau).
   if(!localStorage.getItem('migVidres')){
