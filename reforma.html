@@ -439,7 +439,7 @@ function seedItems() {
     mk('carulla-pend-siniva', 'Carulla (clima+agua+ACS+RITE) — pendiente 40% (con IVA)', 'clima', 37760.82, 'EUR', 21, 'pending', 'Con IVA. Climatización, agua, ACS y RITE'),
     mk('taquillas-bellum-pagado', 'Taquillas + cabinas sanitarias vestuarios (Bellum Logistics) — pagado', 'vestuarios', 7840.75, 'EUR', 21, 'paid', '9.487,31 € pagados por banco (13/07)'),
     mk('taquillas-bellum', 'Taquillas + cabinas sanitarias vestuarios (Bellum Logistics) — pendiente', 'vestuarios', 7840.75, 'EUR', 21, 'pending', 'Pago 50% firma / 50% antes de envío'),
-    mk('pulir-suelo', 'Suelo (pavimento gimnasio)', 'suelo', 17000, 'EUR', 21, 'pending', 'Presupuesto'),
+    mk('pulir-suelo', 'Suelo (pavimento gimnasio)', 'suelo', 14876.03, 'EUR', 21, 'pending', '18.000 € IVA incluido — presupuesto actualizado'),
     mk('pintura-gral', 'Pintura (paredes + fachada)', 'pintura', 5000, 'EUR', 21, 'pending', 'El suelo va acabado, no se pinta'),
     mk('tornos', 'Tornos de acceso', 'acceso', 9000, 'EUR', 21, 'pending', 'Presupuesto'),
     mk('puerta-qr', 'Puerta de cristal exterior con lector QR', 'acceso', 2819.83, 'EUR', 21, 'pending', '3.412 € IVA incl. — presupuesto real'),
@@ -728,6 +728,14 @@ function load() {
     const cs2 = state.items.find(i => i.sk === 'carulla-pend-siniva');
     if (cs2) { cs2.iva = 21; cs2.concepto = 'Carulla (clima+agua+ACS+RITE) — pendiente 40% (con IVA)'; cs2.nota = 'Con IVA. Climatización, agua, ACS y RITE'; }
     state.migV14 = true;
+    migrated = true;
+  }
+
+  // Migración puntual: nuevo presupuesto del suelo, 18.000 € IVA incluido.
+  if (!state.migV15) {
+    const ps = state.items.find(i => i.sk === 'pulir-suelo');
+    if (ps) { ps.base = 14876.03; ps.nota = '18.000 € IVA incluido — presupuesto actualizado'; }
+    state.migV15 = true;
     migrated = true;
   }
 
