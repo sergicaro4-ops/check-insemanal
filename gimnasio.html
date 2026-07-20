@@ -165,6 +165,7 @@ function seedItems(){
     mk('elec-comptadors','Suministro caja de contadores (TMF-10 + armario)','electrica',2252.90,'EUR',21,'pending'),
     mk('obramat-pagado','Material baños/vestuarios/suelo/iluminación (Obramat) — pagado','vestuarios',1769.78,'EUR',21,'paid','2.141,43 € pagados por banco (01/07, luces Obramat vía Terrassa)'),
     mk('obramat-201','Material baños/vestuarios/suelo/iluminación (Obramat) — pendiente','vestuarios',9829.26,'EUR',21,'pending','Total + 21% IVA (base) 14.026,70 €'),
+    mk('vestuarios-enrachado','Enrachado y colocación de material de baños (mano de obra)','vestuarios',9090.91,'EUR',21,'pending','11.000 € IVA incluido — partida aparte del material de Obramat'),
     mk('rotol-legion','Rótulo LEGION letras corpóreas + LED','rotulos',3719.01,'EUR',21,'pending'),
     mk('rotol-xixo','Lonas / decoración La Xixo','rotulos',388.10,'EUR',21,'pending','A nombre de La Xixo — confirmar'),
     mk('carulla-pagado','Carulla (clima+agua+ACS+RITE) — pagado 25%','clima',23600.51,'EUR',21,'paid','Incluye climatización, agua, ACS y renovación aire RITE. 25% = 28.556,62 € pagado'),
@@ -399,6 +400,11 @@ function load(){
   if(!localStorage.getItem('migV15')){
     const ps=R.items.find(i=>i.sk==='pulir-suelo'); if(ps){ps.base=14876.03;ps.nota='18.000 € IVA incluido — presupuesto actualizado';}
     localStorage.setItem('migV15','1'); saveR();
+  }
+  // Migración puntual: enrachado y colocación de material de baños (mano de obra, 11.000 € IVA incl.).
+  if(!localStorage.getItem('migV16')){
+    if(!R.items.some(i=>i.sk==='vestuarios-enrachado')) R.items.push(...seedItems().filter(i=>i.sk==='vestuarios-enrachado'));
+    localStorage.setItem('migV16','1'); saveR();
   }
   // Migración puntual: quitar vidrios recepción (Franquet Barrau).
   if(!localStorage.getItem('migVidres')){
