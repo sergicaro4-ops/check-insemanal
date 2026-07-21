@@ -434,7 +434,6 @@ function seedItems() {
     mk('obramat-201', 'Material baños/vestuarios/suelo/iluminación (Obramat, pedido 201) — pendiente', 'vestuarios', 9829.26, 'EUR', 21, 'pending', 'Total + 21% IVA (base) 14.026,70 €. Depósito obligatorio, entrega 15/07'),
     mk('vestuarios-enrachado', 'Enrachado y colocación de material de baños (mano de obra)', 'vestuarios', 9090.91, 'EUR', 21, 'pending', '11.000 € IVA incluido — partida aparte del material de Obramat'),
     mk('rotol-legion', 'Rótulo LEGION letras corpóreas + LED (Franquet Barrau ENP261169)', 'rotulos', 3719.01, 'EUR', 21, 'pending'),
-    mk('rotol-xixo', 'Lonas / decoración La Xixo (Franquet Barrau FBP261143)', 'rotulos', 388.10, 'EUR', 21, 'pending', 'Presupuesto a nombre de La Xixo — confirmar si es del gimnasio'),
     mk('carulla-pagado', 'Carulla (clima+agua+ACS+RITE) — pagado 25%', 'clima', 23600.51, 'EUR', 21, 'paid', 'Incluye climatización, agua, ACS y renovación aire RITE. 25% = 28.556,62 € pagado'),
     mk('carulla-pend-iva', 'Carulla (clima+agua+ACS+RITE) — pendiente 35% (con IVA)', 'clima', 33040.72, 'EUR', 21, 'pending', 'Con IVA. Climatización, agua, ACS y RITE'),
     mk('carulla-pend-siniva', 'Carulla (clima+agua+ACS+RITE) — pendiente 40% (con IVA)', 'clima', 37760.82, 'EUR', 21, 'pending', 'Con IVA. Climatización, agua, ACS y RITE'),
@@ -729,6 +728,13 @@ function load() {
     const cs2 = state.items.find(i => i.sk === 'carulla-pend-siniva');
     if (cs2) { cs2.iva = 21; cs2.concepto = 'Carulla (clima+agua+ACS+RITE) — pendiente 40% (con IVA)'; cs2.nota = 'Con IVA. Climatización, agua, ACS y RITE'; }
     state.migV14 = true;
+    migrated = true;
+  }
+
+  // Migración puntual: quitar lonas/decoración La Xixo (no está claro que sea del gimnasio).
+  if (!state.migV17) {
+    state.items = state.items.filter(i => i.sk !== 'rotol-xixo');
+    state.migV17 = true;
     migrated = true;
   }
 
