@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Anexo · Inversión pendiente · Caro Legión S.L.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--ink:#141a2b;--ink2:#3a4260;--muted:#697089;--line:#e4e7f0;--line2:#cdd3e2;--paper:#fff;--soft:#f6f8fc;--navy:#12325a;--navy2:#1c4a80;--gold:#a8791f;--amber-bg:#fdf3e3;--amber:#b45309;--green:#166534;--green-bg:#eafaf0;}
+  body{font-family:'Inter',sans-serif;background:#e9ecf3;color:var(--ink);line-height:1.5;padding:22px 12px;}
+  .toolbar{max-width:760px;margin:0 auto 16px;display:flex;justify-content:flex-end;gap:8px;}
+  .btn{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;padding:9px 16px;border-radius:8px;border:1px solid var(--line2);background:#fff;color:var(--ink2);cursor:pointer;}
+  .btn.p{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .doc{max-width:760px;margin:0 auto;background:var(--paper);box-shadow:0 12px 44px rgba(20,24,45,.14);}
+  .pg{padding:34px 46px;}
+  .pg + .pg{border-top:1px dashed var(--line2);}
+
+  .head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid var(--navy);padding-bottom:12px;margin-bottom:16px;flex-wrap:wrap;gap:12px;}
+  .brand{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;letter-spacing:.03em;color:var(--navy);}
+  .brand small{display:block;font-family:'Inter',sans-serif;font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;font-weight:400;margin-top:3px;}
+  .head .meta{text-align:right;font-size:11px;color:var(--muted);line-height:1.6;}
+  .doctype{font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);}
+
+  h1{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;color:var(--navy);margin:2px 0 4px;}
+  .sub{font-size:12px;color:var(--muted);margin-bottom:14px;}
+  h2{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:var(--navy);margin:18px 0 6px;padding-top:8px;border-top:1px solid var(--line);}
+  h2:first-of-type{border-top:none;padding-top:0;}
+
+  table{width:100%;border-collapse:collapse;font-size:11.5px;margin:4px 0;}
+  th{text-align:right;font-family:'Space Grotesk',sans-serif;font-size:9.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);padding:5px 8px;border-bottom:2px solid var(--line2);}
+  th:first-child{text-align:left;}
+  th:nth-child(2){text-align:left;}
+  td{padding:5px 8px;border-bottom:1px solid var(--line);text-align:right;font-family:'Space Grotesk',sans-serif;vertical-align:top;}
+  td:first-child{text-align:left;font-family:'Inter',sans-serif;color:var(--ink2);}
+  td:nth-child(2){text-align:left;font-family:'Inter',sans-serif;font-size:10.5px;}
+  .tag{display:inline-block;font-family:'Inter',sans-serif;font-size:9.5px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap;}
+  .tag.real{background:var(--green-bg);color:var(--green);}
+  .tag.est{background:var(--amber-bg);color:var(--amber);}
+  tr.cat-tot td{font-weight:700;color:var(--navy);border-top:1.5px solid var(--line2);background:var(--soft);}
+  tr.grand td{font-weight:700;color:var(--navy);background:var(--soft);font-size:13.5px;padding:10px 8px;border-top:2px solid var(--navy);}
+
+  .kpis{display:flex;gap:10px;margin:14px 0 4px;flex-wrap:wrap;}
+  .kpi{flex:1;min-width:140px;background:var(--soft);border-radius:10px;padding:9px 14px;}
+  .kpi .l{font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:600;margin-bottom:3px;}
+  .kpi .v{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:var(--navy);}
+  .kpi.bad .v{color:#b91c1c;}
+
+  .note{font-size:10.5px;color:var(--muted);margin:8px 0;}
+  .foot{margin-top:16px;padding-top:8px;border-top:1px solid var(--line);font-size:9.5px;color:var(--muted);}
+
+  @media print{body{background:#fff;padding:0;}.toolbar{display:none;}.doc{box-shadow:none;max-width:none;}.pg{padding:16mm 15mm;}.pg + .pg{border-top:none;}table{page-break-inside:avoid;}h2{page-break-after:avoid;}@page{size:A4;margin:0;}}
+</style>
+</head>
+<body>
+<div class="toolbar"><button class="btn p" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button></div>
+
+<div class="doc">
+  <div class="pg">
+    <div class="head">
+      <div class="brand">CARO LEGIÓN, S.L.<small>Legion Club · Sant Fruitós de Bages</small></div>
+      <div class="meta"><span class="doctype">Anexo al dossier de inversión</span><br/>Inversión pendiente de ejecución · 18 de julio de 2026</div>
+    </div>
+
+    <h1>Anexo — Inversión pendiente</h1>
+    <p class="sub">Desglose completo, partida por partida, de la inversión aún no ejecutada, con el origen de cada importe (presupuesto real o estimación). IVA incluido en todos los importes salvo indicación contraria.</p>
+
+    <div class="kpis">
+      <div class="kpi"><div class="l">Coste total del proyecto</div><div class="v">492.622,90 €</div></div>
+      <div class="kpi"><div class="l">Ejecutado y pagado</div><div class="v">213.329,10 €</div></div>
+      <div class="kpi bad"><div class="l">Pendiente de ejecución</div><div class="v">279.293,80 €</div></div>
+      <div class="kpi"><div class="l">Saldo disponible en caja</div><div class="v">40.666,60 €</div></div>
+    </div>
+    <p class="note"><span class="tag real">Presupuesto</span> importe con presupuesto recibido de proveedor &nbsp; <span class="tag est">Estimación</span> importe estimado, pendiente de presupuesto real de cierre</p>
+
+    <h2>Maquinaria y transporte</h2>
+    <table>
+      <thead><tr><th>Partida</th><th>Base</th><th>Pendiente</th></tr></thead>
+      <tbody>
+        <tr><td>Maquinaria HSE Fitness Equipment — IVA de importación</td><td><span class="tag real">Trámite aduanero</span></td><td>18.788,00 €</td></tr>
+        <tr><td>Transporte marítimo + aduana equipos</td><td><span class="tag est">Estimación</span></td><td>10.800,00 €</td></tr>
+        <tr class="cat-tot"><td colspan="2">Subtotal maquinaria y transporte</td><td>29.588,00 €</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Electricidad e instalaciones</h2>
+    <table>
+      <thead><tr><th>Partida</th><th>Base</th><th>Pendiente</th></tr></thead>
+      <tbody>
+        <tr><td>Instalación eléctrica del gimnasio (Patrick Oviedo Núñez)</td><td><span class="tag real">Presupuesto aceptado</span></td><td>18.337,44 €</td></tr>
+        <tr><td>Caja de contadores (TMF-10 + armario)</td><td><span class="tag real">Presupuesto</span></td><td>2.726,01 €</td></tr>
+        <tr class="cat-tot"><td colspan="2">Subtotal electricidad</td><td>21.063,45 €</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Climatización, agua y renovación de aire</h2>
+    <table>
+      <thead><tr><th>Partida</th><th>Base</th><th>Pendiente</th></tr></thead>
+      <tbody>
+        <tr><td>Carulla Energía (clima + agua + ACS + RITE) — tramo 35%</td><td><span class="tag real">Presupuesto aceptado</span></td><td>39.979,27 €</td></tr>
+        <tr><td>Carulla Energía (clima + agua + ACS + RITE) — tramo 40%</td><td><span class="tag real">Presupuesto aceptado</span></td><td>45.690,59 €</td></tr>
+        <tr class="cat-tot"><td colspan="2">Subtotal climatización</td><td>85.669,86 €</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pg">
+    <h2 style="margin-top:0">Vestuarios, baños y suelo</h2>
+    <table>
+      <thead><tr><th>Partida</th><th>Base</th><th>Pendiente</th></tr></thead>
+      <tbody>
+        <tr><td>Luis Miguel Rubiralta — tabiques + techo vestuarios</td><td><span class="tag real">Presupuesto detallado</span></td><td>19.478,31 €</td></tr>
+        <tr><td>Material baños/vestuarios/suelo/iluminación (Obramat)</td><td><span class="tag real">Presupuesto</span></td><td>11.893,40 €</td></tr>
+        <tr><td>Enrachado y colocación de material de baños (mano de obra)</td><td><span class="tag real">Presupuesto</span></td><td>11.000,00 €</td></tr>
+        <tr><td>Taquillas + cabinas sanitarias (Bellum Logistics)</td><td><span class="tag real">Presupuesto</span></td><td>9.487,31 €</td></tr>
+        <tr><td>Suelo (pavimento gimnasio)</td><td><span class="tag real">Presupuesto actualizado</span></td><td>18.000,00 €</td></tr>
+        <tr class="cat-tot"><td colspan="2">Subtotal vestuarios/baños/suelo</td><td>69.859,02 €</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Accesos y protección contra incendios (PCI)</h2>
+    <table>
+      <thead><tr><th>Partida</th><th>Base</th><th>Pendiente</th></tr></thead>
+      <tbody>
+        <tr><td>Tornos de acceso</td><td><span class="tag real">Presupuesto</span></td><td>10.890,00 €</td></tr>
+        <tr><td>Puerta de cristal exterior con lector QR</td><td><span class="tag real">Presupuesto real</span></td><td>3.411,99 €</td></tr>
+        <tr><td>Detección de incendios (central + 37 detectores)</td><td><span class="tag real">Presupuesto</span></td><td>11.629,87 €</td></tr>
+        <tr><td>Techo RF120 (placa RF + lana de roca, 56 m)</td><td><span class="tag real">Material</span></td><td>4.840,00 €</td></tr>
+        <tr><td>Sobrepresión escalera + pasillo protegido (humos)</td><td><span class="tag est">Estimación</span></td><td>10.890,00 €</td></tr>
+        <tr class="cat-tot"><td colspan="2">Subtotal accesos + PCI</td><td>41.661,86 €</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Obra final, acabados y otros</h2>
+    <table>
+      <thead><tr><th>Partida</th><th>Base</th><th>Pendiente</th></tr></thead>
+      <tbody>
+        <tr><td>Elevador para minusválidos (accesibilidad PMR)</td><td><span class="tag real">Presupuesto real</span></td><td>11.500,00 €</td></tr>
+        <tr><td>Pintura (paredes + fachada)</td><td><span class="tag real">Presupuesto</span></td><td>6.050,00 €</td></tr>
+        <tr><td>Rótulo LEGION (letras corpóreas + LED)</td><td><span class="tag real">Presupuesto</span></td><td>4.500,00 €</td></tr>
+        <tr><td>Espejos sala (pared de entrenamiento)</td><td><span class="tag real">Presupuesto real</span></td><td>5.302,00 €</td></tr>
+        <tr><td>Valla perimetral</td><td><span class="tag real">Presupuesto</span></td><td>3.630,00 €</td></tr>
+        <tr><td>Lonas / decoración (La Xixo)</td><td><span class="tag est">A confirmar</span></td><td>469,60 €</td></tr>
+        <tr class="cat-tot"><td colspan="2">Subtotal obra final y otros</td><td>31.451,60 €</td></tr>
+      </tbody>
+    </table>
+
+    <table style="margin-top:14px">
+      <tbody>
+        <tr class="grand"><td>TOTAL INVERSIÓN PENDIENTE</td><td></td><td>279.293,80 €</td></tr>
+      </tbody>
+    </table>
+
+    <p class="note" style="margin-top:12px"><b>Nota sobre las estimaciones (7,9% del total pendiente, 22.159,60 €):</b> transporte marítimo/aduana, sobrepresión de escalera y pasillo protegido, y decoración de La Xixo son los tres únicos importes sin presupuesto de cierre firmado; el resto (92,1%, 257.134,20 €) corresponde a presupuestos reales recibidos de proveedor, varios de ellos ya aceptados (Patrick, Carulla).</p>
+
+    <div class="foot">Caro Legión, S.L. · CIF B-22593131 · Anexo al Dossier de Inversión y Plan de Negocio · Documento confidencial · Sant Fruitós de Bages, 18 de julio de 2026.</div>
+  </div>
+</div>
+</body>
+</html>
