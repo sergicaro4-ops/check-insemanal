@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tres bloques · Inversión pendiente · Caro Legión S.L.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--ink:#141a2b;--ink2:#3a4260;--muted:#697089;--line:#e4e7f0;--line2:#cdd3e2;--paper:#fff;--soft:#f6f8fc;--navy:#12325a;--navy2:#1c4a80;--gold:#a8791f;--amber-bg:#fdf3e3;--amber:#b45309;--green:#166534;--green-bg:#eafaf0;--red:#b91c1c;}
+  body{font-family:'Inter',sans-serif;background:#e9ecf3;color:var(--ink);line-height:1.5;padding:22px 12px;}
+  .toolbar{max-width:760px;margin:0 auto 16px;display:flex;justify-content:flex-end;gap:8px;}
+  .btn{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;padding:9px 16px;border-radius:8px;border:1px solid var(--line2);background:#fff;color:var(--ink2);cursor:pointer;}
+  .btn.p{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .doc{max-width:760px;margin:0 auto;background:var(--paper);box-shadow:0 12px 44px rgba(20,24,45,.14);}
+  .pg{padding:34px 46px;}
+  .pg + .pg{border-top:1px dashed var(--line2);}
+
+  .head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid var(--navy);padding-bottom:12px;margin-bottom:16px;flex-wrap:wrap;gap:12px;}
+  .brand{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;letter-spacing:.03em;color:var(--navy);}
+  .brand small{display:block;font-family:'Inter',sans-serif;font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;font-weight:400;margin-top:3px;}
+  .head .meta{text-align:right;font-size:11px;color:var(--muted);line-height:1.6;}
+  .doctype{font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);}
+
+  h1{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;color:var(--navy);margin:2px 0 4px;}
+  .sub{font-size:12px;color:var(--muted);margin-bottom:14px;}
+  h2{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:#fff;background:var(--navy);margin:18px 0 8px;padding:8px 12px;border-radius:6px;}
+  h2 .n{display:inline-block;background:rgba(255,255,255,.2);border-radius:20px;padding:1px 9px;margin-right:8px;font-size:11px;}
+
+  table{width:100%;border-collapse:collapse;font-size:12px;margin:4px 0;}
+  th{text-align:right;font-family:'Space Grotesk',sans-serif;font-size:9.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:2px solid var(--line2);}
+  th:first-child{text-align:left;}
+  th:nth-child(2){text-align:left;}
+  td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;font-family:'Space Grotesk',sans-serif;vertical-align:top;}
+  td:first-child{text-align:left;font-family:'Inter',sans-serif;color:var(--ink2);}
+  td:nth-child(2){text-align:left;font-family:'Inter',sans-serif;font-size:10.5px;color:var(--muted);}
+  tr.tot td{font-weight:700;color:var(--navy);background:var(--soft);border-top:1.5px solid var(--navy2);font-size:13px;padding:8px;}
+
+  .kpis{display:flex;gap:10px;margin:14px 0 4px;flex-wrap:wrap;}
+  .kpi{flex:1;min-width:140px;background:var(--soft);border-radius:10px;padding:9px 14px;}
+  .kpi .l{font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:600;margin-bottom:3px;}
+  .kpi .v{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:var(--navy);}
+  .kpi.bad .v{color:var(--red);}
+
+  .warn{background:var(--amber-bg);border:1px solid #f3d9a8;border-radius:8px;padding:10px 14px;font-size:11.5px;color:var(--amber);margin:14px 0;}
+  .note{font-size:10.5px;color:var(--muted);margin:8px 0;}
+  .foot{margin-top:16px;padding-top:8px;border-top:1px solid var(--line);font-size:9.5px;color:var(--muted);}
+
+  @media print{body{background:#fff;padding:0;}.toolbar{display:none;}.doc{box-shadow:none;max-width:none;}.pg{padding:16mm 15mm;}.pg + .pg{border-top:none;}table{page-break-inside:avoid;}h2{page-break-after:avoid;}@page{size:A4;margin:0;}}
+</style>
+</head>
+<body>
+<div class="toolbar"><button class="btn p" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button></div>
+
+<div class="doc">
+  <div class="pg">
+    <div class="head">
+      <div class="brand">CARO LEGIÓN, S.L.<small>Legion Club · Sant Fruitós de Bages</small></div>
+      <div class="meta"><span class="doctype">Documento interno de trabajo</span><br/>Inversión pendiente en 3 bloques · 18 de julio de 2026</div>
+    </div>
+
+    <h1>Inversión pendiente — 3 bloques</h1>
+    <p class="sub">Reparto de toda la inversión pendiente en tres bloques, según el criterio fijado: Bloque 1 y parte del Bloque 2 sin IVA, resto con IVA y con los márgenes de seguridad ya acordados (15% donde se fijó, sin margen donde se retiró expresamente).</p>
+
+    <div class="kpis">
+      <div class="kpi"><div class="l">Bloque 1 — Instalaciones</div><div class="v">85.956,45 €</div></div>
+      <div class="kpi"><div class="l">Bloque 2 — Obra y acabados</div><div class="v">46.547,30 €</div></div>
+      <div class="kpi"><div class="l">Bloque 3 — Resto de partidas</div><div class="v">143.308,64 €</div></div>
+      <div class="kpi bad"><div class="l">TOTAL 3 bloques</div><div class="v">275.812,39 €</div></div>
+    </div>
+
+    <h2><span class="n">1</span>Instalaciones — sin IVA</h2>
+    <table>
+      <thead><tr><th>Partida</th><th>Criterio</th><th>Importe</th></tr></thead>
+      <tbody>
+        <tr><td>Instalación eléctrica (Patrick Oviedo Núñez)</td><td>Base, sin IVA</td><td>15.154,91 €</td></tr>
+        <tr><td>Carulla A — tramo 35% (clima+agua+ACS+RITE)</td><td>Base, sin IVA</td><td>33.040,72 €</td></tr>
+        <tr><td>Carulla B — tramo 40% (clima+agua+ACS+RITE)</td><td>Base, sin IVA</td><td>37.760,82 €</td></tr>
+        <tr class="tot"><td colspan="2">SUBTOTAL BLOQUE 1</td><td>85.956,45 €</td></tr>
+      </tbody>
+    </table>
+
+    <h2><span class="n">2</span>Obra y acabados</h2>
+    <table>
+      <thead><tr><th>Partida</th><th>Criterio</th><th>Importe</th></tr></thead>
+      <tbody>
+        <tr><td>Pintura (paredes + fachada)</td><td>Ajustado a mano</td><td>8.000,00 €</td></tr>
+        <tr><td>Suelo (pavimento gimnasio)</td><td>Con IVA, sin margen extra</td><td>18.000,00 €</td></tr>
+        <tr><td>Luis Miguel — mitad (de 19.000 € fijados)</td><td>Mitad del total revisado</td><td>9.500,00 €</td></tr>
+        <tr><td>Espejos sala (pared de entrenamiento)</td><td>Con IVA + margen 15%</td><td>6.097,30 €</td></tr>
+        <tr><td>Mano de obra — detección de incendios (Patrick)</td><td>Del presupuesto real (línea "mà d'obra"), base</td><td>4.950,00 €</td></tr>
+        <tr class="tot"><td colspan="2">SUBTOTAL BLOQUE 2</td><td>46.547,30 €</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pg">
+    <h2 style="margin-top:0"><span class="n">3</span>Resto de partidas — con IVA</h2>
+    <table>
+      <thead><tr><th>Partida</th><th>Criterio</th><th>Importe</th></tr></thead>
+      <tbody>
+        <tr><td>Maquinaria HSE — IVA de importación</td><td>Con margen 15%</td><td>21.606,20 €</td></tr>
+        <tr><td>Detección de incendios — resto (material)</td><td>Con IVA + margen 15%</td><td>6.486,42 €</td></tr>
+        <tr><td>Caja de contadores (TMF-10 + armario)</td><td>Con margen 15%</td><td>3.134,91 €</td></tr>
+        <tr><td>Obramat — material baños/vestuarios/suelo/luces</td><td>Con margen 15%</td><td>13.677,41 €</td></tr>
+        <tr><td>Enrachado + colocación de material de baños</td><td>Con margen 15%</td><td>12.650,00 €</td></tr>
+        <tr><td>Rótulo LEGION (letras corpóreas + LED)</td><td>Con margen 15%</td><td>5.175,00 €</td></tr>
+        <tr><td>Taquillas + cabinas sanitarias (Bellum)</td><td>Con margen 15%</td><td>10.910,41 €</td></tr>
+        <tr><td>Tornos de acceso</td><td>Ajustado a mano, sin margen extra</td><td>10.500,00 €</td></tr>
+        <tr><td>Puerta de cristal exterior con lector QR</td><td>Con margen 15%</td><td>3.923,79 €</td></tr>
+        <tr><td>Elevador para minusválidos</td><td>Con margen 15%</td><td>13.225,00 €</td></tr>
+        <tr><td>Luis Miguel — mitad restante (de 19.000 €)</td><td>Mitad del total revisado</td><td>9.500,00 €</td></tr>
+        <tr><td>Transporte marítimo + aduana</td><td>Sin margen</td><td>10.800,00 €</td></tr>
+        <tr><td>Techo RF120 (placa RF + lana de roca)</td><td>Con margen 15%</td><td>5.566,00 €</td></tr>
+        <tr><td>Sobrepresión escalera + pasillo protegido</td><td>Con margen 15%</td><td>12.523,50 €</td></tr>
+        <tr><td>Valla perimetral</td><td>Sin margen</td><td>3.630,00 €</td></tr>
+        <tr class="tot"><td colspan="2">SUBTOTAL BLOQUE 3</td><td>143.308,64 €</td></tr>
+      </tbody>
+    </table>
+
+    <table style="margin-top:16px">
+      <tbody>
+        <tr class="tot" style="font-size:15px"><td>TOTAL — BLOQUE 1 + 2 + 3</td><td></td><td>275.812,39 €</td></tr>
+      </tbody>
+    </table>
+
+    <div class="kpis">
+      <div class="kpi"><div class="l">Saldo disponible en caja</div><div class="v">40.666,60 €</div></div>
+      <div class="kpi bad"><div class="l">Falta conseguir</div><div class="v">235.145,79 €</div></div>
+    </div>
+
+    <div class="warn">⚠️ No incluido en ningún bloque: extintores + instalación certificada de bomberos (sin presupuesto real todavía). Confirmar cuanto antes con el instalador de PCI antes de dar por cerrada la cifra de apertura.</div>
+
+    <p class="note">Verificación: las 21 partidas del presupuesto pendiente están repartidas entre los tres bloques sin solapamientos ni huecos (Detección de incendios y Luis Miguel se han dividido en dos partes cada uno, una por bloque, sumando el total de cada partida original). El total de 275.812,39 € es menor que si todo fuera con IVA y margen, porque el Bloque 1 y parte del Bloque 2 se han calculado sin IVA, tal como se pidió expresamente.</p>
+
+    <div class="foot">Caro Legión, S.L. · CIF B-22593131 · Documento interno de trabajo para los socios fundadores · Sant Fruitós de Bages, 18 de julio de 2026.</div>
+  </div>
+</div>
+</body>
+</html>
