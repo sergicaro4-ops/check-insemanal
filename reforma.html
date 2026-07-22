@@ -457,7 +457,7 @@ function seedItems() {
     mk('extra-impuestos', 'Impuestos y comisiones bancarias', 'otros', 1065.67, 'EUR', 0, 'paid', 'Tributos y gastos de banco'),
     mk('icio-tasa', 'Liquidación municipal ICIO + Tasa (licencia de obras)', 'otros', 8737.77, 'EUR', 0, 'pending', 'ICIO 7.418,11 € + Tasa 1.319,66 € — Ajuntament de Sant Fruitós de Bages, expedient 2367/2026. Confirmar si ya está pagada.'),
     mk('techo-rf', 'Techo RF120: placa RF + lana de roca (56 m, sellado)', 'incendios', 4000, 'EUR', 21, 'pending', '4.000 € + 21% IVA (base) — lo ejecuta el promotor (material)'),
-    mk('zonas-protegidas', 'Sobrepresión escalera + pasillo protegido (humos) + cambio techo', 'incendios', 9000, 'EUR', 21, 'pending', 'ESTIMACIÓN — sistema de presurización diferencial (ventilador+cuadro control+conductos) + cambio de techo. Pendiente de presupuesto real.'),
+    mk('zonas-protegidas', 'Sobrepresión escalera + pasillo protegido (humos) + cambio techo', 'incendios', 20661.16, 'EUR', 21, 'pending', '25.000 € IVA incluido — estimación revisada al alza por el usuario. Pendiente de presupuesto real.'),
     mk('valla', 'Valla perimetral', 'obra', 3000, 'EUR', 21, 'pending', '3.000 € + 21% IVA (base)'),
   ];
 }
@@ -729,6 +729,14 @@ function load() {
     const cs2 = state.items.find(i => i.sk === 'carulla-pend-siniva');
     if (cs2) { cs2.iva = 21; cs2.concepto = 'Carulla (clima+agua+ACS+RITE) — pendiente 40% (con IVA)'; cs2.nota = 'Con IVA. Climatización, agua, ACS y RITE'; }
     state.migV14 = true;
+    migrated = true;
+  }
+
+  // Migración puntual: revisar al alza la sobrepresión escalera+pasillo a 25.000 € IVA incluido.
+  if (!state.migV19) {
+    const zp = state.items.find(i => i.sk === 'zonas-protegidas');
+    if (zp) { zp.base = 20661.16; zp.nota = '25.000 € IVA incluido — estimación revisada al alza por el usuario. Pendiente de presupuesto real.'; }
+    state.migV19 = true;
     migrated = true;
   }
 
